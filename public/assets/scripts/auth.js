@@ -6,7 +6,7 @@ document.getElementById('registerForm').onsubmit = async (e) => {
     const email = document.getElementById('email').value;
 
     try {
-        const res = await fetch('http://localhost:8000/custom_auth/register/', {
+        const res = await fetch('https://marketio-3cedad1469b3.herokuapp.com/custom_auth/register/', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json'},
             body: JSON.stringify({ username, email, password })
