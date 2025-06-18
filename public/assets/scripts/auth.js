@@ -27,6 +27,7 @@ document.getElementById('registerForm').onsubmit = async (e) => {
 document.getElementById('loginForm').onsubmit = async (e) => {
     e.preventDefault();
 
+    const navLinksToggle = document.getElementsByClassName('loggedIn');
     const username = document.getElementById('loginUsername').value;
     const password = document.getElementById('loginPassword').value;
 
@@ -43,6 +44,10 @@ document.getElementById('loginForm').onsubmit = async (e) => {
             localStorage.setItem('access_token', data.access);
             localStorage.setItem('refresh_token', data.refresh);
             alert("Login successful");
+            // Update navigation links visibility
+            for (const link of navLinksToggle) {
+                link.classList.toggle('loggedIn');
+            }
             window.location.href = 'market.html';
         } else {
             alert("Error: " + (data.detail || JSON.stringify(data)));

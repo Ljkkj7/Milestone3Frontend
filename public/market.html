@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/styles/styles.css">
+    <title>Market.io - Market</title>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-title"><a href="index.html">📈 Market.io</a></div>
+        <div class="hamburger-menu" id="hamburger">☰</div>
+        <div class="side-menu-container" id="sideMenu">
+            <ul class="nav-links">
+                <li><a href="index.html">🏠 Home</a></li>
+                <li><a href="market.html" class="active">📈 Market</a></li>
+                <li><a href="#about">📌 Dashboard</a></li>
+                <li><a href="#contact">🐵 Profile</a></li>
+            </ul>
+        </div>
+    </nav>
+    <script src="assets/scripts/hamburger.js"></script>
+
+    <header>
+        <div class="header-card">
+            <h1>Market Overview</h1>
+            <p>Explore the latest market trends and stock prices.</p>
+        </div>
+    </header>
+
+    <main>
+        <div class="player-info">
+            <h2>Welcome, <span id="playerName"></span></h2>
+            <div class ="player-info-container">
+                <div class="player-info-card">
+                    <p>Balance: £<span id="playerBalance"></span></p>
+                </div>
+                <div class="player-info-card">
+                    <p>Portfolio Value: £<span id="portfolioValue"></span></p>
+                </div>
+            </div>
+            <div class="stocks-held-container">
+                <h3>Stocks Held</h3>
+                <div id="stocksHeldGrid" class="stocks-held-grid">
+                    <!-- Stocks will be dynamically inserted here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Market.io. All rights reserved.</p>
+    </footer>
+</body>
+</html>
