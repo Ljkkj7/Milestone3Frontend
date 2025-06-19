@@ -6,6 +6,8 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
 
+const DJANGO_STOCK_GET_LIST = 'https://marketio-3cedad1469b3.herokuapp.com/stocks/';
+
 // Serve static files from the 'public' directory
 app.use(express.static('public'));
 
@@ -13,11 +15,34 @@ app.use(express.static('public'));
 io.on('connection', (socket) => {
     console.log('A user connected:', socket.id);
 
+    // Handle stock requests
+    fetchAndSendStocks(socket);
+
+    const intervalId = setInterval(() => {
+        fetchAndSendStocks(socket);
+    }, 5000); // Fetch stocks every 5 seconds
+
     // Handle disconnection
     socket.on('disconnect', () => {
         console.log('User disconnected:', socket.id);
+        clearInterval(intervalId);
     });
 });
+
+// Function to fetch stocks from Django API and send to client
+async function fetchAndSendStocks(socket) {
+    try {
+        const response = await fetch(DJANGO_STOCK_GET_LIST);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const stocks = await response.json();
+        // Emit the stocks data to the connected client
+        socket.emit('stocks_data', stocks);
+    } catch (error) {
+        console.error('Error fetching stocks:', error);
+    }
+}
 
 // Start the server
 const PORT = process.env.PORT || 3000;

@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/styles/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="assets/scripts/market.js" defer></script>
+    <script src="http://localhost:3000/socket.io/socket.io.js"></script>
     <title>Market.io - Market</title>
 </head>
 <body>
@@ -40,8 +43,8 @@
                 </div>
             </div>
             <div class="stocks-held-container">
-                <h3>Stocks Held</h3>
-                <div id="stocksHeldGrid" class="stocks-held-grid">
+                <h3>Live Stocks</h3>
+                <div id="stocksGrid" class="stocks-grid">
                     <!-- Stocks will be dynamically inserted here -->
                 </div>
             </div>
