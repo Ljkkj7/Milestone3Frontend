@@ -46,7 +46,7 @@ document.getElementById('loginForm').onsubmit = async (e) => {
             alert("Login successful");
             // Update navigation links visibility
             for (const link of navLinksToggle) {
-                link.classList.toggle('loggedIn');
+                link.classList.remove('loggedIn');
             }
             window.location.href = 'market.html';
         } else {

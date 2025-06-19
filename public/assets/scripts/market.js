@@ -7,7 +7,8 @@ const renderedStocks = new Set(); // To track rendered stocks
 const container = document.getElementById('stocksGrid');
 
 // Connect to the server using Socket.IO
-const socket = io('https://marketio-frontend-139f7c2c9279.herokuapp.com'); // Adjust the URL as needed
+// const socket = io('https://marketio-frontend-139f7c2c9279.herokuapp.com'); // Adjust the URL as needed
+const socket = io('http://localhost:3000'); // Use localhost for local development
 
 const stockCharts = {};
 
@@ -33,8 +34,8 @@ socket.on('stocks_data', (stocks) => {
             stockCanvas.innerHTML = `
                 <div class="stock-title">${symbol}</div>
                 <a href="#stock-detail.html?symbol=${symbol}" class="stock-link">
-                    <div class="stock-price" id="price-${symbol}">$${parseFloat(price).toFixed(2)}</div>
-                    <canvas id="chart-${symbol}" width="250%" height="120"></canvas>
+                    <div class="stock-price" id="price-${symbol}">£${parseFloat(price).toFixed(2)}</div>
+                    <canvas id="chart-${symbol}" width="400" height="200"></canvas>
                 </a>
             `;
             console.log(`Creating new chart for symbol: ${symbol}`);
