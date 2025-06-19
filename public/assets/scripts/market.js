@@ -7,7 +7,7 @@ const renderedStocks = new Set(); // To track rendered stocks
 const container = document.getElementById('stocksGrid');
 
 // Connect to the server using Socket.IO
-const socket = io('http://localhost:3000'); // Adjust the URL as needed
+const socket = io('https://marketio-frontend-139f7c2c9279.herokuapp.com:3000'); // Adjust the URL as needed
 
 const stockCharts = {};
 
