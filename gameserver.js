@@ -47,14 +47,7 @@ async function fetchAndSendStocks(socket) {
 
 async function updateStockPrice() {
     try {
-        const response = await fetch(DJANGO_STOCK_UPDATE, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ symbol, price }),
-        });
-
+        const response = await fetch(DJANGO_STOCK_UPDATE);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -69,6 +62,6 @@ async function updateStockPrice() {
 // Start the server
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-    // console.log(`Server is running on https://marketio-frontend-139f7c2c9279.herokuapp.com:${PORT}`);
-    console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Server is running on https://marketio-frontend-139f7c2c9279.herokuapp.com:${PORT}`);
+    // console.log(`Server is running on http://localhost:${PORT}`);
 });
