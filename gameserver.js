@@ -20,7 +20,6 @@ io.on('connection', (socket) => {
     fetchAndSendStocks(socket);
 
     const intervalId = setInterval(() => {
-        updateStockPrice();
         fetchAndSendStocks(socket);
     }, 5000); // Fetch stocks every 5 seconds
 
@@ -38,6 +37,7 @@ async function fetchAndSendStocks(socket) {
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
+        const stocks = await response.json();
         // Emit the stocks data to the connected client
         socket.emit('stocks_data', stocks);
     } catch (error) {
