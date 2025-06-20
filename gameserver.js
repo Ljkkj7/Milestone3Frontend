@@ -20,9 +20,11 @@ io.on('connection', (socket) => {
     fetchAndSendStocks(socket);
 
     const intervalId = setInterval(() => {
+        console.log('Updating stock prices...');
         // Update stock prices every 5 seconds
         updateStockPrices(socket);
         // Fetch and send the latest stock data
+        console.log('Fetching stocks...');
         fetchAndSendStocks(socket);
     }, 5000); // 5 seconds
 
