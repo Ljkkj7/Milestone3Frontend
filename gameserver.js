@@ -33,6 +33,7 @@ io.on('connection', (socket) => {
 // Function to fetch stocks from Django API and send to client
 async function fetchAndSendStocks(socket) {
     try {
+        await fetch(DJANGO_STOCK_UPDATE, { method: 'POST' });
         const response = await fetch(DJANGO_STOCK_GET_LIST);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -42,20 +43,6 @@ async function fetchAndSendStocks(socket) {
         socket.emit('stocks_data', stocks);
     } catch (error) {
         console.error('Error fetching stocks:', error);
-    }
-}
-
-async function updateStockPrice() {
-    try {
-        const response = await fetch(DJANGO_STOCK_UPDATE);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        console.log('Stock updated successfully:', data);
-    } catch (error) {
-        console.error('Error updating stock:', error);
     }
 }
 
