@@ -44,10 +44,6 @@ document.getElementById('loginForm').onsubmit = async (e) => {
             localStorage.setItem('access_token', data.access);
             localStorage.setItem('refresh_token', data.refresh);
             alert("Login successful");
-            // Update navigation links visibility
-            for (const link of navLinksToggle) {
-                link.classList.remove('loggedIn');
-            }
             window.location.href = 'market.html';
         } else {
             alert("Error: " + (data.detail || JSON.stringify(data)));

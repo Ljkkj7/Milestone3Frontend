@@ -7,6 +7,7 @@ const server = http.createServer(app);
 const io = socketIO(server);
 
 const DJANGO_STOCK_GET_LIST = 'https://marketio-3cedad1469b3.herokuapp.com/stocks/';
+const DJANGO_STOCK_UPDATE = 'https://marketio-3cedad1469b3.herokuapp.com/stocks/update/';
 
 // Serve static files from the 'public' directory
 app.use(express.static('public'));
@@ -19,6 +20,7 @@ io.on('connection', (socket) => {
     fetchAndSendStocks(socket);
 
     const intervalId = setInterval(() => {
+        updateStockPrice(socket);
         fetchAndSendStocks(socket);
     }, 5000); // Fetch stocks every 5 seconds
 
@@ -36,7 +38,6 @@ async function fetchAndSendStocks(socket) {
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        const stocks = await response.json();
         // Emit the stocks data to the connected client
         socket.emit('stocks_data', stocks);
     } catch (error) {
@@ -44,8 +45,30 @@ async function fetchAndSendStocks(socket) {
     }
 }
 
+async function updateStockPrice() {
+    try {
+        const response = await fetch(DJANGO_STOCK_UPDATE, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ symbol, price }),
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('Stock updated successfully:', data);
+    } catch (error) {
+        console.error('Error updating stock:', error);
+    }
+}
+
 // Start the server
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-    console.log(`Server is running on https://marketio-frontend-139f7c2c9279.herokuapp.com:${PORT}`);
+    // console.log(`Server is running on https://marketio-frontend-139f7c2c9279.herokuapp.com:${PORT}`);
+    console.log(`Server is running on http://localhost:${PORT}`);
 });

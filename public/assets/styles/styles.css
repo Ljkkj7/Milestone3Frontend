@@ -325,3 +325,36 @@ footer p {
     margin: 10px 0;
     font-size: 14px;
 }
+
+@media screen and (max-width: 425px) {
+    .hero-info-card {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .account-section {
+        flex-direction: column;
+    }
+
+    .register-card, .login-card {
+        max-width: 90%;
+    }
+
+    .player-info-container {
+        flex-direction: column;
+    }
+
+    .player-info-card {
+        width: 100%;
+        margin: 10px 0;
+    }
+
+    .stocks-grid {
+        flex-direction: column;
+    }
+
+    .stock-card {
+        width: 100%;
+        margin: 10px 0;
+    }
+}
