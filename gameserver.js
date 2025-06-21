@@ -20,9 +20,13 @@ io.on('connection', (socket) => {
     fetchAndSendStocks(socket);
 
     const intervalId = setInterval(() => {
-        updateStockPrice(socket);
+        console.log('Updating stock prices...');
+        // Update stock prices every 5 seconds
+        updateStockPrices(socket);
+        // Fetch and send the latest stock data
+        console.log('Fetching stocks...');
         fetchAndSendStocks(socket);
-    }, 5000); // Fetch stocks every 5 seconds
+    }, 5000); // 5 seconds
 
     // Handle disconnection
     socket.on('disconnect', () => {
@@ -34,10 +38,13 @@ io.on('connection', (socket) => {
 // Function to fetch stocks from Django API and send to client
 async function fetchAndSendStocks(socket) {
     try {
+        // Fetch stock data from the Django API
+        console.log('Fetching stocks from Django API...');
         const response = await fetch(DJANGO_STOCK_GET_LIST);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
+        const stocks = await response.json();
         // Emit the stocks data to the connected client
         socket.emit('stocks_data', stocks);
     } catch (error) {
@@ -45,17 +52,20 @@ async function fetchAndSendStocks(socket) {
     }
 }
 
-async function updateStockPrice() {
+async function updateStockPrices(socket) {
     try {
-        const response = await fetch(DJANGO_STOCK_UPDATE);
+        // Fetch updated stock prices from the Django API
+        console.log('Updating stock prices from Django API...');
+        const response = await fetch(DJANGO_STOCK_UPDATE, { method: 'POST', headers: { 'Content-Type': 'application/json' } });
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-
         const data = await response.json();
-        console.log('Stock updated successfully:', data);
+        console.log('Stock prices updated:', data);
+
+        socket.emit('stocks_data', data);
     } catch (error) {
-        console.error('Error updating stock:', error);
+        console.error('Error updating stock prices:', error);
     }
 }
 
