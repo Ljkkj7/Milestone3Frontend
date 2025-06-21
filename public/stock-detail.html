@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Market.io - Stock Detail</title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://marketio-frontend-139f7c2c9279.herokuapp.com/socket.io/socket.io.js"></script>
+        <link rel="stylesheet" href="assets/styles/styles.css">
+        <script type="module" href="assets/scripts/stockDetail.js"></script>
+    </head>
+    <body>
+        <nav class="navbar">
+            <div class="nav-title"><a href="index.html">📈 Market.io</a></div>
+            <div class="hamburger-menu" id="hamburger">☰</div>
+            <div class="side-menu-container" id="sideMenu">
+                <ul class="nav-links">
+                    <li><a href="market.html" class="active">📈 Market</a></li>
+                    <li><a href="#about">📌 Dashboard</a></li>
+                    <li><a href="#contact">🐵 Profile</a></li>
+                    <li><a href="#logout">🚪 Logout</a></li>
+                </ul>
+            </div>
+        </nav>
+        <script src="assets/scripts/hamburger.js"></script>
+        <h1 class="stockTitle"></h1>
+        <div id="stock-detail">
+            <h1 id="stockTitle">Loading...</h1>
+            <div id="stockPrice">Price: $--</div>
+            <canvas id="stockChart"></canvas>
+        </div>
+        <div class="gameplaySection">
+            <div class="detail">
+                <h2>Buy Stock</h2>
+                <form id="buyForm" class="buy-form">
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" id="buyQuantity" name="quantity" min="1" required>
+                    <button type="submit">Buy</button>
+                </form>
+                <script src="js/buy.js"></script>
+            </div>
+            <div class="detail">
+                <h2>Sell Stock</h2>
+                <form id="sellForm">
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" id="sellQuantity" name="sellQuantity" min="1" required>
+                    <button type="submit">Sell</button>
+                </form>
+                <script src="js/sell.js"></script>
+            </div>
+        </div>
+    </body>
+</html>
