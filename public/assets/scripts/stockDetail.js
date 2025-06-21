@@ -18,14 +18,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const stockCanvas = document.createElement('div');
     stockCanvas.className = 'stock-card';
     stockCanvas.innerHTML = `
-    <div class="stock-title">${symbol}</div>
-    <a href="stock-detail.html?symbol=${symbol}" class="stock-link">
-        <div class="stock-price" id="price-${symbol}">£${parseFloat(price).toFixed(2)}</div>
-        <canvas id="chart-${symbol}" width="400" height="200"></canvas>
-    </a>`;
-    console.log(`Creating new chart for symbol: ${symbol}`);
+    <div class="stock-title">${symbolUrl}</div>
+    <div class="stock-price" id="price-${symbolUrl}">£${parseFloat(price).toFixed(2)}</div>
+    <canvas id="chart-${symbolUrl}" width="400" height="200"></canvas>`;
+    console.log(`Creating new chart for symbol: ${symbolUrl}`);
     container.appendChild(stockCanvas);
-    renderedStocks.add(symbol); // Add to rendered stocks set
 
     const stockCtx = document.getElementById(`chart-${symbol}`).getContext('2d');
     // let previousPrice = priceHistory[symbol][priceHistory[symbol].length - 1] || 0;
