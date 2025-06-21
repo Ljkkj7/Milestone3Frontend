@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
     const symbolUrl = params.get('symbol');
 
-    document.getElementById('stockTitle').textContent = symbol;
+    document.getElementById('stockTitle').textContent = symbolUrl;
 
     // let priceHistory = JSON.parse(localStorage.getItem('priceHistory'));
     // priceHistory[symbol] = priceHistory[symbol] || [];
