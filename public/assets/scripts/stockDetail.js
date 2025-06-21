@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // let priceHistory = JSON.parse(localStorage.getItem('priceHistory'));
     // priceHistory[symbol] = priceHistory[symbol] || [];
 
-    const chartCtx = document.getElementById('stockChart').getContext('2d');
+    const chartCtx = document.getElementById('stock-detail').getContext('2d');
     // let previousPrice = priceHistory[symbol][priceHistory[symbol].length - 1] || 0;
     createStockChart(chartCtx, symbol);
 
