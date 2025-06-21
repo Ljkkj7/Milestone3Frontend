@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const chartCtx = document.getElementById('stock-detail').getContext('2d');
     // let previousPrice = priceHistory[symbol][priceHistory[symbol].length - 1] || 0;
-    createStockChart(chartCtx, symbolUrl);
+    const stockChart = createStockChart(chartCtx, symbolUrl);
 
     socket.on('stocks_data', (stocks) => {
         console.log("Recieved paramater", stocks)
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const numPrice = parseFloat(price);
 
             if(symbolUrl === symbol) {
-                updateStockChart(symbol, label, numPrice)
+                updateStockChart(stockChart, label, numPrice)
             }
         });
     })
