@@ -33,7 +33,7 @@ socket.on('stocks_data', (stocks) => {
             stockCanvas.className = 'stock-card';
             stockCanvas.innerHTML = `
                 <div class="stock-title">${symbol}</div>
-                <a href="#stock-detail.html?symbol=${symbol}" class="stock-link">
+                <a href="stock-detail.html?symbol=${symbol}" class="stock-link">
                     <div class="stock-price" id="price-${symbol}">£${parseFloat(price).toFixed(2)}</div>
                     <canvas id="chart-${symbol}" width="400" height="200"></canvas>
                 </a>
