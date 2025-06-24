@@ -14,6 +14,8 @@ const socket = io('https://marketio-frontend-139f7c2c9279.herokuapp.com'); // Ad
 
 const stockCharts = {};
 
+// Flag to prevent duplicate listeners
+socket.off('stocks_data')
 socket.on('stocks_data', (stocks) => {
     // Log the received stock data for debugging
     console.log('Received stock data:', stocks);
