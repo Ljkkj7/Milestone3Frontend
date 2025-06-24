@@ -41,8 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     stockRendered = true;
                     const stockChart = createStockChart(stockCtx, symbolUrl);
-                    updateStockChart(stockChart, label, numPrice)
                 }
+                updateStockChart(stockChart, label, numPrice)
             }
         });
     })
