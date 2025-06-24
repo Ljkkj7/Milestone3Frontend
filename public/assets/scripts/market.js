@@ -18,6 +18,10 @@ const stockCharts = {};
 // Load stored charts on page load
 window.addEventListener('DOMContentLoaded', () => {
     for (const symbol in priceHistory) {
+        if (!symbol) {
+            console.warn(`Invalid stock data`);
+            return; // Skip this stock if data is invalid
+        }
         if (!renderedStocks.has(symbol)) {
             const lastPrice = priceHistory[symbol].at(-1) ?? 0;
             const stockCanvas = document.createElement('div');
@@ -103,7 +107,7 @@ socket.on('stocks_data', (stocks) => {
             stockCharts[symbol].data.datasets[0].data = priceHistory[symbol];
             console.log(priceHistory)
             console.log(labelHistory)
-            stockCharts[symbol].update();
+            updateStockChart(stockCharts[symbol], label, numPrice);
         }
     });
 });
