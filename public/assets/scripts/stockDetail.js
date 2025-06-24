@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const socket = io.connect()
 
     let stockRendered = false
+    let stockChart;
 
     const params = new URLSearchParams(window.location.search);
     const symbolUrl = params.get('symbol');
@@ -40,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     // let previousPrice = priceHistory[symbol][priceHistory[symbol].length - 1] || 0;
 
                     stockRendered = true;
-                    const stockChart = createStockChart(stockCtx, symbolUrl);
+                    stockChart = createStockChart(stockCtx, symbolUrl);
                 }
                 updateStockChart(stockChart, label, numPrice)
             }
