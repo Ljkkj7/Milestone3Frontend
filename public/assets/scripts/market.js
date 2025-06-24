@@ -49,7 +49,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Flag to prevent duplicate listeners
+
 socket.on('stocks_data', (stocks) => {
     // Log the received stock data for debugging
     console.log('Received stock data:', stocks);

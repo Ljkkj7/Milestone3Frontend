@@ -13,6 +13,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const symbolUrl = params.get('symbol');
     const container = document.getElementById('stock-detail')
 
+    let priceHistory = JSON.parse(localStorage.getItem('priceHistory')) || {};
+    priceHistory[symbolUrl] = priceHistory[symbolUrl] || [];
+    let labelHistory = JSON.parse(localStorage.getItem('labelHistory')) || {};
+    labelHistory[symbolUrl] = labelHistory[symbolUrl] || [];
     document.getElementById('stockTitle').textContent = symbolUrl;
 
     // let priceHistory = JSON.parse(localStorage.getItem('priceHistory'));
@@ -33,16 +37,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     stockCanvas.innerHTML = `
                     <div class="stock-title">${symbolUrl}</div>
                     <div class="stock-price" id="price-${symbolUrl}">£${parseFloat(price).toFixed(2)}</div>
-                    <canvas id="chart-${symbolUrl}" width="400" height="200"></canvas>`;
-                    console.log(`Creating new chart for symbol: ${symbolUrl}`);
+                    <canvas id="chart-${symbolUrl}detail" width="400" height="200"></canvas>`;
+                    
+                    console.log(`Creating new chart for symbol: ${symbolUrl}detail`);
                     container.appendChild(stockCanvas);
 
-                    const stockCtx = document.getElementById(`chart-${symbol}`).getContext('2d');
-                    // let previousPrice = priceHistory[symbol][priceHistory[symbol].length - 1] || 0;
-
+                    const stockCtx = document.getElementById(`chart-${symbol}detail`).getContext('2d');
+                    stockChart = createStockChart(stockCtx, symbol);
+                    stockChart.data.labels = labelHistory[symbol] || [];
+                    stockChart.data.datasets[0].data = priceHistory[symbol] || [];
+                    stockChart.update();
                     stockRendered = true;
-                    stockChart = createStockChart(stockCtx, symbolUrl);
                 }
+
                 updateStockChart(stockChart, label, numPrice)
             }
         });
