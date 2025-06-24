@@ -7,7 +7,7 @@ const renderedStocks = new Set(); // To track rendered stocks
 const container = document.getElementById('stocksGrid');
 let priceHistory = JSON.parse(localStorage.getItem('priceHistory')) || {};
 const previousPrices = {};
-let labelHistory = JSON.parse(localStorage.getItem('dateHistory')) || {};
+let labelHistory = JSON.parse(localStorage.getItem('labelHistory')) || {};
 
 // Connect to the server using Socket.IO
 const socket = io('https://marketio-frontend-139f7c2c9279.herokuapp.com'); // Adjust the URL as needed
