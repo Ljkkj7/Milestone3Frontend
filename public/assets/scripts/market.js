@@ -56,9 +56,14 @@ socket.on('stocks_data', (stocks) => {
             console.log(stockCharts)
             console.log(priceHistory)
 
-            previousPrices[stock] = price;
+            previousPrices[symbol] = price;
+        } else {
+            stockCharts[symbol].data.labels = priceHistory[symbol].map((_, i) => {
+                const now = new Date();
+                return now.toLocaleTimeString();
+            });
+            stockCharts[symbol].data.datasets[0].data = priceHistory[symbol];
         }
-
         // Update the existing chart with the new data
         updateStockChart(stockCharts[symbol], label, numPrice);
     });
