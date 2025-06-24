@@ -311,6 +311,11 @@ header {
     color: #333;
 }
 
+.stockActionContainer {
+    display: flex;
+    flex-direction: row;
+}
+
 .gameplay-section {
     display: flex;
     flex-direction: row;
@@ -325,7 +330,6 @@ header {
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     transition: box-shadow 0.3s ease, transform 0.3s ease;
-    width: 33%;
 }
 
 .detail:hover {
