@@ -74,8 +74,7 @@ socket.on('stocks_data', (stocks) => {
         } else {
             stockCharts[symbol].data.labels = labelHistory[symbol];
             stockCharts[symbol].data.datasets[0].data = priceHistory[symbol];
+            updateStockChart(stockCharts[symbol], label, numPrice);
         }
-        // Update the existing chart with the new data
-        updateStockChart(stockCharts[symbol], label, numPrice);
     });
 });
