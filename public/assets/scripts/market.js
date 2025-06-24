@@ -18,6 +18,8 @@ const stockCharts = {};
 // Load stored charts on page load
 window.addEventListener('DOMContentLoaded', () => {
     for (const symbol in priceHistory) {
+        console.log(typeof(priceHistory));
+        console.log(typeof(symbol));
         if (typeof(priceHistory[0]) != "number") {
             console.warn(`Invalid stock data`);
             continue; // Skip invalid stock data
