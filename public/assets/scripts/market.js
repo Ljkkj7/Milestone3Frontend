@@ -29,9 +29,9 @@ socket.on('stocks_data', (stocks) => {
             return; // Skip this stock if data is invalid
         }
 
-        if (!priceHistory[stock]) priceHistory[stock] = [];
-        priceHistory[stock].push(price);
-        if (priceHistory[stock].length > 20) priceHistory[stock].shift();
+        if (!priceHistory[symbol]) priceHistory[symbol] = [];
+        priceHistory[symbol].push(price);
+        if (priceHistory[symbol].length > 20) priceHistory[symbol].shift();
         localStorage.setItem('priceHistory', JSON.stringify(priceHistory));
 
         // Check if the stock chart for this symbol already exists
