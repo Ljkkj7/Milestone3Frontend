@@ -103,7 +103,7 @@ socket.on('stocks_data', (stocks) => {
             stockCharts[symbol].data.datasets[0].data = priceHistory[symbol];
             console.log(priceHistory)
             console.log(labelHistory)
-            updateStockChart(stockCharts[symbol], label, numPrice);
+            stockCharts[symbol].update();
         }
     });
 });
