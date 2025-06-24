@@ -31,7 +31,7 @@ socket.on('stocks_data', (stocks) => {
         }
 
         if (!priceHistory[symbol]) priceHistory[symbol] = [];
-        priceHistory[symbol].push(price);
+        priceHistory[symbol].push(numPrice);
         if (priceHistory[symbol].length > 20) priceHistory[symbol].shift();
         localStorage.setItem('priceHistory', JSON.stringify(priceHistory));
 
