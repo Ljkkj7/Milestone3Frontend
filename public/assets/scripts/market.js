@@ -68,6 +68,7 @@ socket.on('stocks_data', (stocks) => {
             stockCharts[symbol] = createStockChart(stockCtx, symbol);
             console.log(stockCharts)
             console.log(priceHistory)
+            console.log(labelHistory)
 
             previousPrices[symbol] = price;
 
