@@ -15,6 +15,32 @@ const socket = io('https://marketio-frontend-139f7c2c9279.herokuapp.com'); // Ad
 
 const stockCharts = {};
 
+// Load stored charts on page load
+window.addEventListener('DOMContentLoaded', () => {
+    for (const symbol in priceHistory) {
+        if (!renderedStocks.has(symbol)) {
+            const lastPrice = priceHistory[symbol].at(-1) ?? 0;
+            const stockCanvas = document.createElement('div');
+            stockCanvas.className = 'stock-card';
+            stockCanvas.innerHTML = `
+                <div class="stock-title">${symbol}</div>
+                <a href="stock-detail.html?symbol=${symbol}" class="stock-link">
+                    <div class="stock-price" id="price-${symbol}">£${parseFloat(lastPrice).toFixed(2)}</div>
+                    <canvas id="chart-${symbol}" width="400" height="200"></canvas>
+                </a>
+            `;
+            container.appendChild(stockCanvas);
+            renderedStocks.add(symbol);
+
+            const stockCtx = document.getElementById(`chart-${symbol}`).getContext('2d');
+            stockCharts[symbol] = createStockChart(stockCtx, symbol);
+            stockCharts[symbol].data.labels = labelHistory[symbol] || [];
+            stockCharts[symbol].data.datasets[0].data = priceHistory[symbol] || [];
+            stockCharts[symbol].update();
+        }
+    }
+});
+
 // Flag to prevent duplicate listeners
 socket.on('stocks_data', (stocks) => {
     // Log the received stock data for debugging
