@@ -13,6 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const symbolUrl = params.get('symbol');
     const container = document.getElementById('stock-detail')
 
+    let priceHistory = JSON.parse(localStorage.getItem('priceHistory')) || {};
+    priceHistory[symbolUrl] = priceHistory[symbolUrl] || [];
     document.getElementById('stockTitle').textContent = symbolUrl;
 
     // let priceHistory = JSON.parse(localStorage.getItem('priceHistory'));
@@ -34,15 +36,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="stock-title">${symbolUrl}</div>
                     <div class="stock-price" id="price-${symbolUrl}">£${parseFloat(price).toFixed(2)}</div>
                     <canvas id="chart-${symbolUrl}" width="400" height="200"></canvas>`;
+                    
                     console.log(`Creating new chart for symbol: ${symbolUrl}`);
                     container.appendChild(stockCanvas);
 
                     const stockCtx = document.getElementById(`chart-${symbol}`).getContext('2d');
-                    // let previousPrice = priceHistory[symbol][priceHistory[symbol].length - 1] || 0;
-
+                    stockChart = createStockChart(stockCtx, symbol);
+                    stockChart[symbol].data.labels = labelHistory[symbol] || [];
+                    stockChart[symbol].data.datasets[0].data = priceHistory[symbol] || [];
+                    stockChart[symbol].update();
                     stockRendered = true;
-                    stockChart = createStockChart(stockCtx, symbolUrl);
                 }
+
                 updateStockChart(stockChart, label, numPrice)
             }
         });
