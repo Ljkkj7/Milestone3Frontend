@@ -18,7 +18,7 @@ const stockCharts = {};
 // Load stored charts on page load
 window.addEventListener('DOMContentLoaded', () => {
     for (const symbol in priceHistory) {
-        if (!symbol) {
+        if (typeof(priceHistory) != "number") {
             console.warn(`Invalid stock data`);
             return; // Skip this stock if data is invalid
         }
@@ -105,8 +105,6 @@ socket.on('stocks_data', (stocks) => {
         } else {
             stockCharts[symbol].data.labels = labelHistory[symbol];
             stockCharts[symbol].data.datasets[0].data = priceHistory[symbol];
-            console.log(priceHistory)
-            console.log(labelHistory)
             updateStockChart(stockCharts[symbol], label, numPrice);
         }
     });
