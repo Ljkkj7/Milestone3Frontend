@@ -5,6 +5,8 @@ import {
 
 const renderedStocks = new Set(); // To track rendered stocks
 const container = document.getElementById('stocksGrid');
+let priceHistory = JSON.parse(localStorage.getItem('priceHistory')) || {};
+const previousPrices = {};
 
 // Connect to the server using Socket.IO
 const socket = io('https://marketio-frontend-139f7c2c9279.herokuapp.com'); // Adjust the URL as needed
@@ -26,6 +28,12 @@ socket.on('stocks_data', (stocks) => {
             console.warn(`Invalid stock data received: ${JSON.stringify(stock)}`);
             return; // Skip this stock if data is invalid
         }
+
+        if (!priceHistory[stock]) priceHistory[stock] = [];
+        priceHistory[stock].push(price);
+        if (priceHistory[stock].length > 20) priceHistory[stock].shift();
+        localStorage.setItem('priceHistory', JSON.stringify(priceHistory));
+
         // Check if the stock chart for this symbol already exists
         if (!renderedStocks.has(symbol)) {
             // Create a new chart for this stock if it doesn't exist
@@ -45,7 +53,11 @@ socket.on('stocks_data', (stocks) => {
             const stockCtx = document.getElementById(`chart-${symbol}`).getContext('2d');
             // Create a new stock chart for this symbol
             stockCharts[symbol] = createStockChart(stockCtx, symbol);
+            console.log(stockCharts)
 
+            previousPrices[stock] = price;
+        } else {
+            
         }
 
         // Update the existing chart with the new data
