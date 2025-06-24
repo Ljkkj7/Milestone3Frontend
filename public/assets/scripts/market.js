@@ -7,6 +7,7 @@ const renderedStocks = new Set(); // To track rendered stocks
 const container = document.getElementById('stocksGrid');
 let priceHistory = JSON.parse(localStorage.getItem('priceHistory')) || {};
 const previousPrices = {};
+let labelHistory = JSON.parse(localStorage.getItem('dateHistory')) || {};
 
 // Connect to the server using Socket.IO
 const socket = io('https://marketio-frontend-139f7c2c9279.herokuapp.com'); // Adjust the URL as needed
@@ -23,7 +24,9 @@ socket.on('stocks_data', (stocks) => {
 
     stocks.forEach(stock => {
         const { symbol, price } = stock;
-        const label = new Date().toLocaleTimeString(); // Use current time as label
+        const label = new Date().toLocaleTimeString([], {
+            hour: '2-digit', minute: '2-digit', second: '2-digit'
+        }); // Use current time as label & track it
         const numPrice = parseFloat(price); // Ensure price is a number
         if (!symbol || !price) {
             console.warn(`Invalid stock data received: ${JSON.stringify(stock)}`);
@@ -31,9 +34,18 @@ socket.on('stocks_data', (stocks) => {
         }
 
         if (!priceHistory[symbol]) priceHistory[symbol] = [];
+        if (!labelHistory[symbol]) labelHistory[symbol] = [];
+
         priceHistory[symbol].push(numPrice);
-        if (priceHistory[symbol].length > 20) priceHistory[symbol].shift();
+        labelHistory[symbol].push(label);
+
+        if (priceHistory[symbol].length > 20) {
+            priceHistory[symbol].shift();
+            labelHistory[symbol].shift();
+        }
+
         localStorage.setItem('priceHistory', JSON.stringify(priceHistory));
+        localStorage.setItem('labelHistory', JSON.stringify(labelHistory));
 
         // Check if the stock chart for this symbol already exists
         if (!renderedStocks.has(symbol)) {
@@ -58,11 +70,9 @@ socket.on('stocks_data', (stocks) => {
             console.log(priceHistory)
 
             previousPrices[symbol] = price;
+
         } else {
-            stockCharts[symbol].data.labels = priceHistory[symbol].map((_, i) => {
-                const now = new Date();
-                return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit'});
-            });
+            stockCharts[symbol].data.labels = labelHistory[symbol];
             stockCharts[symbol].data.datasets[0].data = priceHistory[symbol];
         }
         // Update the existing chart with the new data
