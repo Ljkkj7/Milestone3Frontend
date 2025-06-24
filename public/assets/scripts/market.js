@@ -20,7 +20,7 @@ window.addEventListener('DOMContentLoaded', () => {
     for (const symbol in priceHistory) {
         if (typeof(priceHistory) != "number") {
             console.warn(`Invalid stock data`);
-            return; // Skip this stock if data is invalid
+            continue; // Skip invalid stock data
         }
         if (!renderedStocks.has(symbol)) {
             const lastPrice = priceHistory[symbol].at(-1) ?? 0;
