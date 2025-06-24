@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
     priceHistory[symbolUrl] = priceHistory[symbolUrl] || [];
     let labelHistory = JSON.parse(localStorage.getItem('labelHistory')) || {};
     labelHistory[symbolUrl] = labelHistory[symbolUrl] || [];
-    document.getElementById('stockTitle').textContent = symbolUrl;
 
     // let priceHistory = JSON.parse(localStorage.getItem('priceHistory'));
     // priceHistory[symbol] = priceHistory[symbol] || [];
