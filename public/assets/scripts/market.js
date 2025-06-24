@@ -54,10 +54,9 @@ socket.on('stocks_data', (stocks) => {
             // Create a new stock chart for this symbol
             stockCharts[symbol] = createStockChart(stockCtx, symbol);
             console.log(stockCharts)
+            console.log(priceHistory)
 
             previousPrices[stock] = price;
-        } else {
-            
         }
 
         // Update the existing chart with the new data
