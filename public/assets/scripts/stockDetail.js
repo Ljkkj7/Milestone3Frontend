@@ -35,12 +35,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     stockCanvas.innerHTML = `
                     <div class="stock-title">${symbolUrl}</div>
                     <div class="stock-price" id="price-${symbolUrl}">£${parseFloat(price).toFixed(2)}</div>
-                    <canvas id="chart-${symbolUrl}" width="400" height="200"></canvas>`;
+                    <canvas id="chart-${symbolUrl}detail" width="400" height="200"></canvas>`;
                     
-                    console.log(`Creating new chart for symbol: ${symbolUrl}`);
+                    console.log(`Creating new chart for symbol: ${symbolUrl}detail`);
                     container.appendChild(stockCanvas);
 
-                    const stockCtx = document.getElementById(`chart-${symbol}`).getContext('2d');
+                    const stockCtx = document.getElementById(`chart-${symbol}detail`).getContext('2d');
                     stockChart = createStockChart(stockCtx, symbol);
                     stockChart[symbol].data.labels = labelHistory[symbol] || [];
                     stockChart[symbol].data.datasets[0].data = priceHistory[symbol] || [];
