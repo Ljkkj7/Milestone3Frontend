@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if(symbolUrl === symbol) {
                 if(!stockRendered) {
                     const stockCanvas = document.createElement('div');
-                    stockCanvas.className = 'stock-card';
+                    stockCanvas.className = 'stock-card-detail';
                     stockCanvas.innerHTML = `
                     <div class="stock-title">${symbolUrl}</div>
                     <div class="stock-price" id="price-${symbolUrl}">£${parseFloat(price).toFixed(2)}</div>

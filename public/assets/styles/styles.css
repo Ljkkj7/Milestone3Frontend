@@ -287,6 +287,16 @@ header {
     text-align: left;
 }
 
+.stock-card-detail {
+    margin: 10px 10px 10px 20px;
+    padding: 20px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    text-align: left;
+}
+
 .stock-title {
     font-size: 18px;
     font-weight: bold;
@@ -353,6 +363,20 @@ header {
 .detail form input {
     margin: 10px 10px;
 }
+
+.detail button {
+    width: 100%;
+    padding: 10px;
+    background-color: #333;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.detail button:hover {
+    background-color: #555;
+}
+
 
 footer {
     background-color: #333;
