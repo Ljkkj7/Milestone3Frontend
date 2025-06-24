@@ -73,7 +73,7 @@ socket.on('stocks_data', (stocks) => {
             previousPrices[symbol] = price;
 
         } else {
-            label = labelHistory[symbol];
+            stockCharts[symbol].data.labels = labelHistory[symbol];
             stockCharts[symbol].data.datasets[0].data = priceHistory[symbol];
             console.log(priceHistory)
             console.log(labelHistory)
