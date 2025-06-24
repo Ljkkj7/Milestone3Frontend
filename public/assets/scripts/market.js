@@ -15,7 +15,6 @@ const socket = io('https://marketio-frontend-139f7c2c9279.herokuapp.com'); // Ad
 const stockCharts = {};
 
 // Flag to prevent duplicate listeners
-socket.off('stocks_data')
 socket.on('stocks_data', (stocks) => {
     // Log the received stock data for debugging
     console.log('Received stock data:', stocks);
@@ -60,10 +59,6 @@ socket.on('stocks_data', (stocks) => {
 
             previousPrices[symbol] = price;
         } else {
-            stockCharts[symbol].data.labels = priceHistory[symbol].map((_, i) => {
-                const now = new Date();
-                return now.toLocaleTimeString();
-            });
             stockCharts[symbol].data.datasets[0].data = priceHistory[symbol];
         }
         // Update the existing chart with the new data
