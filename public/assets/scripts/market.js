@@ -22,7 +22,7 @@ window.addEventListener('DOMContentLoaded', () => {
         console.log(typeof(symbol));
         console.log(priceHistory[symbol])
         console.log(symbol)
-        if (typeof(priceHistory[0]) != "number") {
+        if (typeof(priceHistory[symbol][0]) != "number") {
             console.warn(`Invalid stock data`);
             continue; // Skip invalid stock data
         }
