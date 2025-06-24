@@ -6,7 +6,7 @@ import {
 document.addEventListener('DOMContentLoaded', () => {
     const socket = io.connect()
 
-    const stockRendered = false
+    let stockRendered = false
 
     const params = new URLSearchParams(window.location.search);
     const symbolUrl = params.get('symbol');
