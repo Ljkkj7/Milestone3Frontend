@@ -278,6 +278,7 @@ header {
 }
 
 .stock-card {
+    max-width: 40%;
     margin: 10px 10px;
     padding: 20px;
     background-color: #f4f4f4;
