@@ -42,9 +42,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     const stockCtx = document.getElementById(`chart-${symbol}detail`).getContext('2d');
                     stockChart = createStockChart(stockCtx, symbol);
-                    stockChart[symbol].data.labels = labelHistory[symbol] || [];
-                    stockChart[symbol].data.datasets[0].data = priceHistory[symbol] || [];
-                    stockChart[symbol].update();
+                    stockChart.data.labels = labelHistory[symbol] || [];
+                    stockChart.data.datasets[0].data = priceHistory[symbol] || [];
+                    stockChart.update();
                     stockRendered = true;
                 }
 
