@@ -8,7 +8,7 @@ const container = document.getElementById('stocksGrid');
 let priceHistory = JSON.parse(localStorage.getItem('priceHistory')) || {};
 const previousPrices = {};
 let labelHistory = JSON.parse(localStorage.getItem('labelHistory')) || {};
-const DJANGO_GET_USER_BALANCE_FIGURES = 'https://marketio-3cedad1469b3.herokuapp.com/dashboard/balance';
+const DJANGO_GET_USER_BALANCE_FIGURES = 'https://marketio-3cedad1469b3.herokuapp.com/dashboard/balance/';
 
 
 // Connect to the server using Socket.IO
