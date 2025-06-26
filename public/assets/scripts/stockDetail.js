@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
     priceHistory[symbolUrl] = priceHistory[symbolUrl] || [];
     let labelHistory = JSON.parse(localStorage.getItem('labelHistory')) || {};
     labelHistory[symbolUrl] = labelHistory[symbolUrl] || [];
-    document.getElementById('stockTitle').textContent = symbolUrl;
 
     // let priceHistory = JSON.parse(localStorage.getItem('priceHistory'));
     // priceHistory[symbol] = priceHistory[symbol] || [];
@@ -33,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if(symbolUrl === symbol) {
                 if(!stockRendered) {
                     const stockCanvas = document.createElement('div');
-                    stockCanvas.className = 'stock-card';
+                    stockCanvas.className = 'stock-card-detail';
                     stockCanvas.innerHTML = `
                     <div class="stock-title">${symbolUrl}</div>
                     <div class="stock-price" id="price-${symbolUrl}">£${parseFloat(price).toFixed(2)}</div>

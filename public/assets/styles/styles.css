@@ -287,6 +287,21 @@ header {
     text-align: left;
 }
 
+.stock-card-detail {
+    margin: 10px 40px 10px 0px;
+    padding: 20px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    text-align: left;
+}
+
+.stock-card-detail:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+}
+
 .stock-title {
     font-size: 18px;
     font-weight: bold;
@@ -310,6 +325,65 @@ header {
     text-decoration: none;
     color: #333;
 }
+
+.stockActionContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+    padding: 20px 0;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.gameplay-section {
+    display: flex;
+    flex-direction: row;
+    background-color: #f4f4f4;
+}
+
+.detail {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin: 10px auto;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.detail:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+}
+
+.detail form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0px 10px 10px 10px;
+}
+
+.detail form input {
+    margin: 10px 10px;
+}
+
+.detail button {
+    width: 100%;
+    padding: 10px;
+    background-color: #333;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.detail button:hover {
+    background-color: #555;
+}
+
 
 footer {
     background-color: #333;

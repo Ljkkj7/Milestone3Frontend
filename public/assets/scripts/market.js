@@ -8,6 +8,8 @@ const container = document.getElementById('stocksGrid');
 let priceHistory = JSON.parse(localStorage.getItem('priceHistory')) || {};
 const previousPrices = {};
 let labelHistory = JSON.parse(localStorage.getItem('labelHistory')) || {};
+const DJANGO_GET_USER_BALANCE_FIGURES = 'https://marketio-3cedad1469b3.herokuapp.com/dashboard/balance/';
+const DJANGO_GET_USER_PORTFOLIO_FIGURES = 'https://marketio-3cedad1469b3.herokuapp.com/dashboard/portfolio/';
 
 // Connect to the server using Socket.IO
 const socket = io('https://marketio-frontend-139f7c2c9279.herokuapp.com'); // Adjust the URL as needed
@@ -53,6 +55,7 @@ window.addEventListener('DOMContentLoaded', () => {
 socket.on('stocks_data', (stocks) => {
     // Log the received stock data for debugging
     console.log('Received stock data:', stocks);
+    loadUserFigures();
 
     // Update the stock chart with new data
 
@@ -113,3 +116,51 @@ socket.on('stocks_data', (stocks) => {
         }
     });
 });
+
+async function loadUserFigures() {
+    const token = localStorage.getItem('access_token')
+
+    if (!token) {
+        alert("No login token found. Please log in")
+        window.location.href("index.html")
+        return;
+    }
+
+    try {
+        const response = await fetch(DJANGO_GET_USER_BALANCE_FIGURES, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const res = await fetch(DJANGO_GET_USER_PORTFOLIO_FIGURES, {
+           method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            } 
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+        }
+
+        const balanceData = await response.json()
+        const portfolioData = await res.json()
+
+        document.getElementById('playerBalance').textContent = parseFloat(balanceData.balance);
+        document.getElementById('playerName').textContent = balanceData.username;
+        document.getElementById('portfolioValue').textContent = portfolioData.total_portfolio_value; 
+
+    } catch(err) {
+        console.error('Failed to fetch user balance')
+        alert('Could not load profile balance - please log in again')
+        window.location.href("index.html")
+    }
+}
