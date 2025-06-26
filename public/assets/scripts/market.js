@@ -118,8 +118,21 @@ socket.on('stocks_data', (stocks) => {
 });
 
 async function loadBalanceFigures() {
+    const token = localStorage.getItem('access_token')
+
+    if (!token) {
+        alert("No login token found. Please log in")
+        return;
+    }
+
     try {
-        const response = await fetch(DJANGO_GET_USER_BALANCE_FIGURES)
+        const response = await fetch(DJANGO_GET_USER_BALANCE_FIGURES, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
