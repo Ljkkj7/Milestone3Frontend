@@ -122,8 +122,7 @@ async function loadUserFigures() {
 
     if (!token) {
         alert("No login token found. Please log in")
-        window.location.href("index.html")
-        return;
+        window.location.href = 'index.html';
     }
 
     try {
@@ -161,6 +160,6 @@ async function loadUserFigures() {
     } catch(err) {
         console.error('Failed to fetch user balance')
         alert('Could not load profile balance - please log in again')
-        window.location.href("index.html")
+        window.location.href = 'index.html';
     }
 }
