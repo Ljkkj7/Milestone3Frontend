@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Get symbol from URL
 
+    const DJANGO_BUY_STOCK = 'https://marketio-3cedad1469b3.herokuapp.com/stocks/buy/';
+
     const params = new URLSearchParams(window.location.search);
     const symbol = params.get('symbol');
 
