@@ -8,6 +8,8 @@ const container = document.getElementById('stocksGrid');
 let priceHistory = JSON.parse(localStorage.getItem('priceHistory')) || {};
 const previousPrices = {};
 let labelHistory = JSON.parse(localStorage.getItem('labelHistory')) || {};
+const DJANGO_GET_USER_BALANCE_FIGURES = 'https://marketio-3cedad1469b3.herokuapp.com/dashboard/balance';
+
 
 // Connect to the server using Socket.IO
 const socket = io('https://marketio-frontend-139f7c2c9279.herokuapp.com'); // Adjust the URL as needed
@@ -53,6 +55,7 @@ window.addEventListener('DOMContentLoaded', () => {
 socket.on('stocks_data', (stocks) => {
     // Log the received stock data for debugging
     console.log('Received stock data:', stocks);
+    loadBalanceFigures();
 
     // Update the stock chart with new data
 
@@ -113,3 +116,19 @@ socket.on('stocks_data', (stocks) => {
         }
     });
 });
+
+async function loadBalanceFigures() {
+    try {
+        const response = await fetch(DJANGO_GET_USER_BALANCE_FIGURES)
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json()
+
+        document.getElementById('playerBalance').textContent = parseFloat(data.balance);
+    } catch(err) {
+        console.error('Failed to fetch user balance')
+        alert('Could not load profile balance - please log in again')
+    }
+}
