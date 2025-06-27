@@ -168,8 +168,8 @@ async function loadUserFigures() {
 
                     holdingsContainer.className = 'holdings-card'
                     holdingsContainer.innerHTML = `
-                        <div class="holdings-title">${symbol}</div>
                         <a href="stock-detail.html?symbol=${symbol}" class="stock-link">
+                            <div class="holdings-title">${symbol}</div>
                             <p class="holdings-detail" id="holdings-detail-${symbol}"><strong>Holding:</strong> ${quantity} @ ${numPrice.toFixed(2)}</p>
                             <p class="holdings-price" id="holdings-price-${symbol}"><strong>Total value:</strong> £${value}</p>
                         </a>
