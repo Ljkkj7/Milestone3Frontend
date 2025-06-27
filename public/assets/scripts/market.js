@@ -195,6 +195,6 @@ async function updateHoldings(symbol, quantity, numPrice, value) {
     let holdingsDetail = document.getElementById(`holdings-detail-${symbol}`)
     let holdingsPrice = document.getElementById(`holdings-price-${symbol}`)
 
-    holdingsDetail.innerText = `<strong>Holding:</strong> ${quantity} @ ${numPrice.toFixed(2)}`;
-    holdingsPrice.innerText = `<strong>Total Value:</strong> £${value}`;
+    holdingsDetail.innerText = `Holding: ${quantity} @ ${numPrice.toFixed(2)}`;
+    holdingsPrice.innerText = `Total Value: £${value}`;
 }
