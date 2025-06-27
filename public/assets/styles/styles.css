@@ -338,7 +338,7 @@ header {
     transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
-.holdingsOuterContainer {
+.player-info-stocks-held {
     display: flex;
     flex-direction: row;
 }
