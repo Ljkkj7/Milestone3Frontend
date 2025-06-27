@@ -157,7 +157,7 @@ async function loadUserFigures() {
         document.getElementById('playerName').textContent = balanceData.username;
         document.getElementById('portfolioValue').textContent = portfolioData.total_portfolio_value;
 
-        if (!portfolioData.details.isEmpty()){
+        /* if (!portfolioData.details.isEmpty()){
             portfolioData.details.forEach(detail => {
                 const { symbol, quantity, current_price, value } = detail;
                 const numPrice = parseFloat(current_price);
@@ -174,7 +174,7 @@ async function loadUserFigures() {
                 `
                 holdingsOuterContainer.appendChild(holdingsContainer)
             })
-        }
+         }*/
 
 
     } catch(err) {
