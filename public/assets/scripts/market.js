@@ -157,7 +157,7 @@ async function loadUserFigures() {
         document.getElementById('playerName').textContent = balanceData.username;
         document.getElementById('portfolioValue').textContent = portfolioData.total_portfolio_value;
 
-        /* if (!portfolioData.details.isEmpty()){
+        if (portfolioData.details && portfolioData.details.length > 0){
             portfolioData.details.forEach(detail => {
                 const { symbol, quantity, current_price, value } = detail;
                 const numPrice = parseFloat(current_price);
@@ -168,13 +168,13 @@ async function loadUserFigures() {
                 holdingsContainer.innerHTML = `
                     <div class="holdings-title">${symbol}</div>
                     <a href="stock-detail.html?symbol=${symbol}" class="stock-link">
-                        <p class="holdings-detail">Holding: ${quantity} @ ${numPrice}</p>
+                        <p class="holdings-detail">Holding: ${quantity} @ ${numPrice.toFixed(2)}</p>
                         <p class="holdings-price">Total value: £${value}</p>
                     </a>
                 `
                 holdingsOuterContainer.appendChild(holdingsContainer)
             })
-         }*/
+         }
 
 
     } catch(err) {
