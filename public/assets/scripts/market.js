@@ -3,7 +3,8 @@ import {
     updateStockChart
 } from './stockChart.js';
 
-const renderedStocks = new Set(); // To track rendered stocks
+const renderedStocks = new Set(); // To track rendered stocks]
+const renderedHoldings = new Set();
 const container = document.getElementById('stocksGrid');
 let priceHistory = JSON.parse(localStorage.getItem('priceHistory')) || {};
 const previousPrices = {};
@@ -161,19 +162,24 @@ async function loadUserFigures() {
             portfolioData.details.forEach(detail => {
                 const { symbol, quantity, current_price, value } = detail;
                 const numPrice = parseFloat(current_price);
+                if (!renderedHoldings.has(symbol)) {
+                    const holdingsOuterContainer = document.getElementById('holdingsOuterContainer')
+                    const holdingsContainer = document.createElement('div')
 
-                const holdingsOuterContainer = document.getElementById('holdingsOuterContainer')
-                const holdingsContainer = document.createElement('div')
-                holdingsContainer.className = 'holdings-card'
-                holdingsContainer.innerHTML = `
-                    <div class="holdings-title">${symbol}</div>
-                    <a href="stock-detail.html?symbol=${symbol}" class="stock-link">
-                        <p class="holdings-detail">Holding: ${quantity} @ ${numPrice.toFixed(2)}</p>
-                        <p class="holdings-price">Total value: £${value}</p>
-                    </a>
-                `
-                holdingsOuterContainer.appendChild(holdingsContainer)
-            })
+                    holdingsContainer.className = 'holdings-card'
+                    holdingsContainer.innerHTML = `
+                        <div class="holdings-title">${symbol}</div>
+                        <a href="stock-detail.html?symbol=${symbol}" class="stock-link">
+                            <p class="holdings-detail" id="holdings-detail-${symbol}">Holding: ${quantity} @ ${numPrice.toFixed(2)}</p>
+                            <p class="holdings-price" id="holdings-price-${symbol}">Total value: £${value}</p>
+                        </a>
+                    `
+                    holdingsOuterContainer.appendChild(holdingsContainer)
+                    renderedHoldings.add(symbol)
+                } else {
+                    updateHoldings(symbol, quantity, numPrice, value);
+                }
+            });
          }
 
 
@@ -183,4 +189,12 @@ async function loadUserFigures() {
         alert('Could not load profile balance - please log in again')
         window.location.href = 'index.html';
     }
+}
+
+async function updateHoldings(symbol, quantity, numPrice, value) {
+    let holdingsDetail = document.getElementById(`holdings-detail-${symbol}`)
+    let holdingsPrice = document.getElementById(`holdings-price-${symbol}`)
+
+    holdingsDetail.innerText = `Holding: ${quantity} @ ${numPrice.toFixed(2)}`;
+    holdingsPrice.innerText = `Total Value: £${value}`;
 }
