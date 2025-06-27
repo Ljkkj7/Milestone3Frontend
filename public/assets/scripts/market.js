@@ -155,7 +155,27 @@ async function loadUserFigures() {
 
         document.getElementById('playerBalance').textContent = parseFloat(balanceData.balance);
         document.getElementById('playerName').textContent = balanceData.username;
-        document.getElementById('portfolioValue').textContent = portfolioData.total_portfolio_value; 
+        document.getElementById('portfolioValue').textContent = portfolioData.total_portfolio_value;
+
+        if (!portfolioData.details.isEmpty()){
+            portfolioData.details.forEach(detail => {
+                const { symbol, quantity, current_price, value } = detail;
+                const numPrice = parseFloat(current_price);
+
+                const holdingsOuterContainer = document.getElementById('holdingsOuterContainer')
+                const holdingsContainer = document.createElement('div')
+                holdingsContainer.className = 'holdings-card'
+                holdingsContainer.innerHTML = `
+                    <div class="holdings-title">${symbol}</div>
+                    <a href="stock-detail.html?symbol=${symbol}" class="stock-link">
+                        <p class="holdings-detail">Holding: ${quantity} @ ${numPrice}</p>
+                        <p class="holdings-price">Total value: £${value}</p>
+                    </a>
+                `
+                holdingsOuterContainer.appendChild(holdingsContainer)
+            })
+        }
+
 
     } catch(err) {
         console.error('Failed to fetch user balance')
