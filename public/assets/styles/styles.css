@@ -353,6 +353,10 @@ header {
     text-align: left;
 }
 
+.stock-link {
+    text-decoration: none;
+}
+
 .gameplay-section {
     display: flex;
     flex-direction: row;

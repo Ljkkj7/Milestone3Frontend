@@ -170,8 +170,8 @@ async function loadUserFigures() {
                     holdingsContainer.innerHTML = `
                         <div class="holdings-title">${symbol}</div>
                         <a href="stock-detail.html?symbol=${symbol}" class="stock-link">
-                            <p class="holdings-detail" id="holdings-detail-${symbol}">Holding: ${quantity} @ ${numPrice.toFixed(2)}</p>
-                            <p class="holdings-price" id="holdings-price-${symbol}">Total value: £${value}</p>
+                            <p class="holdings-detail" id="holdings-detail-${symbol}"><strong>Holding:</strong> ${quantity} @ ${numPrice.toFixed(2)}</p>
+                            <p class="holdings-price" id="holdings-price-${symbol}"><strong>Total value:</strong> £${value}</p>
                         </a>
                     `
                     holdingsOuterContainer.appendChild(holdingsContainer)
@@ -195,6 +195,6 @@ async function updateHoldings(symbol, quantity, numPrice, value) {
     let holdingsDetail = document.getElementById(`holdings-detail-${symbol}`)
     let holdingsPrice = document.getElementById(`holdings-price-${symbol}`)
 
-    holdingsDetail.innerText = `Holding: ${quantity} @ ${numPrice.toFixed(2)}`;
-    holdingsPrice.innerText = `Total Value: £${value}`;
+    holdingsDetail.innerText = `<strong>Holding:</strong> ${quantity} @ ${numPrice.toFixed(2)}`;
+    holdingsPrice.innerText = `<strong>Total Value:</strong> £${value}`;
 }
