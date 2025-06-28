@@ -357,6 +357,11 @@ header {
     text-align: left;
 }
 
+.holdings-card:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+}
+
 .stock-link {
     text-decoration: none;
     color: #000000;
