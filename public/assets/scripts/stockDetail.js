@@ -102,7 +102,7 @@ async function loadDetailFigures() {
 
         userBalance.innerHTML = `
             <h3>Balance:</h3>
-            <p>£${balanceData.balance}</p>
+            <p>£${parseFloat(balanceData.balance).toFixed(2)}</p>
         `
         portoflioData.details.forEach(detail => {
             const { symbol, quantity, current_price, value } = detail;
