@@ -97,8 +97,8 @@ async function loadDetailFigures() {
             throw new Error(`HTTP error! status: ${res.status}`);
         }
 
-        const balanceData = response.json()
-        const portoflioData = res.json()
+        const balanceData = await response.json()
+        const portoflioData = await res.json()
 
         userBalance.innerHTML = `
             <h3>Balance:</h3>
