@@ -107,7 +107,7 @@ async function loadDetailFigures() {
         portoflioData.details.forEach(detail => {
             const { symbol, quantity, current_price, value } = detail;
             const numPrice = parseFloat(current_price);
-            if (symbol == params) {
+            if (symbol == symbolUrl) {
                 stockHoldings.innerHTML = `
                     <h3>${symbol} Held:</h3>
                     <p>${quantity} @ ${numPrice}</p>
