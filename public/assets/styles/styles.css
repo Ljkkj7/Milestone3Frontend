@@ -413,7 +413,13 @@ header {
     background-color: #555;
 }
 
+.stocks-detail-container {
+    display: flex;
+    flex-direction: row;
+}
+
 .stock-detail-card {
+    width: fit-content;
     margin: 10px 10px;
     padding: 20px;
     background-color: #f4f4f4;
