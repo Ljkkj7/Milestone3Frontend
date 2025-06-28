@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 async function loadDetailFigures() {
-    const token = localStorage.get('access_token')
+    const token = localStorage.getItem('access_token')
 
     if (!token) {
         alert("No login token found - please log in")
