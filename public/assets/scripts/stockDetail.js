@@ -98,7 +98,7 @@ async function loadDetailFigures() {
         }
 
         const balanceData = response.json()
-        const portoflioData = response.json()
+        const portoflioData = res.json()
 
         userBalance.innerHTML = `
             <h3>Balance:</h3>
