@@ -345,6 +345,10 @@ header {
 
 .holdings-title {
     text-align: center;
+    font-size: 24px;
+    font-weight: bolder;
+    font-style: italic;
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 1)
 }
 
 .holdings-card {
