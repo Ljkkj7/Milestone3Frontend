@@ -78,6 +78,10 @@ socket.on('stocks_data', (stocks) => {
         labelHistory[symbol].push(label);
 
         if (priceHistory[symbol].length > 20) {
+            //Code to delete bloated pricehistory arrays from testing
+            while(priceHistory[symbol].length > 21){
+                priceHistory[symbol].shift()
+            }
             priceHistory[symbol].shift();
             labelHistory[symbol].shift();
         }
