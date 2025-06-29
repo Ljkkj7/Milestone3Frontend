@@ -46,7 +46,7 @@ async function fetchAndSendStocks() {
         }
         const stocks = await response.json();
         // Emit the stocks data to the connected client
-        io.socket.emit('stocks_data', stocks);
+        io.sockets.emit('stocks_data', stocks);
     } catch (error) {
         console.error('Error fetching stocks:', error);
     }
@@ -63,7 +63,7 @@ async function updateStockPrices() {
         const data = await response.json();
         console.log('Stock prices updated:', data);
 
-        io.socket.emit('stocks_data', data);
+        io.sockets.emit('stocks_data', data);
     } catch (error) {
         console.error('Error updating stock prices:', error);
     }
