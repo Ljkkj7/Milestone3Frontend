@@ -17,7 +17,7 @@ io.on('connection', (socket) => {
     console.log('A user connected:', socket.id);
 
     // Handle stock requests
-    fetchAndSendStocks(socket);
+    fetchAndSendStocks();
 
     const intervalId = setInterval(() => {
         console.log('Updating stock prices...');
