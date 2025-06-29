@@ -17,7 +17,7 @@ io.on('connection', (socket) => {
     console.log('A user connected:', socket.id);
 
     // Handle stock requests
-    fetchAndSendStocks();
+    fetchAndSendStocks(socket);
 
     const intervalId = setInterval(() => {
         console.log('Updating stock prices...');
@@ -25,7 +25,7 @@ io.on('connection', (socket) => {
         updateStockPrices();
         // Fetch and send the latest stock data
         console.log('Fetching stocks...');
-        fetchAndSendStocks();
+        fetchAndSendStocks(socket);
     }, 5000); // 5 seconds
 
     // Handle disconnection
@@ -36,7 +36,7 @@ io.on('connection', (socket) => {
 });
 
 // Function to fetch stocks from Django API and send to client
-async function fetchAndSendStocks() {
+async function fetchAndSendStocks(socket) {
     try {
         // Fetch stock data from the Django API
         console.log('Fetching stocks from Django API...');
@@ -46,13 +46,13 @@ async function fetchAndSendStocks() {
         }
         const stocks = await response.json();
         // Emit the stocks data to the connected client
-        io.sockets.emit('stocks_data', stocks);
+        socket.emit('stocks_data', stocks);
     } catch (error) {
         console.error('Error fetching stocks:', error);
     }
 }
 
-async function updateStockPrices() {
+async function updateStockPrices(socket) {
     try {
         // Fetch updated stock prices from the Django API
         console.log('Updating stock prices from Django API...');
@@ -63,7 +63,7 @@ async function updateStockPrices() {
         const data = await response.json();
         console.log('Stock prices updated:', data);
 
-        io.sockets.emit('stocks_data', data);
+        socket.emit('stocks_data', data);
     } catch (error) {
         console.error('Error updating stock prices:', error);
     }
