@@ -21,12 +21,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let labelHistory = JSON.parse(localStorage.getItem('labelHistory')) || {};
     labelHistory[symbolUrl] = labelHistory[symbolUrl] || [];
 
-    // let priceHistory = JSON.parse(localStorage.getItem('priceHistory'));
-    // priceHistory[symbol] = priceHistory[symbol] || [];
+    loadDetailFigures();
 
     socket.on('stocks_data', (stocks) => {
         console.log("Recieved paramater", stocks)
-        loadDetailFigures();
 
         stocks.forEach(stock => {
             const { symbol, price } = stock;
@@ -54,6 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 updateStockChart(stockChart, label, numPrice)
+                loadDetailFigures();
             }
         });
     })

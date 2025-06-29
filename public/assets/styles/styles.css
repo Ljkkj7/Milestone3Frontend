@@ -432,6 +432,11 @@ header {
     text-align: center;
 }
 
+.stock-detail-card h3 {
+    padding: 0px;
+    margin: 20px 0px 0px 0px;
+}
+
 .stock-detail-card:hover {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
     transform: translateY(-2px);
@@ -483,5 +488,22 @@ footer p {
     .stock-card {
         width: 100%;
         margin: 10px 0;
+    }
+
+    .stockActionContainer {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .gameplay-section {
+        display: inline-flex;
+        flex-direction: row;
+    }
+
+    .detail {
+        display: flex;
+        flex-direction: row;
+        padding: 20px;
+        margin: 10px 10px;
     }
 }
