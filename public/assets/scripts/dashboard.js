@@ -63,10 +63,44 @@ window.addEventListener('DOMContentLoaded', async () => {
     });
 });
 
-
 socket.on('stocks_data', (stocks) => {
+    stocks.forEach(stock => {
+        const {symbol, price} = stock;
+        const numPrice = parseFloat(price)
+        const label = new Date().toLocaleTimeString([], {
+            hour: '2-digit', minute: '2-digit', second: '2-digit'
+        });
 
-})
+        if (!symbol || !price) {
+            console.warn(`Invalid stock data received: ${JSON.stringify(stock)}`);
+            return; // Skip this stock if data is invalid
+        }
+
+        if (!priceHistory[symbol]) priceHistory[symbol] = [];
+        if (!labelHistory[symbol]) labelHistory[symbol] = [];
+
+        priceHistory[symbol].push(numPrice);
+        labelHistory[symbol].push(label);
+
+        if (priceHistory[symbol].length > 20) {
+            //Code to delete bloated pricehistory arrays from testing
+            while(priceHistory[symbol].length > 21){
+                priceHistory[symbol].shift()
+            }
+            priceHistory[symbol].shift();
+            labelHistory[symbol].shift();
+        }
+
+        localStorage.setItem('priceHistory', JSON.stringify(priceHistory));
+        localStorage.setItem('labelHistory', JSON.stringify(labelHistory));
+
+        if(renderedHoldings.has(symbol)){
+            updateStockChart(stockCharts[symbol], label, numPrice)
+        }
+    })
+});
+
+
 
 async function loadDashboardData(type){
     // Use this function for future API calls by importing it into other js files
