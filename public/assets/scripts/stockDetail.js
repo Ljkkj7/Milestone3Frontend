@@ -34,9 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const label = new Date().toLocaleTimeString();
                 const numPrice = parseFloat(price);
 
-                localStorage.setItem('priceHistory', JSON.stringify(priceHistory));
-                localStorage.setItem('labelHistory', JSON.stringify(labelHistory));
-
                 if(!stockRendered) {
                     const stockCanvas = document.createElement('div');
                     stockCanvas.className = 'stock-card-detail';
@@ -55,6 +52,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     stockChart.update();
                     stockRendered = true;
                 }
+                localStorage.setItem('priceHistory', JSON.stringify(priceHistory));
+                localStorage.setItem('labelHistory', JSON.stringify(labelHistory));
+                
                 updateStockChart(stockChart, label, numPrice)
                 loadDetailFigures();
             }
