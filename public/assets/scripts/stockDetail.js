@@ -54,9 +54,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 localStorage.setItem('priceHistory', JSON.stringify(priceHistory));
                 localStorage.setItem('labelHistory', JSON.stringify(labelHistory));
-                
+
                 updateStockChart(stockChart, label, numPrice)
-                loadDetailFigures();
+                requestAnimationFrame(() => {
+                    loadDetailFigures();
+                })
             }
         });
     })
