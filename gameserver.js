@@ -28,6 +28,11 @@ io.on('connection', (socket) => {
         fetchAndSendStocks(socket);
     }, 5000); // 5 seconds
 
+    // interval to refresh access token
+    setInterval(async () => {
+        await refreshToken();
+    }, 14 * 60 * 1000) // refresh every 14 minutes [15 minute token lifetime]
+
     // Handle disconnection
     socket.on('disconnect', () => {
         console.log('User disconnected:', socket.id);
@@ -66,6 +71,23 @@ async function updateStockPrices(socket) {
         socket.emit('stocks_data', data);
     } catch (error) {
         console.error('Error updating stock prices:', error);
+    }
+}
+
+async function refreshToken() {
+    const res = await fetch('https://marketio-3cedad1469b3.herokuapp.com/custom_auth/token/refresh/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ refresh: localStorage.getItem('refresh_token') })
+    });
+
+    if (res.ok) {
+        const data = await res.json()
+        localStorage.setItem('access_token', data.access);
+        return data.access;
+    } else {
+        alert('Session expired! Please log in again')
+        window.location.href = 'index.html'
     }
 }
 

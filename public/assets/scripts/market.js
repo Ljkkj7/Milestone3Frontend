@@ -3,7 +3,8 @@ import {
     updateStockChart
 } from './stockChart.js';
 
-const renderedStocks = new Set(); // To track rendered stocks
+const renderedStocks = new Set(); // To track rendered stocks]
+const renderedHoldings = new Set();
 const container = document.getElementById('stocksGrid');
 let priceHistory = JSON.parse(localStorage.getItem('priceHistory')) || {};
 const previousPrices = {};
@@ -77,6 +78,10 @@ socket.on('stocks_data', (stocks) => {
         labelHistory[symbol].push(label);
 
         if (priceHistory[symbol].length > 20) {
+            //Code to delete bloated pricehistory arrays from testing
+            while(priceHistory[symbol].length > 21){
+                priceHistory[symbol].shift()
+            }
             priceHistory[symbol].shift();
             labelHistory[symbol].shift();
         }
@@ -122,8 +127,7 @@ async function loadUserFigures() {
 
     if (!token) {
         alert("No login token found. Please log in")
-        window.location.href("index.html")
-        return;
+        window.location.href = 'index.html';
     }
 
     try {
@@ -156,11 +160,45 @@ async function loadUserFigures() {
 
         document.getElementById('playerBalance').textContent = parseFloat(balanceData.balance);
         document.getElementById('playerName').textContent = balanceData.username;
-        document.getElementById('portfolioValue').textContent = portfolioData.total_portfolio_value; 
+        document.getElementById('portfolioValue').textContent = portfolioData.total_portfolio_value;
+
+        if (portfolioData.details && portfolioData.details.length > 0){
+            portfolioData.details.forEach(detail => {
+                const { symbol, quantity, current_price, value } = detail;
+                const numPrice = parseFloat(current_price);
+                if (!renderedHoldings.has(symbol)) {
+                    const holdingsOuterContainer = document.getElementById('holdingsOuterContainer')
+                    const holdingsContainer = document.createElement('div')
+
+                    holdingsContainer.className = 'holdings-card'
+                    holdingsContainer.innerHTML = `
+                        <a href="stock-detail.html?symbol=${symbol}" class="stock-link">
+                            <div class="holdings-title">${symbol}</div>
+                            <p class="holdings-detail" id="holdings-detail-${symbol}"><strong>Holding:</strong> ${quantity} @ ${numPrice.toFixed(2)}</p>
+                            <p class="holdings-price" id="holdings-price-${symbol}"><strong>Total value:</strong> £${value}</p>
+                        </a>
+                    `
+                    holdingsOuterContainer.appendChild(holdingsContainer)
+                    renderedHoldings.add(symbol)
+                } else {
+                    updateHoldings(symbol, quantity, numPrice, value);
+                }
+            });
+         }
+
 
     } catch(err) {
+        console.error(err)
         console.error('Failed to fetch user balance')
         alert('Could not load profile balance - please log in again')
-        window.location.href("index.html")
+        window.location.href = 'index.html';
     }
+}
+
+async function updateHoldings(symbol, quantity, numPrice, value) {
+    let holdingsDetail = document.getElementById(`holdings-detail-${symbol}`)
+    let holdingsPrice = document.getElementById(`holdings-price-${symbol}`)
+
+    holdingsDetail.innerHTML = `<p class="holdings-detail" id="holdings-detail-${symbol}"><strong>Holding:</strong> ${quantity} @ ${numPrice.toFixed(2)}</p>`
+    holdingsPrice.innerHTML = `<p class="holdings-price" id="holdings-price-${symbol}"><strong>Total value:</strong> £${value}</p>`;
 }
