@@ -21,8 +21,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let labelHistory = JSON.parse(localStorage.getItem('labelHistory')) || {};
     labelHistory[symbolUrl] = labelHistory[symbolUrl] || [];
 
-    loadDetailFigures();
-
     socket.on('stocks_data', (stocks) => {
         console.log("Recieved paramater", stocks)
 

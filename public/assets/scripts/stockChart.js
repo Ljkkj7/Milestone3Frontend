@@ -37,7 +37,6 @@ export function createStockChart(ctx, symbol) {
 }
 
 export function updateStockChart(chart, label, price) {
-
     chart.data.labels.push(label);
     chart.data.datasets[0].data.push(price);
 
