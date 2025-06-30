@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const numPrice = parseFloat(price);
 
             if(symbolUrl === symbol) {
+                updateStockChart(stockChart, label, numPrice)
                 if(!stockRendered) {
                     const stockCanvas = document.createElement('div');
                     stockCanvas.className = 'stock-card-detail';
@@ -50,8 +51,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     stockChart.update();
                     stockRendered = true;
                 }
-
-                updateStockChart(stockChart, label, numPrice)
                 loadDetailFigures();
             }
         });
