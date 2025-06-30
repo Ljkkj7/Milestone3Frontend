@@ -26,28 +26,30 @@ window.addEventListener('DOMContentLoaded', async () => {
             const lastPrice = priceHistory[symbol]?.at(-1) ?? 0;
 
             const stockCanvas = document.createElement('div');
-            stockCanvas.className = 'stock-card';
+            stockCanvas.className = 'stock-cards';
             stockCanvas.innerHTML = `
-                <div class="stock-title">${symbol}</div>
-                <a href="stock-detail.html?symbol=${symbol}" class="stock-link">
-                    <div class="stock-price" id="price-${symbol}">£${parseFloat(lastPrice).toFixed(2)}</div>
-                    <canvas id="chart-${symbol}" width="400" height="200"></canvas>
-                </a>
-                <div class="detail">
-                    <h2>Buy Stock</h2>
-                    <form id="buyForm" class="buy-form">
-                        <label for="quantity">Quantity:</label>
-                        <input type="number" id="buyQuantity" name="quantity" min="1" required>
-                        <button type="submit">Buy</button>
-                    </form>
-                </div>
-                <div class="detail">
-                    <h2>Sell Stock</h2>
-                    <form id="sellForm">
-                        <label for="quantity">Quantity:</label>
-                        <input type="number" id="sellQuantity" name="sellQuantity" min="1" required>
-                        <button type="submit">Sell</button>
-                    </form>
+                <div class="stock-dashboard-individual">
+                    <div class="stock-title">${symbol}</div>
+                    <a href="stock-detail.html?symbol=${symbol}" class="stock-link">
+                        <div class="stock-price" id="price-${symbol}">£${parseFloat(lastPrice).toFixed(2)}</div>
+                        <canvas id="chart-${symbol}" width="400" height="200"></canvas>
+                    </a>
+                    <div class="detail">
+                        <h2>Buy Stock</h2>
+                        <form id="buyForm" class="buy-form">
+                            <label for="quantity">Quantity:</label>
+                            <input type="number" id="buyQuantity" name="quantity" min="1" required>
+                            <button type="submit">Buy</button>
+                        </form>
+                    </div>
+                    <div class="detail">
+                        <h2>Sell Stock</h2>
+                        <form id="sellForm">
+                            <label for="quantity">Quantity:</label>
+                            <input type="number" id="sellQuantity" name="sellQuantity" min="1" required>
+                            <button type="submit">Sell</button>
+                        </form>
+                    </div>
                 </div>
             `;
 
