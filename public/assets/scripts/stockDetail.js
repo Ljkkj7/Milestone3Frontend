@@ -28,11 +28,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         stocks.forEach(stock => {
             const { symbol, price } = stock;
-            const label = new Date().toLocaleTimeString();
-            const numPrice = parseFloat(price);
 
             if(symbolUrl === symbol) {
-                updateStockChart(stockChart, label, numPrice)
+
+                const label = new Date().toLocaleTimeString();
+                const numPrice = parseFloat(price);
+
+                localStorage.setItem('priceHistory', JSON.stringify(priceHistory));
+                localStorage.setItem('labelHistory', JSON.stringify(labelHistory));
+
                 if(!stockRendered) {
                     const stockCanvas = document.createElement('div');
                     stockCanvas.className = 'stock-card-detail';
@@ -51,6 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     stockChart.update();
                     stockRendered = true;
                 }
+                updateStockChart(stockChart, label, numPrice)
                 loadDetailFigures();
             }
         });
