@@ -10,7 +10,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const buyForm = document.getElementById('buyForm');
     const sellForm = document.getElementById('sellForm');
     const quantityHeld = document.getElementById('stockQuantityHeld');
-        const valueHeld = document.getElementById('stockValueHeld');
+    const valueHeld = document.getElementById('stockValueHeld');
+    const balanceCurrent = document.getElementById('userDetailBalance')
+
 
     if (!buyForm || !sellForm) {
         console.error("Form not found!")
@@ -51,6 +53,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 <p>£${(buyData.quantity*buyData.price).toFixed(2)}</p>
             `
 
+            balanceCurrent.innerHTML = `
+                <h3>Total Value Held:</h3>
+                <p>£${(buyData.balance).toFixed(2)}</p>
+            `
         } catch(err) {
             alert(err.message);
         }
@@ -93,6 +99,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         <h3>Total Value Held:</h3>
                         <p>£${(sellData.quantity*sellData.price).toFixed(2)}</p>
                     `
+
+                balanceCurrent.innerHTML = `
+                    <h3>Total Value Held:</h3>
+                    <p>£${(buyData.balance).toFixed(2)}</p>
+                `
             }
         } catch (err) {
             alert (err.message)
