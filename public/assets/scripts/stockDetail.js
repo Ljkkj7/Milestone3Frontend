@@ -73,8 +73,6 @@ async function loadDetailFigures() {
     let stockHoldings = document.getElementById('stockQuantityHeld');
     let stockValue = document.getElementById('stockValueHeld');
     let userBalance = document.getElementById('userDetailBalance');
-    let populateOnce = true;
-
 
     // NEED TO WRITE A FUNCTION TO CALL THESE APIS INSTEAD OF RE WRITING
     try {
@@ -112,22 +110,11 @@ async function loadDetailFigures() {
         portoflioData.details.forEach(detail => {
             const { symbol, quantity, current_price, value } = detail;
             const numPrice = parseFloat(current_price);
-            if (quantity == 0 || value == 0) {
-                while(populateOnce) {
-                    stockHoldings.innerHTML = `
-                    <h3>${symbol} Held:</h3>
-                    <p>${quantity} @ ${numPrice}</p>
-                    `
-
-                    stockValue.innerHTML = `
-                        <h3>Total Value Held:</h3>
-                        <p>£${value}</p>
-                    `
-
-                    populateOnce = false;
-                }
-            }
             if (symbol == symbolUrl) {
+                if (stockHoldings.classList.contains('hidden') || stockValue.classList.contains('hidden')){
+                    stockHoldings.classList.toggle('hidden')
+                    stockValue.classList.toggle('hidden')
+                }
                 stockHoldings.innerHTML = `
                     <h3>${symbol} Held:</h3>
                     <p>${quantity} @ ${numPrice}</p>
@@ -137,10 +124,12 @@ async function loadDetailFigures() {
                     <h3>Total Value Held:</h3>
                     <p>£${value}</p>
                 `
-            } 
+            } else {
+                if(!stockHoldings.classList.contains('hidden') || !stockValue.classList.contains('hidden'))
+                    stockHoldings.classList.toggle('hidden')
+                    stockValue.classList.toggle('hidden')
+                }
         });
-
-        populateOnce = true;
     } catch(err) {
         alert(err)
     }

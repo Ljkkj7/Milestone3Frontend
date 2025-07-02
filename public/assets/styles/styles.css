@@ -8,6 +8,10 @@ body {
     padding: 0;
 }
 
+.hidden {
+    display: none;
+}
+
 .navbar {
     background-color: #333;
     color: white;
