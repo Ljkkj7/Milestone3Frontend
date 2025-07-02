@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             valueHeld.innerHTML = `
                 <h3>Total Value Held:</h3>
-                <p>£${buyData.balance}</p>
+                <p>£${buyData.quantity*buyData.price}</p>
             `
 
         } catch(err) {
@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 valueHeld.innerHTML = `
                         <h3>Total Value Held:</h3>
-                        <p>£${sellData.balance}</p>
+                        <p>£${sellData.quantity*sellData.price}</p>
                     `
             }
         } catch (err) {
