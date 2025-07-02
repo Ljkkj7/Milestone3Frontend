@@ -48,6 +48,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const token = localStorage.getItem('access_token')
         const quantity = parseInt(document.getElementById('sellQuantity').value);
+        const quantityHeld = document.getElementById('stockQuantityHeld');
+        const valueHeld = document.getElementById('stockValueHeld');
 
         try {
             const res = await fetch(DJANGO_SELL_STOCK, {
@@ -66,6 +68,16 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!res.ok) {
                 throw new Error(`HTTP error! status: ${res.status}` + (sellData.error));
             }
+
+            quantityHeld.innerHTML = `
+                    <h3>${symbol} Held:</h3>
+                    <p>${quantity-parseFloat(sellData.quantity)} @ ${sellData.price}</p>
+                `
+
+            valueHeld.innerHTML = `
+                    <h3>Total Value Held:</h3>
+                    <p>£${(quantity-parseFloat(sellData.quantity))*sellData.price}</p>
+                `
         } catch (err) {
             alert (err.message)
         }

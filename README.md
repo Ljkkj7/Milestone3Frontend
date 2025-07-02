@@ -66,7 +66,7 @@ Django will manage the core business logic (player management, transaction handl
 
 Django REST Framework will expose API endpoints for the frontend (through Node.js server) to interact with the database (e.g., fetching stock data, updating player portfolios, storing transactions).
 
-### Authentication (Django):
+### Authentication (Django JWT):
 
 The authentication system in Django will handle user login, registration, and management.
 
