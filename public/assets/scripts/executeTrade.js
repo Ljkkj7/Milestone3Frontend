@@ -71,12 +71,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             quantityHeld.innerHTML = `
                     <h3>${symbol} Held:</h3>
-                    <p>${quantity-parseFloat(sellData.quantity)} @ ${sellData.price}</p>
+                    <p>${sellData.quantity} @ ${sellData.price}</p>
                 `
 
             valueHeld.innerHTML = `
                     <h3>Total Value Held:</h3>
-                    <p>£${(quantity-parseFloat(sellData.quantity))*sellData.price}</p>
+                    <p>£${sellData.quantity*sellData.price}</p>
                 `
         } catch (err) {
             alert (err.message)
