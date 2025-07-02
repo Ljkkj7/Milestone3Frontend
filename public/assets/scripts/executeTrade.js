@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 balanceCurrent.innerHTML = `
                     <h3>Total Value Held:</h3>
-                    <p>£${(buyData.balance).toFixed(2)}</p>
+                    <p>£${(sellData.balance).toFixed(2)}</p>
                 `
             }
         } catch (err) {
