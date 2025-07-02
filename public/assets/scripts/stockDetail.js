@@ -116,7 +116,7 @@ async function loadDetailFigures() {
 
                 stockHoldings.classList.remove('hidden')
                 stockValue.classList.remove('hidden')
-                
+
                 stockHoldings.innerHTML = `
                     <h3>${symbol} Held:</h3>
                     <p>${quantity} @ ${numPrice}</p>
@@ -127,9 +127,9 @@ async function loadDetailFigures() {
                     <p>£${value}</p>
                 `
             } else {
-                if(!stockHoldings.classList.contains('hidden') || !stockValue.classList.contains('hidden')){
-                    stockHoldings.classList.toggle('hidden')
-                    stockValue.classList.toggle('hidden')
+                if(!symbolMatch){
+                    stockHoldings.classList.add('hidden')
+                    stockValue.classList.add('hidden')
                     }
                 }
         });
