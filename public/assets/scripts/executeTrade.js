@@ -69,15 +69,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error(`HTTP error! status: ${res.status}` + (sellData.error));
             }
 
-            quantityHeld.innerHTML = `
+            if(sellData.quantity == 0){
+                quantityHeld.classList.add('hidden')
+                valueHeld.classList.add('hidden')
+            } else {
+                 quantityHeld.innerHTML = `
                     <h3>${symbol} Held:</h3>
                     <p>${sellData.quantity} @ ${sellData.price}</p>
                 `
 
-            valueHeld.innerHTML = `
-                    <h3>Total Value Held:</h3>
-                    <p>£${sellData.quantity*sellData.price}</p>
-                `
+                valueHeld.innerHTML = `
+                        <h3>Total Value Held:</h3>
+                        <p>£${sellData.quantity*sellData.price}</p>
+                    `
+            }
         } catch (err) {
             alert (err.message)
         }

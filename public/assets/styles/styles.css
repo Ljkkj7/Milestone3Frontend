@@ -465,6 +465,19 @@ header {
     transform: translateY(-2px);
 }
 
+.dashboard-graph {
+    display: flex;
+    flex-direction: column;
+    width: 100vh;
+    max-width: 600px;
+    padding: 20px;
+    margin: 0 auto;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
 
 footer {
     background-color: #333;
@@ -528,5 +541,10 @@ footer p {
         flex-direction: column;
         padding: 20px;
         margin: 10px 10px;
+    }
+
+    .dashboard-graph {
+        max-width: 300px;
+        padding: 0px;
     }
 }
