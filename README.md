@@ -187,6 +187,10 @@ Test for bugs, scalability, and balance. After the testing phase, release the ga
 
 ---
 
+## Dependencies
+
+---
+
 ## 🚀 Getting Started
 
 ### 1. Clone the Repository

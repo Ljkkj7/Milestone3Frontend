@@ -29,11 +29,13 @@ window.addEventListener('DOMContentLoaded', async () => {
             stockCanvas.className = 'stock-cards';
             stockCanvas.innerHTML = `
                 <div class="stock-dashboard-individual">
-                    <div class="stock-title">${symbol}</div>
-                    <a href="stock-detail.html?symbol=${symbol}" class="stock-link">
-                        <div class="stock-price" id="price-${symbol}">£${parseFloat(lastPrice).toFixed(2)}</div>
-                        <canvas id="chart-${symbol}" width="400" height="200"></canvas>
-                    </a>
+                    <div class="dashboard-graph">
+                        <div class="stock-title">${symbol}</div>
+                        <a href="stock-detail.html?symbol=${symbol}" class="stock-link">
+                            <div class="stock-price" id="price-${symbol}">£${parseFloat(lastPrice).toFixed(2)}</div>
+                            <canvas id="chart-${symbol}" width="400" height="200"></canvas>
+                        </a>
+                    </div>
                     <div class="detail">
                         <h2>Buy Stock</h2>
                         <form id="buyForm" class="buy-form">
