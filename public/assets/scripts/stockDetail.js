@@ -125,9 +125,10 @@ async function loadDetailFigures() {
                     <p>£${value}</p>
                 `
             } else {
-                if(!stockHoldings.classList.contains('hidden') || !stockValue.classList.contains('hidden'))
+                if(!stockHoldings.classList.contains('hidden') || !stockValue.classList.contains('hidden')){
                     stockHoldings.classList.toggle('hidden')
                     stockValue.classList.toggle('hidden')
+                    }
                 }
         });
     } catch(err) {
