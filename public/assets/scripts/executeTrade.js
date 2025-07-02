@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const buyForm = document.getElementById('buyForm');
     const sellForm = document.getElementById('sellForm');
+    const quantityHeld = document.getElementById('stockQuantityHeld');
+        const valueHeld = document.getElementById('stockValueHeld');
 
     if (!buyForm || !sellForm) {
         console.error("Form not found!")
@@ -38,6 +40,17 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!res.ok) {
                 throw new Error(`HTTP error! status: ${res.status}` + (buyData.error));
             }
+
+            quantityHeld.innerHTML = `
+                <h3>${symbol} Held:</h3>
+                <p>${buyData.quantity} @ ${buyData.price}</p>
+            `
+
+            valueHeld.innerHTML = `
+                <h3>Total Value Held:</h3>
+                <p>£${buyData.balance}</p>
+            `
+
         } catch(err) {
             alert(err.message);
         }
@@ -48,8 +61,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const token = localStorage.getItem('access_token')
         const quantity = parseInt(document.getElementById('sellQuantity').value);
-        const quantityHeld = document.getElementById('stockQuantityHeld');
-        const valueHeld = document.getElementById('stockValueHeld');
 
         try {
             const res = await fetch(DJANGO_SELL_STOCK, {
@@ -80,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 valueHeld.innerHTML = `
                         <h3>Total Value Held:</h3>
-                        <p>£${sellData.quantity*sellData.price}</p>
+                        <p>£${sellData.balance}</p>
                     `
             }
         } catch (err) {
