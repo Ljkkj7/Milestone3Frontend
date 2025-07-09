@@ -198,14 +198,13 @@ function updatePalFigures(symbol, price) {
     const {quantity, avgBuy} = data;
     const pnl = (parseFloat(price) - avgBuy) * quantity;
 
-    const palEl = document.getElementById(`pal-${symbol}`);
-    const prevPalEl = document.getElementById(`pal-${symbol}-detail`);
-    const prevPal = parseFloat(prevPalEl);
+    const palEl = document.getElementById(`pal-${symbol}-detail`);
+    const prevPal = parseFloat(PalEl);
 
     console.log(data, pnl, price, avgBuy, quantity, symbol, prevPal)
     const avgBuyEl = document.getElementById(`avg-buy-${symbol}`);
 
-    if (palEl) palEl.textContent = `£${pnl.toFixed(2)}`;
+    if (palEl) palEl.textContent = `${pnl.toFixed(2)}`;
     if (avgBuyEl) avgBuyEl.textContent = `£${avgBuy.toFixed(2)}`;
 
     flashUpdate(palEl, pnl, prevPal);
