@@ -201,18 +201,20 @@ function updatePalFigures(symbol, price) {
     console.log(data, pnl, price, avgBuy, quantity, symbol)
 
     const palEl = document.getElementById(`pal-${symbol}`);
+    const prevPal = parseFloat(palEl.innerText)
+
     const avgBuyEl = document.getElementById(`avg-buy-${symbol}`);
 
     if (palEl) palEl.textContent = `£${pnl.toFixed(2)}`;
     if (avgBuyEl) avgBuyEl.textContent = `£${avgBuy.toFixed(2)}`;
 
-    flashUpdate(palEl, pnl);
+    flashUpdate(palEl, pnl, prevPal);
 }
 
-function flashUpdate(el, value) {
+function flashUpdate(el, value, prevValue) {
     if (!el) return;
     el.style.transition = 'color 0.3s';
-    el.style.color = value >= 0 ? 'green' : 'red';
+    el.style.color = value >= prevValue ? 'green' : 'red';
     setTimeout(() => {
         el.style.color = '';
     }, 800);
