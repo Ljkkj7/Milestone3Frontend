@@ -127,62 +127,52 @@ socket.on('stocks_data', (stocks) => {
     })
 });
 
-async function loadDashboardData(type){
-    // Use this function for future API calls by importing it into other js files
-    const token = localStorage.getItem('access_token')
+async function loadDashboardData(type) {
+    const token = localStorage.getItem('access_token');
 
     try {
-        const response = await fetch(DJANGO_GET_USER_BALANCE_FIGURES, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
-        });
+        const [balanceRes, portfolioRes, palRes] = await Promise.all([
+            fetch(DJANGO_GET_USER_BALANCE_FIGURES, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            }),
+            fetch(DJANGO_GET_USER_PORTFOLIO_FIGURES, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            }),
+            fetch(DJANGO_GET_PANDL_FIGURES, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+        ]);
 
-        const res = await fetch(DJANGO_GET_USER_PORTFOLIO_FIGURES, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
-        });
+        // Check for HTTP errors before parsing
+        if (!balanceRes.ok) throw new Error(`Balance API error: ${balanceRes.status}`);
+        if (!portfolioRes.ok) throw new Error(`Portfolio API error: ${portfolioRes.status}`);
+        if (!palRes.ok) throw new Error(`P&L API error: ${palRes.status}`);
 
-        const resPal = await fetch(DJANGO_GET_PANDL_FIGURES, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
-        })
+        // Parse all responses
+        const [balanceData, portfolioData, palData] = await Promise.all([
+            balanceRes.json(),
+            portfolioRes.json(),
+            palRes.json()
+        ]);
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
+        if (type === 'USER_DATA') return balanceData;
+        if (type === 'PORTFOLIO_DATA') return portfolioData;
+        if (type === 'PAL_DATA') return palData;
 
-        if (!res.ok) {
-            throw new Error(`HTTP error! status: ${res.status}`);
-        }
-
-        if (!resPal.ok) {
-            throw new Error(`HTTP error! status: ${res.status}`)
-        }
-
-        if (type == 'PORTFOLIO_DATA') {
-            const portfolioData = await res.json();
-            return(portfolioData);
-        }
-
-        if (type == 'USER_DATA') {
-            const balanceData = await response.json();
-            return(balanceData);
-        }
-
-        if (type == 'PAL_DATA') {
-            const palData = await resPal.json();
-            return(palData);
-        }
-    } catch(err){
-        alert(err)
+    } catch (err) {
+        console.error("Dashboard data fetch failed:", err);
+        alert("Failed to load dashboard data: " + err.message);
     }
 }
