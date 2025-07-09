@@ -88,11 +88,11 @@ window.addEventListener('DOMContentLoaded', async () => {
                             </div>
                         </div>
                         <div class="detail-dashboard-outer">
-                            <div class="detail-dashboard" id="stockQuantityHeld">
+                            <div class="detail-dashboard" id="stockQuantityHeld${symbol}">
                             </div>
                         </div>
                         <div class="detail-dashboard-outer">
-                            <div class="detail-dashboard" id="stockValueHeld">
+                            <div class="detail-dashboard" id="stockValueHeld${symbol}">
                             </div>
                         </div>
                     </div>
@@ -146,6 +146,7 @@ socket.on('stocks_data', (stocks) => {
         if(renderedHoldings.has(symbol)){
             updateStockChart(stockCharts[symbol], label, numPrice)
             updatePalFigures(symbol, numPrice);
+            loadDetailFigures(symbol)
         }
     })
 });
@@ -226,4 +227,26 @@ function flashUpdate(el, value, prevValue) {
     setTimeout(() => {
         el.style.color = '';
     }, 800);
+}
+
+async function loadDetailFigures(symbol) {
+    quantityHeld = document.getElementById(`stockQuantityHeld${symbol}`);
+    valueHeld = document.getElementById(`stockValueHeld${symbol}`);
+
+    const portfolioData = await loadDashboardData('PORTFOLIO_DATA');
+
+    portfolioData.details.forEach(detail => {
+        const { symbol, quantity, current_price, value } = detail;
+        const numPrice = parseFloat(current_price);
+
+        stockHoldings.innerHTML = `
+            <h3>${symbol} Held:</h3>
+            <p>${quantity} @ ${numPrice}</p>
+        `
+
+        stockValue.innerHTML = `
+            <h3>Total Value Held:</h3>
+            <p>£${value}</p>
+        `
+    })
 }
