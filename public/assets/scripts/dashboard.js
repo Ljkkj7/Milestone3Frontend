@@ -77,13 +77,13 @@ window.addEventListener('DOMContentLoaded', async () => {
                         <div class="detail-dashboard-outer">
                             <div class="detail-dashboard">
                                 <h2>Stock P&L</h2>
-                                <p id="pal-${symbol}" class="palDetail">${parseFloat(profitLoss).toFixed(2)}</p>
+                                <p id="pal-${symbol}" class="palDetail">£<span id="pal-${symbol}-detail">${parseFloat(profitLoss).toFixed(2)}</span></p>
                             </div>
                         </div>
                         <div class="detail-dashboard-outer">
                             <div class="detail-dashboard">
                                 <h2>Avg. Buy Price</h2>
-                                <p  id="avg-buy-${symbol}" class="palDetail">${parseFloat(avgBuyPrice).toFixed(2)}</p>
+                                <p  id="avg-buy-${symbol}" class="palDetail">£${parseFloat(avgBuyPrice).toFixed(2)}</p>
                             </div>
                         </div>
                     </div>
@@ -199,7 +199,7 @@ function updatePalFigures(symbol, price) {
     const pnl = (parseFloat(price) - avgBuy) * quantity;
 
     const palEl = document.getElementById(`pal-${symbol}`);
-    const prevPal = parseFloat(palEl.innerText)
+    const prevPal = parseFloat(document.getElementById(`pal-${symbol}-detail`).innerText);
 
     console.log(data, pnl, price, avgBuy, quantity, symbol, prevPal)
     const avgBuyEl = document.getElementById(`avg-buy-${symbol}`);
