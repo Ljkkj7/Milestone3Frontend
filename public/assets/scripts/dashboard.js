@@ -28,12 +28,6 @@ window.addEventListener('DOMContentLoaded', async () => {
 
     portfolioData.details.forEach(detail => {
         const symbol = detail.symbol;
-        if (palDetail) {
-            holdings[symbol] = {
-                quantity: detail.quantity,
-                avgBuy: parseFloat(palDetail.average_buy_price)
-            };
-        }
         if (!renderedHoldings.has(symbol)) {
             const lastPrice = priceHistory[symbol]?.at(-1) ?? 0;
 
@@ -41,6 +35,12 @@ window.addEventListener('DOMContentLoaded', async () => {
             const profitLoss = palDetail ? palDetail.profit_loss : 'N/A';
             const avgBuyPrice = palDetail ? palDetail.average_buy_price : 'N/A';
 
+            if (palDetail) {
+                holdings[symbol] = {
+                    quantity: detail.quantity,
+                    avgBuy: parseFloat(palDetail.average_buy_price)
+                };
+            }
             const stockCanvas = document.createElement('div');
             stockCanvas.className = 'stock-cards';
             stockCanvas.innerHTML = `
