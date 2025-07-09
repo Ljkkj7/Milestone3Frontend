@@ -30,6 +30,10 @@ window.addEventListener('DOMContentLoaded', async () => {
         if (!renderedHoldings.has(symbol)) {
             const lastPrice = priceHistory[symbol]?.at(-1) ?? 0;
 
+            const palDetail = palData.details.find(d => d.symbol === symbol);
+            const profitLoss = palDetail ? palDetail.profit_loss : 'N/A';
+            const avgBuyPrice = palDetail ? palDetail.average_buy_price : 'N/A';
+
             const stockCanvas = document.createElement('div');
             stockCanvas.className = 'stock-cards';
             stockCanvas.innerHTML = `
@@ -65,13 +69,13 @@ window.addEventListener('DOMContentLoaded', async () => {
                         <div class="detail-dashboard-outer">
                             <div class="detail-dashboard">
                                 <h2>Stock P&L</h2>
-                                <p id="PAL">${palData.details.profit_loss}</p>
+                                <p id="PAL" class="palDetail">${profitLoss}</p>
                             </div>
                         </div>
                         <div class="detail-dashboard-outer">
                             <div class="detail-dashboard">
                                 <h2>Avg. Buy Price</h2>
-                                <p id="PAL">${palData.details.average_buy_price}</p>
+                                <p class="palDetail">${avgBuyPrice}</p>
                             </div>
                         </div>
                     </div>
