@@ -38,7 +38,7 @@ window.addEventListener('DOMContentLoaded', async () => {
             if (palDetail) {
                 holdings[symbol] = {
                     quantity: parseFloat(detail.quantity),
-                    avgBuy: parseFloat(palDetail.average_buy_price)
+                    avgBuy: parseFloat(avgBuyPrice)
                 };
             }
 
@@ -197,6 +197,9 @@ function updatePalFigures(symbol, price) {
 
     const {quanity, avgBuy} = data;
     const pnl = (price - avgBuy) * quanity;
+
+    console.log(data, pnl, price, avgBuy, quanity)
+    console.log(typeof(data, pnl, price, avgBuy, quanity))
 
     const palEl = document.getElementById(`pal-${symbol}`);
     const avgBuyEl = document.getElementById(`avg-buy-${symbol}`);
