@@ -54,27 +54,6 @@ window.addEventListener('DOMContentLoaded', async () => {
                         </a>
                     </div>
                     <div class="detail-dashboard-container">
-                        <div class="detail-dashboard-outer">
-                            <div class="detail-dashboard">
-                                <h2>Buy Stock</h2>
-                                <form id="buyForm" class="buy-form">
-                                    <label for="quantity">Quantity:</label>
-                                    <input type="number" id="buyQuantity" name="quantity" min="1" required>
-                                    <button type="submit">Buy</button>
-                                </form>
-                            </div>
-                        </div>
-                        <div class="detail-dashboard-outer">
-                            <div class="detail-dashboard">
-                                <h2>Sell Stock</h2>
-                                <form id="sellForm">
-                                    <label for="quantity">Quantity:</label>
-                                    <input type="number" id="sellQuantity" name="sellQuantity" min="1" required>
-                                    <button type="submit">Sell</button>
-                                </form>
-                            </div>
-                        </div>
-                        <script src="assets/scripts/executeTrade.js"></script>
                         <div class="detail-dashboard-outer-stats">
                             <div class="detail-dashboard-outer">
                                 <div class="detail-dashboard">
