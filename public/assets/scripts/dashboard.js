@@ -74,6 +74,7 @@ window.addEventListener('DOMContentLoaded', async () => {
                                 </form>
                             </div>
                         </div>
+                        <script src="assets/scripts/executeTrade.js"></script>
                         <div class="detail-dashboard-outer">
                             <div class="detail-dashboard">
                                 <h2>Stock P&L</h2>
@@ -84,6 +85,14 @@ window.addEventListener('DOMContentLoaded', async () => {
                             <div class="detail-dashboard">
                                 <h2>Avg. Buy Price</h2>
                                 <p  id="avg-buy-${symbol}" class="palDetail">£${parseFloat(avgBuyPrice).toFixed(2)}</p>
+                            </div>
+                        </div>
+                        <div class="detail-dashboard-outer">
+                            <div class="detail-dashboard" id="stockQuantityHeld">
+                            </div>
+                        </div>
+                        <div class="detail-dashboard-outer">
+                            <div class="detail-dashboard" id="stockValueHeld">
                             </div>
                         </div>
                     </div>

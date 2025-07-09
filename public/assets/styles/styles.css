@@ -423,7 +423,7 @@ header {
     margin: 10px 10px;
 }
 
-.detail button {
+.detail button, .detail-dashboard button {
     width: 100%;
     padding: 10px;
     background-color: #333;
@@ -432,7 +432,7 @@ header {
     cursor: pointer;
 }
 
-.detail button:hover {
+.detail button:hover, .detail-dashboard button:hover {
     background-color: #555;
 }
 
