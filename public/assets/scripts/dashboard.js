@@ -8,6 +8,7 @@ const DJANGO_GET_USER_PORTFOLIO_FIGURES = 'https://marketio-3cedad1469b3.herokua
 const DJANGO_GET_USER_BALANCE_FIGURES = 'https://marketio-3cedad1469b3.herokuapp.com/dashboard/balance/';
 const DJANGO_GET_PANDL_FIGURES = 'https://marketio-3cedad1469b3.herokuapp.com/dashboard/pal/'
 const renderedHoldings = new Set();
+const holdings = {};
 const container = document.getElementById('dashboardCards');
 const stockCharts = {};
 let priceHistory = JSON.parse(localStorage.getItem('priceHistory')) || {};
@@ -16,7 +17,7 @@ let labelHistory = JSON.parse(localStorage.getItem('labelHistory')) || {};
 window.addEventListener('DOMContentLoaded', async () => {
     const portfolioData = await loadDashboardData('PORTFOLIO_DATA');
     const balanceData = await loadDashboardData('BALANCE_DATA');
-    const palData = await loadDashboardData('PAL_DATA')
+    const palData = await loadDashboardData('PAL_DATA');
 
     // document.getElementById('Username').textContent = balanceData.username;
 
@@ -27,6 +28,12 @@ window.addEventListener('DOMContentLoaded', async () => {
 
     portfolioData.details.forEach(detail => {
         const symbol = detail.symbol;
+        if (palDetail) {
+            holdings[symbol] = {
+                quantity: detail.quantity,
+                avgBuy: parseFloat(palDetail.average_buy_price)
+            };
+        }
         if (!renderedHoldings.has(symbol)) {
             const lastPrice = priceHistory[symbol]?.at(-1) ?? 0;
 
@@ -69,13 +76,13 @@ window.addEventListener('DOMContentLoaded', async () => {
                         <div class="detail-dashboard-outer">
                             <div class="detail-dashboard">
                                 <h2>Stock P&L</h2>
-                                <p id="PAL" class="palDetail">${profitLoss}</p>
+                                <p id="pal-${symbol}" class="palDetail">${parseFloat(profitLoss).toFixed(2)}</p>
                             </div>
                         </div>
                         <div class="detail-dashboard-outer">
                             <div class="detail-dashboard">
                                 <h2>Avg. Buy Price</h2>
-                                <p class="palDetail">${avgBuyPrice}</p>
+                                <p  id="avg-buy-${symbol}" class="palDetail">${parseFloat(avgBuyPrice).toFixed(2)}</p>
                             </div>
                         </div>
                     </div>
@@ -95,6 +102,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 });
 
 socket.on('stocks_data', (stocks) => {
+    
     stocks.forEach(stock => {
         const {symbol, price} = stock;
         const numPrice = parseFloat(price)
@@ -127,6 +135,7 @@ socket.on('stocks_data', (stocks) => {
 
         if(renderedHoldings.has(symbol)){
             updateStockChart(stockCharts[symbol], label, numPrice)
+            updatePalFigures(symbol, numPrice);
         }
     })
 });
@@ -179,4 +188,29 @@ async function loadDashboardData(type) {
         console.error("Dashboard data fetch failed:", err);
         alert("Failed to load dashboard data: " + err.message);
     }
+}
+
+function updatePalFigures(symbol, price) {
+    const data = holdings[symbol];
+    if (!data) return;
+
+    const {quanity, avgBuy} = data;
+    const pnl = (price - avgBuy) * quanity;
+
+    const palEl = document.getElementById(`pal-${symbol}`);
+    const avgBuyEl = document.getElementById(`avg-buy-${symbol}`);
+
+    if (palEl) palEl.textContent = `£${pnl.toFixed(2)}`;
+    if (avgBuyEl) avgBuyEl.textContent = `£${avgBuy.toFixed(2)}`;
+
+    flashUpdate(palEl, pnl);
+}
+
+function flashUpdate(el, value) {
+    if (!el) return;
+    el.style.transition = 'color 0.3s';
+    el.style.color = value >= 0 ? 'green' : 'red';
+    setTimeout(() => {
+        el.style.color = '';
+    }, 800);
 }
