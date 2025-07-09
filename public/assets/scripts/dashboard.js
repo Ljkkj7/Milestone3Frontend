@@ -83,6 +83,8 @@ window.addEventListener('DOMContentLoaded', async () => {
             container.appendChild(stockCanvas);
             renderedHoldings.add(symbol);
 
+            loadDetailFigures();
+
             const stockCtx = document.getElementById(`chart-${symbol}`).getContext('2d');
             stockCharts[symbol] = createStockChart(stockCtx, symbol);
             stockCharts[symbol].data.labels = labelHistory[symbol] || [];
