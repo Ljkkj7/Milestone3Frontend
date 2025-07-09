@@ -37,10 +37,11 @@ window.addEventListener('DOMContentLoaded', async () => {
 
             if (palDetail) {
                 holdings[symbol] = {
-                    quantity: detail.quantity,
+                    quantity: parseFloat(detail.quantity),
                     avgBuy: parseFloat(palDetail.average_buy_price)
                 };
             }
+
             const stockCanvas = document.createElement('div');
             stockCanvas.className = 'stock-cards';
             stockCanvas.innerHTML = `
