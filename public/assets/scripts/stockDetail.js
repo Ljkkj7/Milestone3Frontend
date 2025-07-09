@@ -7,6 +7,7 @@ const DJANGO_GET_USER_BALANCE_FIGURES = 'https://marketio-3cedad1469b3.herokuapp
 const DJANGO_GET_USER_PORTFOLIO_FIGURES = 'https://marketio-3cedad1469b3.herokuapp.com/dashboard/portfolio/';
 const params = new URLSearchParams(window.location.search);
 const symbolUrl = params.get('symbol');
+let symbolMatch = false;
 
 document.addEventListener('DOMContentLoaded', () => {
     const socket = io.connect()
@@ -111,6 +112,11 @@ async function loadDetailFigures() {
             const { symbol, quantity, current_price, value } = detail;
             const numPrice = parseFloat(current_price);
             if (symbol == symbolUrl) {
+                symbolMatch = true;
+
+                stockHoldings.classList.remove('hidden')
+                stockValue.classList.remove('hidden')
+
                 stockHoldings.innerHTML = `
                     <h3>${symbol} Held:</h3>
                     <p>${quantity} @ ${numPrice}</p>
@@ -120,7 +126,12 @@ async function loadDetailFigures() {
                     <h3>Total Value Held:</h3>
                     <p>£${value}</p>
                 `
-            } 
+            } else {
+                if(!symbolMatch){
+                    stockHoldings.classList.add('hidden')
+                    stockValue.classList.add('hidden')
+                    }
+                }
         });
     } catch(err) {
         alert(err)

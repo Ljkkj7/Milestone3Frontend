@@ -8,6 +8,10 @@ body {
     padding: 0;
 }
 
+.hidden {
+    display: none !important;
+}
+
 .navbar {
     background-color: #333;
     color: white;
@@ -419,7 +423,7 @@ header {
     margin: 10px 10px;
 }
 
-.detail button {
+.detail button, .detail-dashboard button {
     width: 100%;
     padding: 10px;
     background-color: #333;
@@ -428,7 +432,7 @@ header {
     cursor: pointer;
 }
 
-.detail button:hover {
+.detail button:hover, .detail-dashboard button:hover {
     background-color: #555;
 }
 
@@ -459,6 +463,57 @@ header {
 .stock-detail-card:hover {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
     transform: translateY(-2px);
+}
+
+.dashboard-graph {
+    display: flex;
+    flex-direction: column;
+    width: 100vh;
+    max-width: 800px;
+    padding: 20px;
+    margin: 0 auto;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.detail-dashboard-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 20px 10px;
+}
+
+.detail-dashboard-outer-stats {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.detail-dashboard-outer {
+    width: 50vh;
+    max-width: 300px;
+    margin: 10px 10px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.detail-dashboard {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.detail-dashboard form {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    margin: 10px 10px;
 }
 
 
@@ -524,5 +579,10 @@ footer p {
         flex-direction: column;
         padding: 20px;
         margin: 10px 10px;
+    }
+
+    .dashboard-graph {
+        max-width: 300px;
+        padding: 0px;
     }
 }

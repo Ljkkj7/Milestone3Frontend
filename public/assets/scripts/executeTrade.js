@@ -9,6 +9,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const buyForm = document.getElementById('buyForm');
     const sellForm = document.getElementById('sellForm');
+    const quantityHeld = document.getElementById('stockQuantityHeld');
+    const valueHeld = document.getElementById('stockValueHeld');
+    const balanceCurrent = document.getElementById('userDetailBalance')
+
 
     if (!buyForm || !sellForm) {
         console.error("Form not found!")
@@ -38,6 +42,21 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!res.ok) {
                 throw new Error(`HTTP error! status: ${res.status}` + (buyData.error));
             }
+
+            quantityHeld.innerHTML = `
+                <h3>${symbol} Held:</h3>
+                <p>${buyData.quantity} @ ${buyData.price}</p>
+            `
+
+            valueHeld.innerHTML = `
+                <h3>Total Value Held:</h3>
+                <p>£${(buyData.quantity*buyData.price).toFixed(2)}</p>
+            `
+
+            balanceCurrent.innerHTML = `
+                <h3>Total Value Held:</h3>
+                <p>£${(buyData.balance).toFixed(2)}</p>
+            `
         } catch(err) {
             alert(err.message);
         }
@@ -65,6 +84,26 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             if (!res.ok) {
                 throw new Error(`HTTP error! status: ${res.status}` + (sellData.error));
+            }
+
+            if(sellData.quantity == 0){
+                quantityHeld.classList.add('hidden')
+                valueHeld.classList.add('hidden')
+            } else {
+                 quantityHeld.innerHTML = `
+                    <h3>${symbol} Held:</h3>
+                    <p>${sellData.quantity} @ ${sellData.price}</p>
+                `
+
+                valueHeld.innerHTML = `
+                        <h3>Total Value Held:</h3>
+                        <p>£${(sellData.quantity*sellData.price).toFixed(2)}</p>
+                    `
+
+                balanceCurrent.innerHTML = `
+                    <h3>Total Value Held:</h3>
+                    <p>£${(sellData.balance).toFixed(2)}</p>
+                `
             }
         } catch (err) {
             alert (err.message)
