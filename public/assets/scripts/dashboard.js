@@ -195,11 +195,10 @@ function updatePalFigures(symbol, price) {
     const data = holdings[symbol];
     if (!data) return;
 
-    const {quanity, avgBuy} = data;
-    const pnl = (price - avgBuy) * quanity;
+    const {quantity, avgBuy} = data;
+    const pnl = (parseFloat(price) - avgBuy) * quantity;
 
-    console.log(data, pnl, price, avgBuy, quanity)
-    console.log(typeof(data, pnl, price, avgBuy, quanity))
+    console.log(data, pnl, price, avgBuy, quantity, symbol)
 
     const palEl = document.getElementById(`pal-${symbol}`);
     const avgBuyEl = document.getElementById(`avg-buy-${symbol}`);
