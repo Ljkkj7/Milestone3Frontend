@@ -18,7 +18,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     const balanceData = await loadDashboardData('BALANCE_DATA');
     const palData = await loadDashboardData('PAL_DATA')
 
-    document.getElementById('Username').textContent = balanceData.username;
+    // document.getElementById('Username').textContent = balanceData.username;
 
     if (!portfolioData || !portfolioData.details) {
         console.error("Portfolio data not loaded properly.");
