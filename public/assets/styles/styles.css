@@ -478,6 +478,25 @@ header {
     transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
+.detail-dashboard-outer {
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.detail-dashboard {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.detail-dashboard form {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    margin: 10px 10px;
+}
+
 
 footer {
     background-color: #333;
