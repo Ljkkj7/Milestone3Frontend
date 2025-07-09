@@ -6,6 +6,7 @@ import {
 const socket = io.connect()
 const DJANGO_GET_USER_PORTFOLIO_FIGURES = 'https://marketio-3cedad1469b3.herokuapp.com/dashboard/portfolio/';
 const DJANGO_GET_USER_BALANCE_FIGURES = 'https://marketio-3cedad1469b3.herokuapp.com/dashboard/balance/';
+const DJANGO_GET_PANDL_FIGURES = 'https://marketio-3cedad1469b3.herokuapp.com/dashboard/pal/'
 const renderedHoldings = new Set();
 const container = document.getElementById('dashboardCards');
 const stockCharts = {};
@@ -14,6 +15,10 @@ let labelHistory = JSON.parse(localStorage.getItem('labelHistory')) || {};
 
 window.addEventListener('DOMContentLoaded', async () => {
     const portfolioData = await loadDashboardData('PORTFOLIO_DATA');
+    const balanceData = await loadDashboardData('BALANCE_DATA');
+    const palData = await loadDashboardDataData('PAL_DATA')
+
+    document.getElementById('Username').textContent = balanceData.username;
 
     if (!portfolioData || !portfolioData.details) {
         console.error("Portfolio data not loaded properly.");
@@ -55,6 +60,18 @@ window.addEventListener('DOMContentLoaded', async () => {
                                     <input type="number" id="sellQuantity" name="sellQuantity" min="1" required>
                                     <button type="submit">Sell</button>
                                 </form>
+                            </div>
+                        </div>
+                        <div class="detail-dashboard-outer">
+                            <div class="detail-dashboard">
+                                <h2>Stock P&L</h2>
+                                <p id="PAL">${palData.details.profit_loss}</p>
+                            </div>
+                        </div>
+                        <div class="detail-dashboard-outer">
+                            <div class="detail-dashboard">
+                                <h2>Avg. Buy Price</h2>
+                                <p id="PAL">${palData.details.average_buy_price}</p>
                             </div>
                         </div>
                     </div>
@@ -110,8 +127,6 @@ socket.on('stocks_data', (stocks) => {
     })
 });
 
-
-
 async function loadDashboardData(type){
     // Use this function for future API calls by importing it into other js files
     const token = localStorage.getItem('access_token')
@@ -133,12 +148,24 @@ async function loadDashboardData(type){
             }
         });
 
+        const resPal = await fetch(DJANGO_GET_PANDL_FIGURES, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        })
+
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
         if (!res.ok) {
             throw new Error(`HTTP error! status: ${res.status}`);
+        }
+
+        if (!resPal.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`)
         }
 
         if (type == 'PORTFOLIO_DATA') {
@@ -149,6 +176,11 @@ async function loadDashboardData(type){
         if (type == 'USER_DATA') {
             const balanceData = await response.json();
             return(balanceData);
+        }
+
+        if (type == 'PAL_DATA') {
+            const palData = await resPal.json();
+            return(palData);
         }
     } catch(err){
         alert(err)
