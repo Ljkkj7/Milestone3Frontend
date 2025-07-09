@@ -78,13 +78,13 @@ window.addEventListener('DOMContentLoaded', async () => {
                         <div class="detail-dashboard-outer-stats">
                             <div class="detail-dashboard-outer">
                                 <div class="detail-dashboard">
-                                    <h2>Stock P&L</h2>
+                                    <h3>Stock P&L</h3>
                                     <p id="pal-${symbol}" class="palDetail">£<span id="pal-${symbol}-detail">${parseFloat(profitLoss).toFixed(2)}</span></p>
                                 </div>
                             </div>
                             <div class="detail-dashboard-outer">
                                 <div class="detail-dashboard">
-                                    <h2>Avg. Buy Price</h2>
+                                    <h3>Avg. Buy Price</h3>
                                     <p  id="avg-buy-${symbol}" class="palDetail">£${parseFloat(avgBuyPrice).toFixed(2)}</p>
                                 </div>
                             </div>

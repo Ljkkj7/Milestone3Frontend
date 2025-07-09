@@ -486,6 +486,13 @@ header {
     margin: 20px 10px;
 }
 
+.detail-dashboard-outer-stats {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
 .detail-dashboard-outer {
     width: 50vh;
     max-width: 300px;
