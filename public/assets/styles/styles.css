@@ -478,10 +478,19 @@ header {
     transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
-.detail-dashboard-outer {
-    display: inline-flex;
+.detail-dashboard-container {
+    display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    justify-content: center;
+}
+
+.detail-dashboard-outer {
+    margin: 20px 10px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .detail-dashboard {
