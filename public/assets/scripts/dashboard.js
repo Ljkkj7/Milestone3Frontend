@@ -199,7 +199,7 @@ function updatePalFigures(symbol, price) {
     const pnl = (parseFloat(price) - avgBuy) * quantity;
 
     const palEl = document.getElementById(`pal-${symbol}-detail`);
-    const prevPal = parseFloat(palEl);
+    const prevPal = parseFloat(palEl.innerText);
 
     console.log(data, pnl, price, avgBuy, quantity, symbol, prevPal)
     const avgBuyEl = document.getElementById(`avg-buy-${symbol}`);
