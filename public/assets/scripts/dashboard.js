@@ -236,17 +236,19 @@ async function loadDetailFigures(symbol) {
     const portfolioData = await loadDashboardData('PORTFOLIO_DATA');
 
     portfolioData.details.forEach(detail => {
-        const { symbol, quantity, current_price, value } = detail;
+        const { symbolInner, quantity, current_price, value } = detail;
         const numPrice = parseFloat(current_price);
 
-        quantityHeld.innerHTML = `
-            <h3>${symbol} Held:</h3>
-            <p>${quantity} @ ${numPrice}</p>
-        `
+        if (symbol == symbolInner) {
+            quantityHeld.innerHTML = `
+                <h3>${symbol} Held:</h3>
+                <p>${quantity} @ ${numPrice}</p>
+            `
 
-        valueHeld.innerHTML = `
-            <h3>Total Value Held:</h3>
-            <p>£${value}</p>
-        `
+            valueHeld.innerHTML = `
+                <h3>Total Value Held:</h3>
+                <p>£${value}</p>
+            `
+        }
     })
 }
