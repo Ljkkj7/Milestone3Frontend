@@ -230,8 +230,8 @@ function flashUpdate(el, value, prevValue) {
 }
 
 async function loadDetailFigures(symbol) {
-    quantityHeld = document.getElementById(`stockQuantityHeld${symbol}`);
-    valueHeld = document.getElementById(`stockValueHeld${symbol}`);
+    let quantityHeld = document.getElementById(`stockQuantityHeld${symbol}`);
+    let valueHeld = document.getElementById(`stockValueHeld${symbol}`);
 
     const portfolioData = await loadDashboardData('PORTFOLIO_DATA');
 
@@ -239,12 +239,12 @@ async function loadDetailFigures(symbol) {
         const { symbol, quantity, current_price, value } = detail;
         const numPrice = parseFloat(current_price);
 
-        stockHoldings.innerHTML = `
+        quantityHeld.innerHTML = `
             <h3>${symbol} Held:</h3>
             <p>${quantity} @ ${numPrice}</p>
         `
 
-        stockValue.innerHTML = `
+        valueHeld.innerHTML = `
             <h3>Total Value Held:</h3>
             <p>£${value}</p>
         `
