@@ -16,7 +16,7 @@ let labelHistory = JSON.parse(localStorage.getItem('labelHistory')) || {};
 window.addEventListener('DOMContentLoaded', async () => {
     const portfolioData = await loadDashboardData('PORTFOLIO_DATA');
     const balanceData = await loadDashboardData('BALANCE_DATA');
-    const palData = await loadDashboardDataData('PAL_DATA')
+    const palData = await loadDashboardData('PAL_DATA')
 
     document.getElementById('Username').textContent = balanceData.username;
 
