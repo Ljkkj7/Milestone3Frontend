@@ -58,7 +58,7 @@ function appendComment(comment) {
     div.innerHTML = `
         <div class="comment-item">
             <p><strong>${sanitize(comment.author_username)}</strong>:</p>
-            <p>${sanitize(comment.text)}</p>
+            <p>${sanitize(comment.content)}</p>
             <small>${new Date(comment.created_at).toLocaleString()}</small>
         </div>
     `;
