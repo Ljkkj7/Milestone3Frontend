@@ -3,7 +3,7 @@ const postButton = document.getElementById('postCommentButton');
 postButton.addEventListener('click', async (e) => {
     const commentInput = document.getElementById('commentInput');
     const comment = commentInput.value.trim();
-    const targetUserId = getUserIdFromUrl();
+    const targetUserId = Number(getUserIdFromUrl());
 
     if (!comment || !targetUserId) {
         return;
