@@ -17,7 +17,7 @@ postButton.addEventListener('click', async (e) => {
             return;
         }
 
-        const response = await fetch(`https://marketio-3cedad1469b3.herokuapp.com/comments/?target_user=${targetUserId}`, {
+        const response = await fetch(`https://marketio-3cedad1469b3.herokuapp.com/comments/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
