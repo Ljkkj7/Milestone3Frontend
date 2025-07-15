@@ -3,7 +3,7 @@ const postButton = document.getElementById('postCommentButton');
 postButton.addEventListener('click', async (e) => {
     const commentInput = document.getElementById('commentInput');
     const comment = commentInput.value.trim();
-    const targetUserId = Number(getUserIdFromUrl());
+    const targetUserId = getUserIdFromUrl();
 
     if (!comment || !targetUserId) {
         return;
@@ -24,7 +24,7 @@ postButton.addEventListener('click', async (e) => {
                 'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({ 
-                text: comment,
+                content: comment,
                 target_user: targetUserId
             }),
         });
