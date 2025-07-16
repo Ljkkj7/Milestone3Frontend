@@ -56,6 +56,7 @@ function appendComment(comment) {
         // You can use userData to customize the comment display
 
         if (userData.user_id === comment.author_id || userData.user_id === getUserIdFromUrl()) {
+            console.log(userData.user_id, comment.author_id, getUserIdFromUrl());
             div.innerHTML += `
                 <button class="CRUD-comment" id="del${comment.id}">Delete</button>
                 <button class="CRUD-comment" id="edit${comment.id}">Edit</button>
