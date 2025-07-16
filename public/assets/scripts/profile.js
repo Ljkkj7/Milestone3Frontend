@@ -1,3 +1,7 @@
+import {
+    parseJwt,
+} from './profilePayLoad.js';
+
 const postButton = document.getElementById('postCommentButton');
 
 postButton.addEventListener('click', async (e) => {
@@ -31,6 +35,8 @@ function appendComment(comment) {
     const div = document.createElement('div');
     div.classList.add('comment');
 
+    const token = localStorage.getItem('access_token');
+
     div.innerHTML = `
         <div class="comment-item">
             <a href="profile.html?user=${comment.author_id}" class="comment-author-link">
@@ -44,6 +50,18 @@ function appendComment(comment) {
             })}</small>
         </div>
     `;
+
+    if (token) {
+        const userData = parseJwt(token);
+        // You can use userData to customize the comment display
+
+        if (userData.user_id === comment.author_id) {
+            div.innerHTML += `
+                <button class="delete-comment" id="del${comment.id}">Delete</button>
+                <button class="edit-comment" id="edit${comment.id}">Edit</button>
+            `;
+        }
+    }
 
     container.prepend(div); // Add new comments at the top
 }
@@ -108,6 +126,13 @@ function sanitize(str) {
     temp.textContent = str;
     // Return the inner HTML, which is now safe
     return temp.innerHTML;
+}
+
+async function callStatsAPI() {
+
+}
+
+async function loadProfileData() {
 }
 
 // Load comments when the page is ready
