@@ -138,7 +138,14 @@ export async function loadDashboardData(type) {
     const token = localStorage.getItem('access_token');
 
     try {
-        const [balanceRes, portfolioRes, palRes] = await Promise.all([
+        const [targetBalanceRes, balanceRes, portfolioRes, palRes] = await Promise.all([
+            fetch(`${DJANGO_GET_USER_BALANCE_FIGURES}?target_user=${getUserIdFromUrl()}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            }),
             fetch(DJANGO_GET_USER_BALANCE_FIGURES, {
                 method: 'GET',
                 headers: {
@@ -163,17 +170,20 @@ export async function loadDashboardData(type) {
         ]);
 
         // Check for HTTP errors before parsing
+        if (!targetBalanceRes.ok) throw new Error(`Target Balance API error: ${targetBalanceRes.status}`);
         if (!balanceRes.ok) throw new Error(`Balance API error: ${balanceRes.status}`);
         if (!portfolioRes.ok) throw new Error(`Portfolio API error: ${portfolioRes.status}`);
         if (!palRes.ok) throw new Error(`P&L API error: ${palRes.status}`);
 
         // Parse all responses
-        const [balanceData, portfolioData, palData] = await Promise.all([
+        const [targetBalanceData, balanceData, portfolioData, palData] = await Promise.all([
+            targetBalanceRes.json(),
             balanceRes.json(),
             portfolioRes.json(),
             palRes.json()
         ]);
 
+        if (type === 'TARGET_USER_DATA') return targetBalanceData;
         if (type === 'USER_DATA') return balanceData;
         if (type === 'PORTFOLIO_DATA') return portfolioData;
         if (type === 'PAL_DATA') return palData;

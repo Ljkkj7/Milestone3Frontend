@@ -149,9 +149,14 @@ function sanitize(str) {
 
 async function loadProfileData(type) {
     const token = localStorage.getItem('access_token');
+    const userData = {};
     if (!token) return;
 
-    const userData = await loadDashboardData('USER_DATA');
+    if (parseJwt(token) === getUserIdFromUrl()) {
+        userData = await loadDashboardData('USER_DATA');
+    } else {
+        userData = await loadDashboardData('TARGET_USER_DATA');
+    }
     const portfolioData = await loadDashboardData('PORTFOLIO_DATA');
 
     if (type === 'USER_DATA') return userData;
