@@ -3,7 +3,11 @@ import {
     updateStockChart
 } from './stockChart.js'
 
-const socket = io.connect()
+import {
+    getUserIdFromUrl,
+} from './profile.js';
+
+const socket = io.connect();
 const DJANGO_GET_USER_PORTFOLIO_FIGURES = 'https://marketio-3cedad1469b3.herokuapp.com/dashboard/portfolio/';
 const DJANGO_GET_USER_BALANCE_FIGURES = 'https://marketio-3cedad1469b3.herokuapp.com/dashboard/balance/';
 const DJANGO_GET_PANDL_FIGURES = 'https://marketio-3cedad1469b3.herokuapp.com/dashboard/pal/'
