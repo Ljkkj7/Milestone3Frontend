@@ -15,6 +15,8 @@ const postButton = document.getElementById('postCommentButton');
 const renderedStocks = new Set(); // To track rendered stocks
 const socket = io.connect();
 const stockCharts = {};
+let priceHistory = JSON.parse(localStorage.getItem('priceHistory')) || {};
+let labelHistory = JSON.parse(localStorage.getItem('labelHistory')) || {};
 
 postButton.addEventListener('click', async (e) => {
     const commentInput = document.getElementById('commentInput');
@@ -167,8 +169,6 @@ async function loadProfileData(type) {
 async function setProfileStocks() {
     const portfolioData = await loadDashboardData('PORTFOLIO_DATA');
     const container = document.getElementById('stockCards');
-    let priceHistory = JSON.parse(localStorage.getItem('priceHistory')) || {};
-    let labelHistory = JSON.parse(localStorage.getItem('labelHistory')) || {};
 
     container.innerHTML = ''; // Clear existing stocks
     console.log('Portfolio data:', portfolioData);
