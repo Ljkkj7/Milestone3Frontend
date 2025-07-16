@@ -66,6 +66,23 @@ function appendComment(comment) {
     container.prepend(div); // Add new comments at the top
 }
 
+function loadComments() {
+    const targetUserId = getUserIdFromUrl();
+    if (!targetUserId) return;
+
+    fetch(`https://marketio-3cedad1469b3.herokuapp.com/comments/?target_user=${targetUserId}`)
+        .then(response => response.json())
+        .then(data => {
+            const container = document.getElementById('commentPosts');
+            container.innerHTML = ''; // Clear existing comments
+
+            data.forEach(comment => {
+                appendComment(comment);
+            });
+        })
+        .catch(error => console.error('Error loading comments:', error));
+}
+
 // Simple sanitization to prevent XSS
 function sanitize(str) {
     // Create a temporary element to escape HTML
@@ -75,3 +92,8 @@ function sanitize(str) {
     // Return the inner HTML, which is now safe
     return temp.innerHTML;
 }
+
+// Load comments when the page is ready
+document.addEventListener('DOMContentLoaded', () => {
+    loadComments();
+});
