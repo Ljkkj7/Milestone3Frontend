@@ -9,38 +9,14 @@ postButton.addEventListener('click', async (e) => {
         return;
     }
 
-    try {
-        const token = localStorage.getItem('access_token');
-
-        if (!token) {
-            alert('You must be logged in to post a comment.');
-            return;
-        }
-
-        const response = await fetch(`https://marketio-3cedad1469b3.herokuapp.com/comments/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({ 
-                content: comment,
-                target_user: targetUserId
-            }),
-        });
-
-        if (!response.ok) {
-            const errorData = await response.json();
-            alert(`Error posting comment: ${errorData.detail || 'Unknown error'}`);
-            return;
-        }
-
-        const data = await response.json();
+    const data = await callCommentsAPI('POST_COMMENT', { content: comment, target_user: targetUserId });
+    if (data) {
         appendComment(data);
         commentInput.value = ''; // Clear the input field
+    }
 
-    } catch (error) {
-        console.error('Error posting comment:', error);
+    else {
+        alert('Failed to post comment. Please try again.');
     }
 });
 
@@ -70,24 +46,7 @@ function appendComment(comment) {
 }
 
 async function loadComments() {
-    const targetUserId = getUserIdFromUrl();
-    if (!targetUserId) return;
-
-   const response = await fetch(`https://marketio-3cedad1469b3.herokuapp.com/comments/?target_user=${targetUserId}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-        }
-    });
-
-    if (!response.ok) {
-        console.error('Error loading comments:', response.statusText);
-        return;
-    }
-
-    const data = await response.json();
-    console.log('Loaded comments:', data);
+    const data = await callCommentsAPI('LOAD_COMMENTS');
     const container = document.getElementById('commentPosts');
     container.innerHTML = ''; // Clear existing comments
 
@@ -95,6 +54,48 @@ async function loadComments() {
         appendComment(comment);
     });
 }
+
+async function callCommentsAPI(type, payload = {}) {
+    const targetUserId = getUserIdFromUrl();
+    const token = localStorage.getItem('access_token');
+
+    if (!targetUserId || !token) return;
+
+    const baseUrl = 'https://marketio-3cedad1469b3.herokuapp.com/comments/';
+
+    try {
+        if (type === 'LOAD_COMMENTS') {
+            const res = await fetch(`${baseUrl}?target_user=${targetUserId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!res.ok) throw new Error(`GET failed: ${res.status}`);
+            return await res.json();
+        }
+
+        if (type === 'POST_COMMENT') {
+            const res = await fetch(baseUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!res.ok) throw new Error(`POST failed: ${res.status}`);
+            return await res.json();
+        }
+
+    } catch (error) {
+        console.error('API error:', error);
+    }
+}
+
 
 // Simple sanitization to prevent XSS
 function sanitize(str) {

@@ -668,7 +668,16 @@ header {
     transform: translateY(-2px);
 }
 
+.comment-item a {
+    text-decoration: none;
+    color: #333;
+}
 
+.comment-item a:hover {
+    text-decoration: underline;
+    color: #555;
+    transform: translateY(-2px);
+}
 
 footer {
     background-color: #333;
@@ -739,5 +748,5 @@ footer p {
         padding: 0px;
     }
 
-    
+
 }
