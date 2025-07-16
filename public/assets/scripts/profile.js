@@ -174,7 +174,7 @@ async function setProfileStocks() {
     console.log('Portfolio data:', portfolioData);
     portfolioData.details.forEach(stock => {
 
-        const { symbol, quantity, price } = stock;
+        const { symbol, quantity, price, value } = stock;
 
         const numPrice = parseFloat(price).toFixed(2);
         const label = new Date().toLocaleDateString();
