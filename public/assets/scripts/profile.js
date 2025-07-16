@@ -72,6 +72,7 @@ async function loadComments() {
     const container = document.getElementById('commentPosts');
     container.innerHTML = ''; // Clear existing comments
 
+    console.log('Loaded comments:', data);
     data.forEach(comment => {
         appendComment(comment);
     });
