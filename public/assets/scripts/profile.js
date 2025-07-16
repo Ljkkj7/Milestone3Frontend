@@ -172,9 +172,9 @@ async function setProfileStocks() {
 
     container.innerHTML = ''; // Clear existing stocks
     console.log('Portfolio data:', portfolioData);
-    portfolioData.forEach(stock => {
+    portfolioData.details.forEach(stock => {
 
-        const { symbol, price } = stock;
+        const { symbol, quantity, price } = stock;
 
         const numPrice = parseFloat(price).toFixed(2);
         const label = new Date().toLocaleDateString();
