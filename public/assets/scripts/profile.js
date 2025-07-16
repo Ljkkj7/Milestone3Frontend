@@ -174,11 +174,11 @@ async function setProfileStocks() {
     console.log('Portfolio data:', portfolioData);
     portfolioData.details.forEach(stock => {
 
-        const { symbol, quantity, price, value } = stock;
+        const { symbol, quantity, current_price, value } = stock;
 
-        console.log('Processing stock:', symbol, quantity, price, value);
+        console.log('Processing stock:', symbol, quantity, current_price, value);
 
-        const numPrice = parseFloat(price).toFixed(2);
+        const numPrice = parseFloat(current_price).toFixed(2);
         const label = new Date().toLocaleDateString();
 
         if (!renderedStocks.has(symbol)) {
