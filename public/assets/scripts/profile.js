@@ -206,15 +206,7 @@ async function setProfileStocks() {
                 stockCharts[symbol],
                 label,
                 numPrice
-        );
-
-        }
-        console.log('Updating stock chart:', symbol);
-        updateStockChart(
-                stockCharts[symbol],
-                label,
-                numPrice
-        );
+            )};
     });
 }
 
@@ -231,7 +223,7 @@ socket.on('connect', () => {
     });
 });
 
-socket.on('stocks_data', () => {
-    setProfileStocks();
+socket.on('stocks_data', async () => {
+    await setProfileStocks();
 });
 
