@@ -55,10 +55,10 @@ function appendComment(comment) {
         const userData = parseJwt(token);
         // You can use userData to customize the comment display
 
-        if (userData.user_id === comment.author_id) {
+        if (userData.user_id === comment.author_id || userData.user_id === getUserIdFromUrl()) {
             div.innerHTML += `
-                <button class="delete-comment" id="del${comment.id}">Delete</button>
-                <button class="edit-comment" id="edit${comment.id}">Edit</button>
+                <button class="CRUD-comment" id="del${comment.id}">Delete</button>
+                <button class="CRUD-comment" id="edit${comment.id}">Edit</button>
             `;
         }
     }
