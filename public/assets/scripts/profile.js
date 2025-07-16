@@ -68,7 +68,7 @@ function appendComment(comment) {
         }
     }
 
-    container.prepend(div); // Add new comments at the top
+    container.append(div); // Add new comments at the bottom
 }
 
 async function loadComments() {
