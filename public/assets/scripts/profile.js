@@ -200,13 +200,12 @@ async function setProfileStocks() {
             stockCharts[symbol].data.labels = labelHistory[symbol] || [];
             stockCharts[symbol].data.datasets[0].data = priceHistory[symbol] || [];
             stockCharts[symbol].update();
-        } else if (renderedStocks.has(symbol)) {
-            updateStockChart(
+        } 
+        updateStockChart(
                 stockCharts[symbol],
                 label,
                 numPrice
-            );
-        }
+        );
     });
 }
 
