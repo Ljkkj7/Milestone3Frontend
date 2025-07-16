@@ -586,6 +586,15 @@ header {
     max-width: 50rem;
 }
 
+.stock-cards {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-self: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
 .profile-comment-wall {
     margin-top: 20px;
     padding: 20px;
