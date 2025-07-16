@@ -2,7 +2,19 @@ import {
     parseJwt,
 } from './profilePayLoad.js';
 
+import {
+    loadDashboardData,
+} from './dashboard.js';
+
+import {
+    createStockChart,
+    updateStockChart
+} from './stockChart.js';
+
 const postButton = document.getElementById('postCommentButton');
+const renderedStocks = new Set(); // To track rendered stocks
+const socket = io.connect();
+const stockCharts = {};
 
 postButton.addEventListener('click', async (e) => {
     const commentInput = document.getElementById('commentInput');
@@ -68,7 +80,7 @@ function appendComment(comment) {
         }
     }
 
-    container.append(div); // Add new comments at the bottom
+    container.append(div); // Add new comments at the top - comments API feeds objects in from most recent ID first
 }
 
 async function loadComments() {
@@ -135,14 +147,75 @@ function sanitize(str) {
     return temp.innerHTML;
 }
 
-async function callStatsAPI() {
+async function loadProfileData(type) {
+    const token = localStorage.getItem('access_token');
+    if (!token) return;
 
+    const userData = await loadDashboardData('USER_DATA');
+    const portfolioData = await loadDashboardData('PORTFOLIO_DATA');
+
+    if (type === 'USER_DATA') return userData;
+    if (type === 'PORTFOLIO_DATA') return portfolioData;
 }
 
-async function loadProfileData() {
+async function setProfileStocks() {
+    const portfolioData = await loadDashboardData('PORTFOLIO_DATA');
+    const container = document.getElementById('stockCards');
+    let priceHistory = JSON.parse(localStorage.getItem('priceHistory')) || {};
+    let labelHistory = JSON.parse(localStorage.getItem('labelHistory')) || {};
+
+    container.innerHTML = ''; // Clear existing stocks
+    portfolioData.forEach(stock => {
+
+        const { symbol, price } = stock;
+
+        const numPrice = parseFloat(price).toFixed(2);
+        const label = new Date().toLocaleDateString();
+
+        if (!renderedStocks.has(symbol)) {
+
+
+            const stockCard = document.createElement('div');
+            stockCard.className = 'stock-card';
+            stockCard.innerHTML = `
+                <div class="stock-title">${symbol}</div>
+                <a href="stock-detail.html?symbol=${symbol}" class="stock-link">
+                    <div class="stock-price" id="price-${symbol}">£${numPrice}</div>
+                    <canvas id="chart-${symbol}" width="400" height="200"></canvas>
+                </a>
+            `;
+            container.appendChild(stockCard);
+            renderedStocks.add(symbol); // Add to rendered stocks set
+
+            const stockCtx = document.getElementById(`chart-${symbol}`).getContext('2d');
+            stockCharts[symbol] = createStockChart(stockCtx, symbol);
+            stockCharts[symbol].data.labels = labelHistory[symbol] || [];
+            stockCharts[symbol].data.datasets[0].data = priceHistory[symbol] || [];
+            stockCharts[symbol].update();
+        } else if (renderedStocks.has(symbol)) {
+            updateStockChart(
+                stockCharts[symbol],
+                label,
+                numPrice
+            );
+        }
+    });
 }
 
 // Load comments when the page is ready
 document.addEventListener('DOMContentLoaded', () => {
     loadComments();
 });
+
+socket.on('connect', () => {
+    console.log('Connected to WebSocket');
+    loadProfileData('USER_DATA').then(userData => {
+        document.getElementById('profileUsername').textContent = userData.username;
+        document.getElementById('profileUserStocks').textContent = userData.username;
+    });
+});
+
+socket.on('stocks_data', () => {
+    setProfileStocks();
+});
+

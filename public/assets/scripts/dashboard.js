@@ -134,7 +134,7 @@ socket.on('stocks_data', (stocks) => {
     })
 });
 
-async function loadDashboardData(type) {
+export async function loadDashboardData(type) {
     const token = localStorage.getItem('access_token');
 
     try {

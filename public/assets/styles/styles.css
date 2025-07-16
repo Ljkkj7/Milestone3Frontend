@@ -636,6 +636,26 @@ header {
     max-width: 600px;
     min-height: 100px;
     text-align: left;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    background-color: #f4f4f4;
+    transition: border-color 0.3s ease;
+    &:focus {
+        border-color: #333;
+    }
+    &:hover {
+        border-color: #555;
+    }
+    &:active {
+        border-color: #000;
+    }
+    &:placeholder {
+        color: #888;
+    }
+    &::-webkit-input-placeholder{
+        text-align: center;
+    }
 }
 
 .comment-form button {
