@@ -58,7 +58,7 @@ function appendComment(comment) {
     div.innerHTML = `
         <div class="comment-item">
             <a href="profile.html?user=${comment.target_user}" class="comment-author-link">
-                <img src="${comment.author_avatar || 'images/profile.png'}" alt="${sanitize(comment.author_username)}'s avatar" class="comment-avatar">
+                <img src="${comment.author_avatar || './images/profile.png'}" alt="${sanitize(comment.author_username)}'s avatar" class="comment-avatar">
                 <p><strong>${sanitize(comment.author_username)}</strong>:</p>
             </a>
             <p>${sanitize(comment.content)}</p>
@@ -87,6 +87,7 @@ async function loadComments() {
     }
 
     const data = await response.json();
+    console.log('Loaded comments:', data);
     const container = document.getElementById('commentPosts');
     container.innerHTML = ''; // Clear existing comments
 
