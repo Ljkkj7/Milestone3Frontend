@@ -213,15 +213,11 @@ async function setProfileStocks() {
 // Load comments when the page is ready
 document.addEventListener('DOMContentLoaded', () => {
     loadComments();
-    setProfileStocks();
-});
-
-socket.on('connect', () => {
-    console.log('Connected to WebSocket');
     loadProfileData('USER_DATA').then(userData => {
         document.getElementById('profileUsername').textContent = userData.username;
         document.getElementById('profileUserStocks').textContent = userData.username;
     });
+    setProfileStocks();
 });
 
 socket.on('stocks_data', (stocks) => {
