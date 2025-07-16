@@ -74,8 +74,8 @@ function appendComment(comment) {
         if (userData.user_id === comment.author_id || userData.user_id === Number(getUserIdFromUrl())) {
             console.log(userData.user_id, comment.author_id, getUserIdFromUrl());
             div.innerHTML += `
-                <button class="CRUD-comment" id="del${comment.id}">Delete</button>
-                <button class="CRUD-comment" id="edit${comment.id}">Edit</button>
+                <button class="CRUD-comment" data-comment-id="del${comment.id}">Delete</button>
+                <button class="CRUD-comment" data-comment-id="edit${comment.id}">Edit</button>
             `;
         }
     }
@@ -149,10 +149,11 @@ function sanitize(str) {
 
 async function loadProfileData(type) {
     const token = localStorage.getItem('access_token');
-    const userData = {};
+    let userData = {};
+    const jwtUserId = parseJwt(token)?.user_id;
     if (!token) return;
 
-    if (parseJwt(token) === getUserIdFromUrl()) {
+    if (jwtUserId === getUserIdFromUrl()) {
         userData = await loadDashboardData('USER_DATA');
     } else {
         userData = await loadDashboardData('TARGET_USER_DATA');
