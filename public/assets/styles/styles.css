@@ -685,7 +685,6 @@ header {
 }
 
 .comment-item a:hover {
-    text-decoration: underline;
     color: #555;
     transform: translateY(-2px);
 }
@@ -699,11 +698,18 @@ header {
 }
 
 .CRUD-comment {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.CRUD-comment:hover {
+    background-color: #555;
+    transform: translateY(-2px);
+    transition: transform 0.2s ease;
 }
 
 footer {
