@@ -670,13 +670,32 @@ header {
 
 .comment-item a {
     text-decoration: none;
-    color: #333;
+    color: #000;
+    background-color: #99999927;
+    border: 1px solid #f5f4f4;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    max-width: min-content;
+    margin: 0 auto;
+    padding: 0 2rem;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }
 
 .comment-item a:hover {
     text-decoration: underline;
     color: #555;
     transform: translateY(-2px);
+}
+
+.comment-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover;
 }
 
 footer {

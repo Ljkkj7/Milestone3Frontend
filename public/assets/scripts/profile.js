@@ -35,7 +35,7 @@ function appendComment(comment) {
         <div class="comment-item">
             <a href="profile.html?user=${comment.author_id}" class="comment-author-link">
                 <img src="${comment.author_avatar || 'assets/images/profile.png'}" alt="${sanitize(comment.author_username)}'s avatar" class="comment-avatar">
-                <p><strong>${sanitize(comment.author_username)}</strong>:</p>
+                <p><strong>${sanitize(comment.author_username)}</strong></p>
             </a>
             <p>${sanitize(comment.content)}</p>
             <small>${new Date(comment.created_at).toLocaleString({
