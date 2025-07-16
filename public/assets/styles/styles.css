@@ -601,6 +601,9 @@ header {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     transition: box-shadow 0.3s ease, transform 0.3s ease;
     text-align: center;
+    min-width: fit-content;
+    max-width: 50%;
+
 }
 
 .comment-wall h2 {
@@ -649,6 +652,22 @@ header {
     transform: translateY(-2px);
     transition: transform 0.2s ease;
 }
+
+.comment {
+    margin: 20px auto;
+    padding: 10px 0;
+    max-width: 20rem;
+    border-radius: 8px;
+    background-color: #f4f4f427;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.comment:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+}
+
 
 
 footer {
@@ -719,4 +738,6 @@ footer p {
         max-width: 300px;
         padding: 0px;
     }
+
+    
 }
