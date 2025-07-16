@@ -176,6 +176,8 @@ async function setProfileStocks() {
 
         const { symbol, quantity, price, value } = stock;
 
+        console.log('Processing stock:', symbol, quantity, price, value);
+
         const numPrice = parseFloat(price).toFixed(2);
         const label = new Date().toLocaleDateString();
 
