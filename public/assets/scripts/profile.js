@@ -165,6 +165,7 @@ async function setProfileStocks() {
     let labelHistory = JSON.parse(localStorage.getItem('labelHistory')) || {};
 
     container.innerHTML = ''; // Clear existing stocks
+    console.log('Portfolio data:', portfolioData);
     portfolioData.forEach(stock => {
 
         const { symbol, price } = stock;
@@ -173,7 +174,6 @@ async function setProfileStocks() {
         const label = new Date().toLocaleDateString();
 
         if (!renderedStocks.has(symbol)) {
-
 
             const stockCard = document.createElement('div');
             stockCard.className = 'stock-card';
