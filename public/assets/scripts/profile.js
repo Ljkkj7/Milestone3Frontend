@@ -45,6 +45,9 @@ function appendComment(comment) {
             </a>
             <p class="comment-body">${sanitize(comment.content)}</p>
             <small>${new Date(comment.created_at).toLocaleString({
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
                 hour: '2-digit',
                 minute: '2-digit',
             })}</small>
@@ -74,6 +77,7 @@ async function loadComments() {
 
     console.log('Loaded comments:', data);
     data.forEach(comment => {
+        console.log('Appending comment:', comment);
         appendComment(comment);
     });
 }
