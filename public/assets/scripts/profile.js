@@ -43,7 +43,7 @@ function appendComment(comment) {
                 <img src="${comment.author_avatar || 'assets/images/profile.png'}" alt="${sanitize(comment.author_username)}'s avatar" class="comment-avatar">
                 <p><strong>${sanitize(comment.author_username)}</strong></p>
             </a>
-            <p>${sanitize(comment.content)}</p>
+            <p class="comment-body">${sanitize(comment.content)}</p>
             <small>${new Date(comment.created_at).toLocaleString({
                 hour: '2-digit',
                 minute: '2-digit',
