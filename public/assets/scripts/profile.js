@@ -37,7 +37,11 @@ function appendComment(comment) {
 
     const token = localStorage.getItem('access_token');
 
-    div.innerHTML = `
+    if (token) {
+        const userData = parseJwt(token);
+        // You can use userData to customize the comment display
+
+        div.innerHTML = `
         <div class="comment-item">
             <a href="profile.html?user=${comment.author_id}" class="comment-author-link">
                 <img src="${comment.author_avatar || 'assets/images/profile.png'}" alt="${sanitize(comment.author_username)}'s avatar" class="comment-avatar">
@@ -50,13 +54,10 @@ function appendComment(comment) {
                 day: '2-digit',
                 hour: '2-digit',
                 minute: '2-digit',
+                second: 'none',
             })}</small>
         </div>
-    `;
-
-    if (token) {
-        const userData = parseJwt(token);
-        // You can use userData to customize the comment display
+        `;
 
         if (userData.user_id === comment.author_id || userData.user_id === Number(getUserIdFromUrl())) {
             console.log(userData.user_id, comment.author_id, getUserIdFromUrl());
