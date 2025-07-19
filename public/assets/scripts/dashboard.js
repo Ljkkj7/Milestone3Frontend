@@ -5,7 +5,7 @@ import {
 
 import {
     getUserIdFromUrl,
-} from './profile.js';
+} from './utils.js';
 
 const socket = io.connect();
 const DJANGO_GET_USER_PORTFOLIO_FIGURES = 'https://marketio-3cedad1469b3.herokuapp.com/dashboard/portfolio/';
