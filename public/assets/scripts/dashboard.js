@@ -138,6 +138,7 @@ socket.on('stocks_data', (stocks) => {
     })
 });
 
+// Break down into seperate functions - only call API when necessary - reduce backend load
 export async function loadDashboardData(type) {
     const token = localStorage.getItem('access_token');
 
@@ -151,6 +152,13 @@ export async function loadDashboardData(type) {
                 }
             }),
             fetch(DJANGO_GET_USER_BALANCE_FIGURES, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            }),
+            fetch(`${DJANGO_GET_USER_PORTFOLIO_FIGURES}?target_user=${getUserIdFromUrl()}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -188,7 +196,7 @@ export async function loadDashboardData(type) {
         ]);
 
         if (type === 'TARGET_USER_DATA') return targetBalanceData;
-        if (type === 'USER_DATA') return balanceData;
+        if (type === 'BALANCE_DATA') return balanceData;
         if (type === 'PORTFOLIO_DATA') return portfolioData;
         if (type === 'PAL_DATA') return palData;
 
