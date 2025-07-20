@@ -153,11 +153,14 @@ export async function loadDashboardData(type) {
         case 'TARGET_USER_DATA':
             url = `${API_URLS.balance}?target_user=${getUserIdFromUrl()}`;
             break;
+        case `TARGET_PORTFOLIO_DATA`:
+            url = `${API_URLS.portfolio}?target_user=${getUserIdFromUrl()}`;
+            break;
         case 'BALANCE_DATA':
             url = API_URLS.balance;
             break;
         case 'PORTFOLIO_DATA':
-            url = `${API_URLS.portfolio}?target_user=${getUserIdFromUrl()}`;
+            url = API_URLS.portfolio;
             break;
         case 'PAL_DATA':
             url = API_URLS.pal;
