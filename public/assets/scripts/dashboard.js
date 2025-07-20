@@ -9,9 +9,9 @@ import {
 
 const socket = io.connect();
 const API_URLS = {
-    portfolio: `${process.env.API_BASE_URL}${process.env.API_PORTFOLIO_PATH}`,
-    balance: `${process.env.API_BASE_URL}${process.env.API_BALANCE_PATH}`,
-    pal: `${process.env.API_BASE_URL}${process.env.API_PAL_PATH}`,
+    portfolio: `${window.env.API_BASE_URL}${window.env.API_PORTFOLIO_PATH}`,
+    balance: `${window.env.API_BASE_URL}${window.env.API_BALANCE_PATH}`,
+    pal: `${window.env.API_BASE_URL}${window.env.API_PAL_PATH}`,
 };
 const renderedHoldings = new Set();
 const holdings = {};

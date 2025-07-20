@@ -9,6 +9,19 @@ const io = socketIO(server);
 const DJANGO_STOCK_GET_LIST = 'https://marketio-3cedad1469b3.herokuapp.com/stocks/';
 const DJANGO_STOCK_UPDATE = 'https://marketio-3cedad1469b3.herokuapp.com/stocks/update/';
 
+// Serve environment variables to the client
+app.get('/env.js', (req, res) => {
+    res.setHeader('Content-Type', 'application/javascript');
+    res.send(`
+        window.env = {
+            API_BASE_URL: "${process.env.API_BASE_URL}",
+            API_PORTFOLIO_PATH: "${process.env.API_PORTFOLIO_PATH}",
+            API_BALANCE_PATH: "${process.env.API_BALANCE_PATH}",
+            API_PAL_PATH: "${process.env.API_PAL_PATH}"
+        };
+    `);
+});
+
 // Serve static files from the 'public' directory
 app.use(express.static('public'));
 
