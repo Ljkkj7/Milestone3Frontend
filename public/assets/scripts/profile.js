@@ -167,7 +167,22 @@ async function loadProfileData(type) {
 }
 
 async function setProfileStocks() {
-    const portfolioData = await loadDashboardData('PORTFOLIO_DATA');
+    const token = localStorage.getItem('access_token');
+    const userId = parseJwt(token)?.user_id;
+    const targetUserId = getUserIdFromUrl();
+    let portfolioData = {};
+    if (!token || !userId || !targetUserId) {
+        console.error('Missing token or user ID');
+        return;
+    }
+
+    // if (userId !== Number(targetUserId)) {
+        // portfolioData = await loadDashboardData('TARGET_USER_PORTFOLIO_DATA');
+    // } else {
+        // portfolioData = await loadDashboardData('PORTFOLIO_DATA');
+    // }
+    
+    portfolioData = await loadDashboardData('PORTFOLIO_DATA');
     const container = document.getElementById('stockCards');
 
     container.innerHTML = ''; // Clear existing stocks
