@@ -6,10 +6,10 @@
         <link rel="stylesheet" href="assets/styles/styles.css">
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="https://marketio-frontend-139f7c2c9279.herokuapp.com/socket.io/socket.io.js"></script>
-        <script type="module" src="assets/scripts/dashboard.js"></script>
         <title>Market.io - Dashboard</title>
     </head>
     <body>
+        <script src="/env.js"></script>
         <!-- Navbar -->
         <nav class="navbar">
             <div class ="nav-title"><a href="market.html">📈 Market.io</a></div>
@@ -27,6 +27,7 @@
         </nav>
         <!-- Script to open menu-->
         <script src="assets/scripts/hamburger.js"></script>
+        <script type="module" src="assets/scripts/profilePayLoad.js"></script>
         <header>
             <div class="header-card">
                 <h1>Dashboard</h1>
@@ -42,5 +43,6 @@
         <p>&copy; 2025 Market.io. All rights reserved.</p>
         <p>Developed by Kian Jenkins</p>
     </footer>
+    <script type="module" src="assets/scripts/dashboard.js"></script>
     </body>
 </html>

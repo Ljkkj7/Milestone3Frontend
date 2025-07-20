@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/styles/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://marketio-frontend-139f7c2c9279.herokuapp.com/socket.io/socket.io.js"></script>
     <title>Market.io - Profile</title>
 </head>
@@ -22,15 +23,15 @@
         </div>
     </nav>
     <script src="assets/scripts/hamburger.js"></script>
-    <script src="assets/scripts/profilePayLoad.js"></script>
+    <script type="module" src="assets/scripts/profilePayLoad.js"></script>
     <section class ="profile-side-container">
         <div class="profile-image">
-            <img src="assets/images/profile.png" alt="Profile Image">
+            <img src="assets/images/profile.png" alt="Profile Image" id="profileAvatar">
         </div>
         <div class="profile-details">
-            <p class="profile-username"><span id="profile-username"></span>'s Profile</p>
+            <p class="profile-username"><span id="profileUsername"></span>'s Profile</p>
             <div class="profile-user-detail">
-                <p class="profile-balance">Net worth: £<span id="profile-balance"></span></p>
+                <p class="profile-balance">Net worth: £<span id="profileBalance"></span></p>
                 <div class="profile-detail-top-trades">
                     <div class="profile-detail-top-trades-title">Top Trades</div>
                     <div class="profile-detail-top-trades-list" id="topTradesList">
@@ -40,7 +41,7 @@
         </div>
     </section>
     <section class="profile-stock-cards">
-        <h2><span id="profile-user-stocks"></span>'s Stocks</h2>
+        <h2><span id="profileUserStocks"></span>'s Stocks</h2>
         <div class="stock-cards" id="stockCards">
             <!-- Stock cards will be dynamically inserted here -->
         </div>
@@ -57,7 +58,7 @@
             </div>
         </div>
     </section>
-    <script src="assets/scripts/profile.js"></script>
+    <script type="module" src="assets/scripts/profile.js"></script>
     <footer>
         <p>&copy; 2025 Market.io.</p>
         <p>Developed by Kian Jenkins</p>

@@ -3,23 +3,29 @@ import {
     updateStockChart
 } from './stockChart.js'
 
-const socket = io.connect()
-const DJANGO_GET_USER_PORTFOLIO_FIGURES = 'https://marketio-3cedad1469b3.herokuapp.com/dashboard/portfolio/';
-const DJANGO_GET_USER_BALANCE_FIGURES = 'https://marketio-3cedad1469b3.herokuapp.com/dashboard/balance/';
-const DJANGO_GET_PANDL_FIGURES = 'https://marketio-3cedad1469b3.herokuapp.com/dashboard/pal/'
+import {
+    getUserIdFromUrl,
+} from './utils.js';
+
+const socket = io.connect();
+const API_URLS = {
+    portfolio: `${window.env.API_BASE_URL}${window.env.API_PORTFOLIO_PATH}`,
+    balance: `${window.env.API_BASE_URL}${window.env.API_BALANCE_PATH}`,
+    pal: `${window.env.API_BASE_URL}${window.env.API_PAL_PATH}`,
+};
 const renderedHoldings = new Set();
 const holdings = {};
 const container = document.getElementById('dashboardCards');
 const stockCharts = {};
-let priceHistory = JSON.parse(localStorage.getItem('priceHistory')) || {};
-let labelHistory = JSON.parse(localStorage.getItem('labelHistory')) || {};
+const priceHistory = JSON.parse(localStorage.getItem('priceHistory')) || {};
+const labelHistory = JSON.parse(localStorage.getItem('labelHistory')) || {};
 
 window.addEventListener('DOMContentLoaded', async () => {
     const portfolioData = await loadDashboardData('PORTFOLIO_DATA');
     const balanceData = await loadDashboardData('BALANCE_DATA');
     const palData = await loadDashboardData('PAL_DATA');
 
-    // document.getElementById('Username').textContent = balanceData.username;
+    document.getElementById('Username').textContent = balanceData.username;
 
     if (!portfolioData || !portfolioData.details) {
         console.error("Portfolio data not loaded properly.");
@@ -134,50 +140,39 @@ socket.on('stocks_data', (stocks) => {
     })
 });
 
-async function loadDashboardData(type) {
+// Break down into seperate functions - only call API when necessary - reduce backend load
+export async function loadDashboardData(type) {
     const token = localStorage.getItem('access_token');
+    const headers = {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+    };
+
+    let url;
+    switch (type) {
+        case 'TARGET_USER_DATA':
+            url = `${API_URLS.balance}?target_user=${getUserIdFromUrl()}`;
+            break;
+        case `TARGET_PORTFOLIO_DATA`:
+            url = `${API_URLS.portfolio}?target_user=${getUserIdFromUrl()}`;
+            break;
+        case 'BALANCE_DATA':
+            url = API_URLS.balance;
+            break;
+        case 'PORTFOLIO_DATA':
+            url = API_URLS.portfolio;
+            break;
+        case 'PAL_DATA':
+            url = API_URLS.pal;
+            break;
+        default:
+            throw new Error("Invalid data type");
+    }
 
     try {
-        const [balanceRes, portfolioRes, palRes] = await Promise.all([
-            fetch(DJANGO_GET_USER_BALANCE_FIGURES, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            }),
-            fetch(DJANGO_GET_USER_PORTFOLIO_FIGURES, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            }),
-            fetch(DJANGO_GET_PANDL_FIGURES, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            })
-        ]);
-
-        // Check for HTTP errors before parsing
-        if (!balanceRes.ok) throw new Error(`Balance API error: ${balanceRes.status}`);
-        if (!portfolioRes.ok) throw new Error(`Portfolio API error: ${portfolioRes.status}`);
-        if (!palRes.ok) throw new Error(`P&L API error: ${palRes.status}`);
-
-        // Parse all responses
-        const [balanceData, portfolioData, palData] = await Promise.all([
-            balanceRes.json(),
-            portfolioRes.json(),
-            palRes.json()
-        ]);
-
-        if (type === 'USER_DATA') return balanceData;
-        if (type === 'PORTFOLIO_DATA') return portfolioData;
-        if (type === 'PAL_DATA') return palData;
-
+        const res = await fetch(url, { method: 'GET', headers });
+        if (!res.ok) throw new Error(`${type} API error: ${res.status}`);
+        return await res.json();
     } catch (err) {
         console.error("Dashboard data fetch failed:", err);
         alert("Failed to load dashboard data: " + err.message);
