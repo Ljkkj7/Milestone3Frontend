@@ -5,7 +5,7 @@ import {
 
 import {
     getUserIdFromUrl,
-} from './profile.js';
+} from './utils.js';
 
 const socket = io.connect();
 const API_URLS = {
@@ -140,6 +140,7 @@ socket.on('stocks_data', (stocks) => {
     })
 });
 
+// Break down into seperate functions - only call API when necessary - reduce backend load
 export async function loadDashboardData(type) {
     const token = localStorage.getItem('access_token');
     const headers = {
