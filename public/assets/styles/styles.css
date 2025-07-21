@@ -415,7 +415,7 @@ header {
 
 .player-info-card {
     justify-content: space-between;
-    width: 300px;
+    width: 15rem;
     min-width: fit-content;
     margin: 10px 10px;
     padding: 20px;
@@ -423,7 +423,7 @@ header {
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     transition: box-shadow 0.3s ease, transform 0.3s ease;
-    text-align: left;
+    text-align: center;
 }
 
 .player-info-card:hover {
@@ -433,7 +433,7 @@ header {
 
 .stocks-container h3 {
     text-align: center;
-    margin-bottom: 20px;
+    margin: 20px 0;
 }
 
 .stocks-grid {
@@ -443,7 +443,6 @@ header {
     margin: 20px auto;
     max-width: 100%;
     padding: 20px;
-    background-color: #f4f4f4;
     border-radius: 8px;
 }
 
@@ -977,7 +976,6 @@ footer p {
     }
 
     .stock-card {
-        width: 100%;
         margin: 10px 0;
     }
 
@@ -1002,6 +1000,4 @@ footer p {
         max-width: 300px;
         padding: 0px;
     }
-
-
 }
