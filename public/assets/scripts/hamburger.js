@@ -19,9 +19,6 @@ document.addEventListener('DOMContentLoaded', function () {
         sideMenu.classList.add('open');
         hamburger.classList.add('open');
         
-        // Prevent body scroll on mobile
-        document.body.style.overflow = 'hidden';
-        
         // Add outside click listener after animation starts
         setTimeout(() => {
             document.addEventListener('click', handleOutsideClick);
@@ -36,15 +33,8 @@ document.addEventListener('DOMContentLoaded', function () {
         sideMenu.classList.remove('open');
         hamburger.classList.remove('open');
         
-        // Re-enable body scroll
-        document.body.style.overflow = '';
-        
         // Remove event listeners
-        document.removeEventListener('click', handleOutsideClick);
-        if (menuOverlay) {
-            menuOverlay.removeEventListener('click', closeMenu);
-        }
-        
+        document.removeEventListener('click', handleOutsideClick);   
         menuOpen = false;
     }
 
