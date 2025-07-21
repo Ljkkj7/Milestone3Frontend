@@ -162,6 +162,8 @@ async function loadProfileData() {
     }
     const portfolioData = await callAPIs('PORTFOLIO_DATA');
 
+    console.log('User data:', userData);
+    console.log('Portfolio data:', portfolioData);
     return { portfolioData, userData };
 }
 
