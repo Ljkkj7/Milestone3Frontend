@@ -6,7 +6,7 @@ export function createStockChart(ctx, symbol) {
             datasets: [{
                 label: `${symbol} Stock Price`,
                 data: [],
-                borderColor: 'rgb(0, 0, 0)',
+                borderColor: 'var(--text-primary)',
                 borderWidth: 2,
                 fill: false,
                 tension: 0.1,
