@@ -115,6 +115,13 @@ body::before {
   color: inherit;
 }
 
+.icons {
+    width: 24px;
+    height: 24px;
+    margin: 0 5px 0 1px;
+    transition: all 0.3s ease;
+}
+
 .hamburger-menu {
   font-size: 28px;
   cursor: pointer;
@@ -323,13 +330,19 @@ header {
     flex: 1;
     margin: 20px auto;
     max-width: 40%;
-    background-color: #f4f4f4;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    background: var(--card-bg);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    box-shadow: var(--shadow-primary);
 }
 
 .register-card h2, .login-card h2 {
+    background: linear-gradient(45deg, var(--accent-primary), var(--accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
     text-align: center;
     margin-bottom: 20px;
 }
@@ -350,21 +363,38 @@ header {
 .register-card input, .login-card input {
     width: 100%;
     padding: 10px;
-    border: 2px solid #ccc;
+    border: 1px solid rgba(0, 212, 255, 0.3);
     border-radius: 4px;
+    &:hover {
+        border-color: var(--accent-primary);
+    }
+    &:focus {
+        border-color: var(--accent-secondary);
+    }
+    &:placeholder {
+        color: #000;
+    }
+    &::-webkit-input-placeholder{
+        text-align: center;
+        color: #000;
+    }
 }
 
 .register-card button, .login-card button {
     width: 100%;
     padding: 10px;
-    background-color: #333;
     color: white;
     border-radius: 4px;
     cursor: pointer;
+    background: var(--gradient-primary);
+    border: 1px solid var(--gradient-primary);
+    box-shadow: var(--shadow-primary);
 }
 
 .register-card button:hover, .login-card button:hover {
-    background-color: #555;
+    background: var(--gradient-secondary);
+    transform: translateY(-2px);
+    transition: transform 0.2s ease;
 }
 
 .player-info {

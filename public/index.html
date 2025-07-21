@@ -4,23 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/styles/styles.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
     <title>Market.io</title>
 </head>
 <body>
     <!-- Navbar -->
     <nav class="navbar">
-        <div class ="nav-title"><a href="index.html">📈 Market.io</a></div>
+        <div class ="nav-title"><a href="index.html">Market.io</a></div>
         <div class="hamburger-menu" id="hamburger">☰</div>
         <!-- Hidden Side Menu -->
         <div class ="side-menu-container" id="sideMenu">
             <ul class="nav-links">
-                <li><a href="index.html" class="active">🏠 Home</a></li>
-                <li><a href="market.html" class="loggedIn">📈 Market</a></li>
-                <li><a href="#about" class="loggedIn">📌 Dashboard</a></li>
-                <li><a href="#contact" class="loggedIn">🐵 Profile</a></li>
+                <li><a href="index.html" class="active"><i data-lucide="home" class="icons"></i> Home</a></li>
             </ul>
         </div>
     </nav>
+    <script>
+        lucide.createIcons();
+    </script>
     <!-- Script to open menu-->
     <script src="assets/scripts/hamburger.js"></script>
     <header>

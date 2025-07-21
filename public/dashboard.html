@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="assets/styles/styles.css">
+        <script src="https://unpkg.com/lucide@latest"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="https://marketio-frontend-139f7c2c9279.herokuapp.com/socket.io/socket.io.js"></script>
         <title>Market.io - Dashboard</title>
@@ -17,14 +18,17 @@
             <!-- Hidden Side Menu -->
             <div class ="side-menu-container" id="sideMenu">
                 <ul class="nav-links">
-                    <li><a href="market.html">📈 Market</a></li>
-                    <li><a href="dashboard.html" class="active">📌 Dashboard</a></li>
-                    <li><a href="#contact">🐵 Profile</a></li>
-                    <li><a href="#leaderboard">🏆 Leaderboard</a></li>
-                    <li><a href="#logout">🚪 Logout</a></li>
+                    <li><a href="market.html"><i data-lucide="align-horizontal-distribute-center" class="icons"></i> Market</a></li>
+                    <li><a href="dashboard.html" class="active"><i data-lucide="pin" class="icons"></i> Dashboard</a></li>
+                    <li><a href="#contact"><i data-lucide="user" class="icons"></i> Profile</a></li>
+                    <li><a href="#leaderboard"><i data-lucide="trophy" class="icons"></i> Leaderboard</a></li>
+                    <li><a href="#logout"><i data-lucide="log-out" class="icons"></i> Logout</a></li>
                 </ul>
             </div>
         </nav>
+        <script>
+            lucide.createIcons();
+        </script>
         <!-- Script to open menu-->
         <script src="assets/scripts/hamburger.js"></script>
         <script type="module" src="assets/scripts/profilePayLoad.js"></script>
