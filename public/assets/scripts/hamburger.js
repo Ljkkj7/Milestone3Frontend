@@ -1,10 +1,15 @@
 document.addEventListener('DOMContentLoaded', function () {
     const hamburger = document.getElementById('hamburger');
     const sideMenu = document.getElementById('sideMenu');
+    sideMenu.classList.toggle('hidden');
   
     let menuOpen = false;
   
     function toggleMenu() {
+      setTimeout(() => {
+        sideMenu.classList.toggle('hidden');
+      }, "100")
+      
       sideMenu.classList.toggle('open');
       hamburger.classList.toggle('open');
       menuOpen = sideMenu.classList.contains('open');
@@ -28,4 +33,4 @@ document.addEventListener('DOMContentLoaded', function () {
       e.stopPropagation(); // Prevent document click from firing first
       toggleMenu();
     });
-  });
+});
