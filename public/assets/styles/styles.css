@@ -411,6 +411,8 @@ header {
 .player-info-container {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .player-info-card {
