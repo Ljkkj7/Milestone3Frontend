@@ -228,12 +228,11 @@ async function setProfileStocks() {
 }
 
 // Load comments when the page is ready
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     loadComments();
-    loadProfileData('USER_DATA').then(userData => {
-        document.getElementById('profileUsername').textContent = userData.username;
-        document.getElementById('profileUserStocks').textContent = userData.username;
-    });
+    const { portfolioData, userData } = await loadProfileData();
+    document.getElementById('Username').textContent = userData.username;
+    document.getElementById('profileBalance').textContent = `£${parseFloat(userData.balance).toFixed(2)}`;
     setProfileStocks();
 });
 
