@@ -231,7 +231,7 @@ async function setProfileStocks() {
 document.addEventListener('DOMContentLoaded', async () => {
     loadComments();
     const { portfolioData, userData } = await loadProfileData();
-    document.getElementById('Username').textContent = userData.username;
+    document.getElementById('profileUsername').textContent = userData.username;
     document.getElementById('profileBalance').textContent = `£${parseFloat(userData.balance).toFixed(2)}`;
     setProfileStocks();
 });
