@@ -8,11 +8,6 @@ import {
 } from './utils.js';
 
 const socket = io.connect();
-const API_URLS = {
-    portfolio: `${window.env.API_BASE_URL}${window.env.API_PORTFOLIO_PATH}`,
-    balance: `${window.env.API_BASE_URL}${window.env.API_BALANCE_PATH}`,
-    pal: `${window.env.API_BASE_URL}${window.env.API_PAL_PATH}`,
-};
 const renderedHoldings = new Set();
 const holdings = {};
 const container = document.getElementById('dashboardCards');
@@ -148,6 +143,8 @@ export async function loadDashboardData(type) {
         'Content-Type': 'application/json'
     };
 
+    const API_URLS = getApiUrls();
+
     let url;
     switch (type) {
         case 'TARGET_USER_DATA':
@@ -178,6 +175,14 @@ export async function loadDashboardData(type) {
         alert("Failed to load dashboard data: " + err.message);
     }
 }
+
+function getApiUrls() {
+    return {
+        portfolio: `${window.env.API_BASE_URL}${window.env.API_PORTFOLIO_PATH}`,
+        balance: `${window.env.API_BASE_URL}${window.env.API_BALANCE_PATH}`,
+        pal: `${window.env.API_BASE_URL}${window.env.API_PAL_PATH}`,
+    };
+} 
 
 function updatePalFigures(symbol, price) {
     const data = holdings[symbol];

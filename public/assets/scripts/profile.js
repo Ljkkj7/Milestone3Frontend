@@ -3,6 +3,7 @@ import {
 } from './profilePayLoad.js';
 
 import {
+    API_URLS,
     loadDashboardData,
 } from './dashboard.js';
 
@@ -15,11 +16,6 @@ const postButton = document.getElementById('postCommentButton');
 const renderedStocks = new Set(); // To track rendered stocks
 const socket = io.connect();
 const stockCharts = {};
-const API_URLS = {
-    portfolio: `${window.env.API_BASE_URL}${window.env.API_PORTFOLIO_PATH}`,
-    balance: `${window.env.API_BASE_URL}${window.env.API_BALANCE_PATH}`,
-    pal: `${window.env.API_BASE_URL}${window.env.API_PAL_PATH}`,
-};
 let priceHistory = JSON.parse(localStorage.getItem('priceHistory')) || {};
 let labelHistory = JSON.parse(localStorage.getItem('labelHistory')) || {};
 
@@ -167,8 +163,7 @@ async function loadProfileData(type) {
     }
     const portfolioData = await loadDashboardData('PORTFOLIO_DATA');
 
-    if (type === 'USER_DATA') return userData;
-    if (type === 'PORTFOLIO_DATA') return portfolioData;
+    return portfolioData; 
 }
 
 async function setProfileStocks() {
