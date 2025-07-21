@@ -642,20 +642,26 @@ header {
 .stock-dashboard-individual {
     display: inline-flex;
     flex-direction: row;
+    justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
+}
+
+.dashboardHoldingsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    background: var(--primary-bg);
 }
 
 .dashboard-graph {
     display: flex;
     flex-direction: column;
-    width: 100vh;
-    max-width: 800px;
+    width: 30rem;
+    max-width: 30rem;
     padding: 20px;
     margin: 0 auto;
-    background-color: #f4f4f4;
+    background: var(--card-bg);
     border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .detail-dashboard-container {
@@ -667,19 +673,15 @@ header {
 }
 
 .detail-dashboard-outer-stats {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    display: grid;
     justify-content: center;
 }
 
 .detail-dashboard-outer {
-    width: 50vh;
-    max-width: 300px;
     margin: 10px 10px;
-    background-color: #f4f4f4;
     border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    box-shadow: var(--shadow-primary);
     transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
@@ -687,6 +689,9 @@ header {
     display: flex;
     flex-direction: column;
     text-align: center;
+    background: var(--card-bg);
+    border-radius: 8px;
+    width: 10rem;
 }
 
 .detail-dashboard form {
