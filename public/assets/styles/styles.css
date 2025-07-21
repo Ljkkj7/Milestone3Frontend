@@ -561,6 +561,14 @@ header {
     color: #000000;
 }
 
+.stock-link canvas {
+    border-radius: 8px;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    box-shadow: var(--shadow-primary);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    padding: 10px;
+}
+
 .gameplay-section {
     display: flex;
     flex-direction: row;
