@@ -3,7 +3,6 @@ import {
 } from './profilePayLoad.js';
 
 import {
-    API_URLS,
     loadDashboardData,
 } from './dashboard.js';
 
