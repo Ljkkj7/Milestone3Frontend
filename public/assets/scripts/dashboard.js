@@ -176,7 +176,7 @@ export async function loadDashboardData(type) {
     }
 }
 
-function getApiUrls() {
+export function getApiUrls() {
     return {
         portfolio: `${window.env.API_BASE_URL}${window.env.API_PORTFOLIO_PATH}`,
         balance: `${window.env.API_BASE_URL}${window.env.API_BALANCE_PATH}`,
