@@ -3,8 +3,8 @@ import {
 } from './profilePayLoad.js';
 
 import {
-    loadDashboardData,
-} from './dashboard.js';
+    callAPIs
+} from './apiCalls.js';
 
 import {
     createStockChart,
@@ -149,20 +149,20 @@ function sanitize(str) {
     return temp.innerHTML;
 }
 
-async function loadProfileData(type) {
+async function loadProfileData() {
     const token = localStorage.getItem('access_token');
     let userData = {};
     const jwtUserId = parseJwt(token)?.user_id;
     if (!token) return;
 
     if (jwtUserId === getUserIdFromUrl()) {
-        userData = await loadDashboardData('USER_DATA');
+        userData = await callAPIs('USER_DATA');
     } else {
-        userData = await loadDashboardData('TARGET_USER_DATA');
+        userData = await callAPIs('TARGET_USER_DATA');
     }
-    const portfolioData = await loadDashboardData('PORTFOLIO_DATA');
+    const portfolioData = await callAPIs('PORTFOLIO_DATA');
 
-    return portfolioData; 
+    return { portfolioData, userData };
 }
 
 async function setProfileStocks() {

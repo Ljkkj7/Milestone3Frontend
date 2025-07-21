@@ -4,8 +4,8 @@ import {
 } from './stockChart.js'
 
 import {
-    getUserIdFromUrl,
-} from './utils.js';
+    callAPIs
+} from './apiCalls.js';
 
 const socket = io.connect();
 const renderedHoldings = new Set();
@@ -16,9 +16,9 @@ const priceHistory = JSON.parse(localStorage.getItem('priceHistory')) || {};
 const labelHistory = JSON.parse(localStorage.getItem('labelHistory')) || {};
 
 window.addEventListener('DOMContentLoaded', async () => {
-    const portfolioData = await loadDashboardData('PORTFOLIO_DATA');
-    const balanceData = await loadDashboardData('BALANCE_DATA');
-    const palData = await loadDashboardData('PAL_DATA');
+    const portfolioData = await callAPIs('PORTFOLIO_DATA');
+    const balanceData = await callAPIs('BALANCE_DATA');
+    const palData = await callAPIs('PAL_DATA');
 
     document.getElementById('Username').textContent = balanceData.username;
 
@@ -135,55 +135,6 @@ socket.on('stocks_data', (stocks) => {
     })
 });
 
-// Break down into seperate functions - only call API when necessary - reduce backend load
-export async function loadDashboardData(type) {
-    const token = localStorage.getItem('access_token');
-    const headers = {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-    };
-
-    const API_URLS = getApiUrls();
-
-    let url;
-    switch (type) {
-        case 'TARGET_USER_DATA':
-            url = `${API_URLS.balance}?target_user=${getUserIdFromUrl()}`;
-            break;
-        case `TARGET_PORTFOLIO_DATA`:
-            url = `${API_URLS.portfolio}?target_user=${getUserIdFromUrl()}`;
-            break;
-        case 'BALANCE_DATA':
-            url = API_URLS.balance;
-            break;
-        case 'PORTFOLIO_DATA':
-            url = API_URLS.portfolio;
-            break;
-        case 'PAL_DATA':
-            url = API_URLS.pal;
-            break;
-        default:
-            throw new Error("Invalid data type");
-    }
-
-    try {
-        const res = await fetch(url, { method: 'GET', headers });
-        if (!res.ok) throw new Error(`${type} API error: ${res.status}`);
-        return await res.json();
-    } catch (err) {
-        console.error("Dashboard data fetch failed:", err);
-        alert("Failed to load dashboard data: " + err.message);
-    }
-}
-
-export function getApiUrls() {
-    return {
-        portfolio: `${window.env.API_BASE_URL}${window.env.API_PORTFOLIO_PATH}`,
-        balance: `${window.env.API_BASE_URL}${window.env.API_BALANCE_PATH}`,
-        pal: `${window.env.API_BASE_URL}${window.env.API_PAL_PATH}`,
-    };
-} 
-
 function updatePalFigures(symbol, price) {
     const data = holdings[symbol];
     if (!data) return;
@@ -213,7 +164,7 @@ function flashUpdate(el, value, prevValue) {
 }
 
 async function loadDetailFigures() {
-    const portfolioData = await loadDashboardData('PORTFOLIO_DATA');
+    const portfolioData = await callAPIs('PORTFOLIO_DATA');
 
     portfolioData.details.forEach(detail => {
         const { symbol, quantity, current_price, value } = detail;
