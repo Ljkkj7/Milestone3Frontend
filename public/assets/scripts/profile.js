@@ -164,6 +164,7 @@ async function loadProfileData() {
 
     console.log('User data:', userData);
     console.log('Portfolio data:', portfolioData);
+    console.log({ userData, portfolioData });
     return { portfolioData, userData };
 }
 
