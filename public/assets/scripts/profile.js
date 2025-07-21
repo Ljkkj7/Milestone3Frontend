@@ -181,7 +181,7 @@ async function setProfileStocks() {
         // portfolioData = await loadDashboardData('PORTFOLIO_DATA');
     // }
     
-    portfolioData = await loadDashboardData('PORTFOLIO_DATA');
+    portfolioData = await callAPIs('PORTFOLIO_DATA');
     const container = document.getElementById('stockCards');
 
     container.innerHTML = ''; // Clear existing stocks
