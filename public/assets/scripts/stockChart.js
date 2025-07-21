@@ -6,33 +6,57 @@ export function createStockChart(ctx, symbol) {
             datasets: [{
                 label: `${symbol} Stock Price`,
                 data: [],
-                borderColor: 'var(--text-primary)',
+                borderColor: 'white',            // Line color
+                backgroundColor: 'white',        // Data point color
                 borderWidth: 2,
                 fill: false,
                 tension: 0.1,
+                pointBackgroundColor: 'white',   // Dot fill
+                pointBorderColor: 'white',       // Dot outline
             }]
         },
         options: {
             responsive: true,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: 'white'           // Legend label color
+                    }
+                }
+            },
             scales: {
                 x: {
                     type: 'category',
                     title: {
                         display: true,
-                        text: 'Time'
+                        text: 'Time',
+                        color: 'white'           // X axis title color
                     },
+                    ticks: {
+                        color: 'white'           // X axis tick labels
+                    },
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'  // Light white grid
+                    }
                 },
                 y: {
                     title: {
                         display: true,
-                        text: 'Price (GBP)'
+                        text: 'Price (GBP)',
+                        color: 'white'           // Y axis title color
+                    },
+                    ticks: {
+                        color: 'white'           // Y axis tick labels
+                    },
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'  // Light white grid
                     },
                     beginAtZero: false
                 }
             }
         }
     });
-    
+
     return chart;
 }
 
