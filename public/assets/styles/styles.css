@@ -443,7 +443,6 @@ header {
     margin: 20px auto;
     max-width: 100%;
     padding: 20px;
-    background-color: #f4f4f4;
     border-radius: 8px;
 }
 
@@ -713,12 +712,12 @@ header {
 }
 
 .profile-image img {
-    width: 150px;
-    height: 150px;
+    width: 80%;
+    height: 80%;
     border-radius: 50%;
-    border: 2px solid #ccc;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    box-shadow: var(--shadow-primary);
     object-fit: cover;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
@@ -749,11 +748,15 @@ header {
 }
 
 .profile-stock-cards {
-    display: flex;
+    display: grid;
     flex-direction: column;
     align-items: center;
     margin-top: 20px;
-    max-width: 50rem;
+    max-width: 50em;
+}
+
+.profile-stock-cards h2 {
+    text-align: center;
 }
 
 .stock-cards {
@@ -775,9 +778,10 @@ header {
     flex-direction: column;
     margin: 20px auto;
     padding: 20px;
-    background-color: #f4f4f427;
+    background-color: var(--secondary-bg);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    box-shadow: var(--shadow-primary);
     border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     transition: box-shadow 0.3s ease, transform 0.3s ease;
     text-align: center;
     min-width: fit-content;
@@ -821,25 +825,23 @@ header {
     background-color: #f4f4f4;
     transition: border-color 0.3s ease;
     &:focus {
-        border-color: #333;
+        border-color: var(--accent-primary);
     }
     &:hover {
-        border-color: #555;
+        border-color: var(--accent-primary);
     }
     &:active {
-        border-color: #000;
-    }
-    &:placeholder {
-        color: #888;
+        border-color: var(--accent-primary);
     }
     &::-webkit-input-placeholder{
         text-align: center;
+        color: #000;
     }
 }
 
 .comment-form button {
     padding: 10px 20px;
-    background-color: #333;
+    background: var(--gradient-primary);
     color: white;
     border: none;
     border-radius: 4px;
@@ -847,7 +849,7 @@ header {
 }
 
 .comment-form button:hover {
-    background-color: #555;
+    background: var(--gradient-secondary);
     transform: translateY(-2px);
     transition: transform 0.2s ease;
 }
@@ -857,7 +859,7 @@ header {
     padding: 10px 0;
     max-width: 20rem;
     border-radius: 8px;
-    background-color: #f4f4f427;
+    background: var(--card-bg);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
@@ -868,11 +870,10 @@ header {
 }
 
 .comment-item a {
-    text-decoration: none;
-    color: #fff;
-    background-color: #333;
-    border: 1px solid #f5f4f4;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    text-decoration: none;;
+    background: linear-gradient(45deg, var(--accent-primary), var(--accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;;
     max-width: min-content;
     margin: 0 auto;
     padding: 0 2rem;
@@ -884,12 +885,15 @@ header {
 }
 
 .comment-item a:hover {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     transform: translateY(-2px);
     transition: transform 0.2s ease;
 }
 
 .comment-item small {
-    color: #888;
+    color: var(--text-secondary);
     font-size: 0.9em;
     padding: 10px;
     margin: 20px;
@@ -917,15 +921,15 @@ header {
 
 .CRUD-comment {
     padding: 5px 10px;
-    background-color: #333;
-    color: white;
+    background: var(--gradient-primary);
+    color: var(--text-primary);
     border: none;
     border-radius: 4px;
     cursor: pointer;
 }
 
 .CRUD-comment:hover {
-    background-color: #555;
+    background: var(--gradient-secondary);
     transform: translateY(-2px);
     transition: transform 0.2s ease;
 }
