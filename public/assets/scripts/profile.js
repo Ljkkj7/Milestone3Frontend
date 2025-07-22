@@ -11,8 +11,6 @@ import {
     updateStockChart
 } from './stockChart.js';
 
-const numeral = require('numeral');
-
 const postButton = document.getElementById('postCommentButton');
 const renderedStocks = new Set(); // To track rendered stocks
 const socket = io.connect();
