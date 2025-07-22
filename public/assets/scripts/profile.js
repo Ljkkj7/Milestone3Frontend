@@ -10,7 +10,6 @@ import {
     createStockChart,
     updateStockChart
 } from './stockChart.js';
-import { parse } from 'dotenv';
 
 const postButton = document.getElementById('postCommentButton');
 const renderedStocks = new Set(); // To track rendered stocks
