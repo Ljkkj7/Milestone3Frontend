@@ -310,6 +310,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const { portfolioData, userData } = await loadProfileData();
     document.getElementById('profileUserStocks').textContent = userData.username;
     document.getElementById('profileUsername').textContent = userData.username;
+    document.getElementById('profileLevel').textContent = userData.level;
+    document.getElementById('profileExperience').textContent = userData.experience;
     document.getElementById('profileBalance').textContent = `£${parseFloat(userData.balance).toFixed(2)}`;
     setProfileStocks();
 });
