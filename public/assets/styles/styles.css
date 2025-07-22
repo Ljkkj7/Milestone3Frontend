@@ -833,7 +833,8 @@ header {
 .comment-form textarea {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    box-shadow: var(--shadow-primary);
     border-radius: 4px;
     margin-bottom: 10px;
     resize: vertical;
@@ -845,6 +846,7 @@ header {
     line-height: 1.5;
     background-color: var(--text-muted);
     transition: border-color 0.3s ease;
+    color: var(--text-secondary);
     &:focus {
         border-color: var(--accent-primary);
     }
