@@ -3,8 +3,8 @@ import {
 } from './profilePayLoad.js';
 
 import {
-    loadDashboardData,
-} from './dashboard.js';
+    callAPIs
+} from './apiCalls.js';
 
 import {
     createStockChart,
@@ -85,6 +85,55 @@ function appendComment(comment) {
     container.append(div); // Add new comments at the top - comments API feeds objects in from most recent ID first
 }
 
+// Handle delete and edit actions
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('CRUD-comment')) {
+        const dataId = e.target.getAttribute('data-comment-id');
+        
+        if (dataId.startsWith('del')) {
+            const commentId = dataId.replace('del', '');
+            handleDeleteComment(commentId);
+        } else if (dataId.startsWith('edit')) {
+            const commentId = dataId.replace('edit', '');
+            handleEditComment(commentId);
+        }
+    }
+});
+
+// Function to handle editing a comment
+async function handleEditComment(commentId) {
+    const newContent = prompt("Edit your comment:");
+    if (!newContent) return;
+
+    try {
+        const data = await callCommentsAPI('EDIT_COMMENT', { commentId, content: newContent });
+        if (data) {
+            const commentElement = document.querySelector(`.comment-item button[data-comment-id="edit${commentId}"]`).closest('.comment');
+            commentElement.querySelector('.comment-body').textContent = sanitize(newContent);
+        } else {
+            alert('Failed to edit comment. Please try again.');
+        }
+    } catch (error) {
+        console.error('Error editing comment:', error);
+    }
+}
+
+// Function to handle deleting a comment
+async function handleDeleteComment(commentId) {
+    const confirmation = confirm("Are you sure you want to delete this comment?");
+    if (!confirmation) return;
+    try {
+        const data = await callCommentsAPI('DELETE_COMMENT', { commentId });
+        if (data) {
+            document.querySelector(`.comment-item button[data-comment-id="del${commentId}"]`).closest('.comment').remove();
+        } else {
+            alert('Failed to delete comment. Please try again.');
+        }
+    } catch (error) {
+        console.error('Error deleting comment:', error);
+    }
+}
+
 async function loadComments() {
     const data = await callCommentsAPI('LOAD_COMMENTS');
     const container = document.getElementById('commentPosts');
@@ -133,6 +182,35 @@ async function callCommentsAPI(type, payload = {}) {
             return await res.json();
         }
 
+        if (type === 'DELETE_COMMENT') {
+            const commentId = payload.commentId;
+            const res = await fetch(`${baseUrl}${commentId}/`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!res.ok) throw new Error(`DELETE failed: ${res.status}`);
+            return await res.json();
+        }
+
+        if (type === 'EDIT_COMMENT') {
+            const commentId = payload.commentId;
+            const res = await fetch(`${baseUrl}${commentId}/`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!res.ok) throw new Error(`EDIT failed: ${res.status}`);
+            return await res.json();
+        }
+
     } catch (error) {
         console.error('API error:', error);
     }
@@ -141,29 +219,31 @@ async function callCommentsAPI(type, payload = {}) {
 
 // Simple sanitization to prevent XSS
 function sanitize(str) {
+
     // Create a temporary element to escape HTML
     const temp = document.createElement('div');
+
     // Set the text content to the string, which will escape HTML
     temp.textContent = str;
+
     // Return the inner HTML, which is now safe
     return temp.innerHTML;
 }
 
-async function loadProfileData(type) {
+async function loadProfileData() {
     const token = localStorage.getItem('access_token');
     let userData = {};
     const jwtUserId = parseJwt(token)?.user_id;
     if (!token) return;
 
     if (jwtUserId === getUserIdFromUrl()) {
-        userData = await loadDashboardData('USER_DATA');
+        userData = await callAPIs('USER_DATA');
     } else {
-        userData = await loadDashboardData('TARGET_USER_DATA');
+        userData = await callAPIs('TARGET_USER_DATA');
     }
-    const portfolioData = await loadDashboardData('PORTFOLIO_DATA');
+    const portfolioData = await callAPIs('PORTFOLIO_DATA');
 
-    if (type === 'USER_DATA') return userData;
-    if (type === 'PORTFOLIO_DATA') return portfolioData;
+    return { portfolioData, userData };
 }
 
 async function setProfileStocks() {
@@ -176,13 +256,12 @@ async function setProfileStocks() {
         return;
     }
 
-    // if (userId !== Number(targetUserId)) {
-        // portfolioData = await loadDashboardData('TARGET_USER_PORTFOLIO_DATA');
-    // } else {
-        // portfolioData = await loadDashboardData('PORTFOLIO_DATA');
-    // }
+    if (userId !== Number(targetUserId)) {
+        portfolioData = await callAPIs('TARGET_USER_PORTFOLIO_DATA');
+    } else {
+        portfolioData = await callAPIs('PORTFOLIO_DATA');
+    }
     
-    portfolioData = await loadDashboardData('PORTFOLIO_DATA');
     const container = document.getElementById('stockCards');
 
     container.innerHTML = ''; // Clear existing stocks
@@ -226,12 +305,12 @@ async function setProfileStocks() {
 }
 
 // Load comments when the page is ready
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     loadComments();
-    loadProfileData('USER_DATA').then(userData => {
-        document.getElementById('profileUsername').textContent = userData.username;
-        document.getElementById('profileUserStocks').textContent = userData.username;
-    });
+    const { portfolioData, userData } = await loadProfileData();
+    document.getElementById('profileUserStocks').textContent = userData.username;
+    document.getElementById('profileUsername').textContent = userData.username;
+    document.getElementById('profileBalance').textContent = `£${parseFloat(userData.balance).toFixed(2)}`;
     setProfileStocks();
 });
 

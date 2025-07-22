@@ -1,113 +1,239 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+
+/* CSS Variables for Theming */
+:root {
+  --primary-bg: #0a0f1a;
+  --secondary-bg: #1a2332;
+  --card-bg: #243447;
+  --accent-primary: #00d4ff;
+  --accent-secondary: #ff6b35;
+  --success-color: #00ff88;
+  --danger-color: #ff4757;
+  --warning-color: #ffa502;
+  --text-primary: #ffffff;
+  --text-secondary: #b8c6d9;
+  --text-muted: #7f8fa6;
+  --border-color: #2c3e50;
+  --shadow-primary: 0 8px 32px rgba(0, 212, 255, 0.15);
+  --shadow-secondary: 0 4px 16px rgba(0, 0, 0, 0.3);
+  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --gradient-success: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+  --gradient-danger: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+}
+
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-    font-family: 'Inter', sans-serif;
-    margin: 0;
-    padding: 0;
+  font-family: 'Rajdhani', sans-serif;
+  background: var(--primary-bg);
+  color: var(--text-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Animated Background */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 80% 20%, rgba(255, 107, 53, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 40% 40%, rgba(0, 212, 255, 0.05) 0%, transparent 50%);
+  z-index: -1;
+  animation: backgroundShift 20s ease-in-out infinite;
+}
+
+@keyframes backgroundShift {
+  0%, 100% { transform: translateX(0) translateY(0); }
+  33% { transform: translateX(-20px) translateY(20px); }
+  66% { transform: translateX(20px) translateY(-20px); }
 }
 
 .hidden {
     display: none !important;
 }
 
+.glow {
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+}
+
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* Navbar Styling */
 .navbar {
-    background-color: #333;
-    color: white;
-    padding: 10px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+  background: rgba(26, 35, 50, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 2px solid var(--accent-primary);
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: var(--shadow-secondary);
 }
 
 .nav-title {
-    font-size: 24px;
-    font-weight: bold;
-    cursor: pointer;
+  font-family: 'Orbitron', monospace;
+  font-size: 28px;
+  font-weight: 900;
+  background: linear-gradient(45deg, var(--accent-primary), var(--accent-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.nav-title:hover {
+  transform: scale(1.05);
+  filter: brightness(1.2);
 }
 
 .nav-title a {
-    color: white;
-    text-decoration: none;
+  text-decoration: none;
+  color: inherit;
+}
+
+.icons {
+    width: 24px;
+    height: 24px;
+    margin: 0 5px 0 1px;
+    transition: all 0.3s ease;
 }
 
 .hamburger-menu {
-    top: 10px;
-    right: 20px;
-    font-size: 30px;
-    cursor: pointer;
-    z-index: 1001;
+  font-size: 28px;
+  cursor: pointer;
+  color: var(--accent-primary);
+  transition: all 0.3s ease;
+  z-index: 1001;
 }
 
-.nav-links {
-    list-style-type: none;
+.hamburger-menu:hover {
+  color: var(--accent-secondary);
+  transform: rotate(90deg);
 }
 
-.nav-links a {
-    text-decoration: none;
-    color: white;
-}
-
+/* Side Menu */
 .side-menu-container {
-    position: fixed;
-    top: 0;
-    right: -250px; /* hide off-screen initially */
-    width: 250px;
-    height: 100%;
-    background-color: #333333d5;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    padding-top: 60px;
-    transition: right 0.3s ease;
-    z-index: 1000;
+  position: fixed;
+  top: 0;
+  right: -300px;
+  width: 300px;
+  height: 100vh;
+  background: rgba(36, 52, 71, 0.98);
+  backdrop-filter: blur(20px);
+  border-left: 2px solid var(--accent-primary);
+  display: flex;
+  flex-direction: column;
+  padding: 80px 20px 20px;
+  transition: right 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: 999;
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
 }
 
 .side-menu-container.open {
-    right: 0; /* slide in */
+  right: 0;
 }
 
-.hamburger-menu.open {
-    transform: translateZ(-180deg); /* to keep hamburger from shifting */
-
+.nav-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
+.nav-links li {
+  transform: translateX(50px);
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.side-menu-container.open .nav-links li {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.nav-links a {
+  display: flex;
+  align-items: center;
+  padding: 15px 20px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 500;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.nav-links a:hover,
 .nav-links .active {
-    transform: translateX(-4px);
-    color: white;
-    font-weight: 600;
+  color: var(--accent-primary);
+  background: rgba(0, 212, 255, 0.1);
+  transform: translateX(10px);
+  box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2);
 }
-
-.nav-links a, li {
-    color: white;
-    margin-left: 1rem;
-    padding: 5px 5px;
-    margin: 0 auto;
-    text-decoration: none;
-    font-weight: 500;
-    list-style-type: none;
-    display: block;
-  }
-  
-  .nav-links a:hover {
-    transform: translateX(-4px);
-  }
 
 .loggedIn {
     display: none !important;
 }
 
+/* Header Styling */
 header {
-    text-align: center;
-    margin: 20px 0;
+  text-align: center;
+  margin: 40px 0;
+  padding: 0 20px;
 }
 
-@keyframes slideIn {
-    from {
-        transform: translateY(-20px);
-        opacity: 0.65;
-    }
+.header-card {
+  max-width: 900px;
+  margin: 0 auto;
+  background: rgba(36, 52, 71, 0.8);
+  backdrop-filter: blur(20px);
+  padding: 40px;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  box-shadow: var(--shadow-primary);
+  position: relative;
+  overflow: hidden;
+}
+
+.header-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--gradient-primary);
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { transform: translateX(-100%); }
+  50% { transform: translateX(100%); }
 }
 
 @keyframes bounceInRight {
@@ -135,14 +261,32 @@ header {
     }
 }
 
-.header-card {
-    max-width: 800px;
-    margin: 0 auto;
-    background-color: #f4f4f4;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    animation: bounceInRight 1s ease-in-out;
+.header-card h1 {
+  font-family: 'Orbitron', monospace;
+  font-size: 48px;
+  font-weight: 900;
+  margin-bottom: 20px;
+  background: linear-gradient(45deg, var(--accent-primary), var(--accent-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+}
+
+.header-card p {
+  font-size: 18px;
+  color: var(--text-secondary);
+  margin-bottom: 15px;
+  opacity: 0;
+  animation: fadeInUp 1s ease forwards;
+}
+
+.header-card p:nth-child(2) { animation-delay: 0.3s; }
+.header-card p:nth-child(3) { animation-delay: 0.6s; }
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .hero-section {
@@ -152,23 +296,22 @@ header {
     justify-content: center;
     margin: 0 auto;
     max-width: 800px;
-    background-color: #f4f4f4;
     padding: 20px 20px;
     text-align: center;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     animation: bounceInRight 1.5s ease-in-out;
+    background: var(--card-bg);
 }
 
 .hero-info-card {
     align-items: center;
     max-width: 800px;
     margin: 10px auto;
-    background-color: #f4f4f4;
     padding: 20px 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    box-shadow: var(--shadow-primary);
 }
 
 .hero-info-card:hover {
@@ -187,13 +330,19 @@ header {
     flex: 1;
     margin: 20px auto;
     max-width: 40%;
-    background-color: #f4f4f4;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    background: var(--card-bg);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    box-shadow: var(--shadow-primary);
 }
 
 .register-card h2, .login-card h2 {
+    background: linear-gradient(45deg, var(--accent-primary), var(--accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
     text-align: center;
     margin-bottom: 20px;
 }
@@ -214,21 +363,38 @@ header {
 .register-card input, .login-card input {
     width: 100%;
     padding: 10px;
-    border: 2px solid #ccc;
+    border: 1px solid rgba(0, 212, 255, 0.3);
     border-radius: 4px;
+    &:hover {
+        border-color: var(--accent-primary);
+    }
+    &:focus {
+        border-color: var(--accent-secondary);
+    }
+    &:placeholder {
+        color: #000;
+    }
+    &::-webkit-input-placeholder{
+        text-align: center;
+        color: #000;
+    }
 }
 
 .register-card button, .login-card button {
     width: 100%;
     padding: 10px;
-    background-color: #333;
     color: white;
     border-radius: 4px;
     cursor: pointer;
+    background: var(--gradient-primary);
+    border: 1px solid var(--gradient-primary);
+    box-shadow: var(--shadow-primary);
 }
 
 .register-card button:hover, .login-card button:hover {
-    background-color: #555;
+    background: var(--gradient-secondary);
+    transform: translateY(-2px);
+    transition: transform 0.2s ease;
 }
 
 .player-info {
@@ -237,27 +403,29 @@ header {
     align-items: center;
     margin: 20px 0;
     padding: 20px;
-    background-color: #f4f4f4;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    background: var(--primary-bg);
 }
 
 .player-info-container {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .player-info-card {
     justify-content: space-between;
-    width: 300px;
+    width: 15rem;
     min-width: fit-content;
     margin: 10px 10px;
     padding: 20px;
-    background-color: #f4f4f4;
+    background: var(--secondary-bg);
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     transition: box-shadow 0.3s ease, transform 0.3s ease;
-    text-align: left;
+    text-align: center;
 }
 
 .player-info-card:hover {
@@ -267,7 +435,7 @@ header {
 
 .stocks-container h3 {
     text-align: center;
-    margin-bottom: 20px;
+    margin: 20px 0;
 }
 
 .stocks-grid {
@@ -277,16 +445,16 @@ header {
     margin: 20px auto;
     max-width: 100%;
     padding: 20px;
-    background-color: #f4f4f4;
     border-radius: 8px;
 }
 
 .stock-card {
     margin: 10px 10px;
     padding: 20px;
-    background-color: #f4f4f4;
+    background-color: var(--card-bg);
     border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    box-shadow: var(--shadow-primary);
     transition: box-shadow 0.3s ease, transform 0.3s ease;
     text-align: left;
 }
@@ -294,9 +462,10 @@ header {
 .stock-card-detail {
     margin: 10px 40px 10px 0px;
     padding: 20px;
-    background-color: #f4f4f4;
+    background-color: var(--card-bg);
     border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    box-shadow: var(--shadow-primary);
     transition: box-shadow 0.3s ease, transform 0.3s ease;
     text-align: left;
 }
@@ -315,7 +484,7 @@ header {
 
 .stock-price {
     font-size: 16px;
-    color: #333;
+    color: var(--text-primary);
     margin-bottom: 10px;
     text-align: center;
 }
@@ -357,19 +526,20 @@ header {
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
     border: 1px solid black;
     border-radius: 10px;
-    background: #F4F4F4;
-    background: radial-gradient(circle, rgba(244, 244, 244, 0.5) 0%, rgba(61, 61, 61, 0.5) 100%);
+    background: var(--gradient-primary);
+    color: var(--text-primary);
+    text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
 }
 
 .holdings-card {
     margin: 10px 10px;
     width: 10em;
     padding: 20px;
-    background-color: #f4f4f4;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     transition: box-shadow 0.3s ease, transform 0.3s ease;
     text-align: left;
+    background-color: var(--card-bg);
 }
 
 .holdings-card p {
@@ -377,6 +547,7 @@ header {
     flex-direction: column;
     text-align: center;
     margin: 10px 0;
+    color: var(--text-secondary);
 }
 
 
@@ -390,6 +561,14 @@ header {
     color: #000000;
 }
 
+.stock-link canvas {
+    border-radius: 8px;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    box-shadow: var(--shadow-primary);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    padding: 10px;
+}
+
 .gameplay-section {
     display: flex;
     flex-direction: row;
@@ -401,9 +580,10 @@ header {
     align-items: center;
     flex-direction: column;
     margin: 10px auto;
-    background-color: #f4f4f4;
+    background: var(--card-bg);
     border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    box-shadow: var(--shadow-primary);
     transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
@@ -426,14 +606,16 @@ header {
 .detail button, .detail-dashboard button {
     width: 100%;
     padding: 10px;
-    background-color: #333;
+    background: var(--gradient-primary);
     color: white;
     border-radius: 4px;
     cursor: pointer;
 }
 
 .detail button:hover, .detail-dashboard button:hover {
-    background-color: #555;
+    background: var(--gradient-secondary);
+    transform: translateY(-2px);
+    transition: transform 0.2s ease;
 }
 
 .stockDetailsContainer {
@@ -448,11 +630,13 @@ header {
     flex-direction: column;
     width: 25rem;
     margin: 10px 10px 20px 10px;
-    background-color: #f4f4f4;
+    background: var(--card-bg);
     border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    box-shadow: var(--shadow-primary);
     transition: box-shadow 0.3s ease, transform 0.3s ease;
     text-align: center;
+    justify-content: center;
 }
 
 .stock-detail-card h3 {
@@ -472,20 +656,27 @@ header {
 .stock-dashboard-individual {
     display: inline-flex;
     flex-direction: row;
+    justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
+    margin: 1rem;
+}
+
+.dashboardHoldingsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    background: var(--primary-bg);
 }
 
 .dashboard-graph {
     display: flex;
     flex-direction: column;
-    width: 100vh;
-    max-width: 800px;
+    width: 30rem;
+    max-width: 30rem;
     padding: 20px;
     margin: 0 auto;
-    background-color: #f4f4f4;
+    background: var(--card-bg);
     border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .detail-dashboard-container {
@@ -497,19 +688,15 @@ header {
 }
 
 .detail-dashboard-outer-stats {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    display: grid;
     justify-content: center;
 }
 
 .detail-dashboard-outer {
-    width: 50vh;
-    max-width: 300px;
     margin: 10px 10px;
-    background-color: #f4f4f4;
     border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    box-shadow: var(--shadow-primary);
     transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
@@ -517,6 +704,9 @@ header {
     display: flex;
     flex-direction: column;
     text-align: center;
+    background: var(--card-bg);
+    border-radius: 8px;
+    width: 10rem;
 }
 
 .detail-dashboard form {
@@ -543,12 +733,12 @@ header {
 }
 
 .profile-image img {
-    width: 150px;
-    height: 150px;
+    width: 80%;
+    height: 80%;
     border-radius: 50%;
-    border: 2px solid #ccc;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    box-shadow: var(--shadow-primary);
     object-fit: cover;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
@@ -579,11 +769,15 @@ header {
 }
 
 .profile-stock-cards {
-    display: flex;
+    display: grid;
     flex-direction: column;
     align-items: center;
     margin-top: 20px;
-    max-width: 50rem;
+    max-width: 50em;
+}
+
+.profile-stock-cards h2 {
+    text-align: center;
 }
 
 .stock-cards {
@@ -605,9 +799,10 @@ header {
     flex-direction: column;
     margin: 20px auto;
     padding: 20px;
-    background-color: #f4f4f427;
+    background-color: var(--secondary-bg);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    box-shadow: var(--shadow-primary);
     border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     transition: box-shadow 0.3s ease, transform 0.3s ease;
     text-align: center;
     min-width: fit-content;
@@ -638,7 +833,8 @@ header {
 .comment-form textarea {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    box-shadow: var(--shadow-primary);
     border-radius: 4px;
     margin-bottom: 10px;
     resize: vertical;
@@ -648,28 +844,27 @@ header {
     font-family: 'Inter', sans-serif;
     font-size: 16px;
     line-height: 1.5;
-    background-color: #f4f4f4;
+    background-color: var(--text-muted);
     transition: border-color 0.3s ease;
+    color: var(--text-secondary);
     &:focus {
-        border-color: #333;
+        border-color: var(--accent-primary);
     }
     &:hover {
-        border-color: #555;
+        border-color: var(--accent-primary);
     }
     &:active {
-        border-color: #000;
-    }
-    &:placeholder {
-        color: #888;
+        border-color: var(--accent-primary);
     }
     &::-webkit-input-placeholder{
         text-align: center;
+        color: var(--text-secondary);
     }
 }
 
 .comment-form button {
     padding: 10px 20px;
-    background-color: #333;
+    background: var(--gradient-primary);
     color: white;
     border: none;
     border-radius: 4px;
@@ -677,7 +872,7 @@ header {
 }
 
 .comment-form button:hover {
-    background-color: #555;
+    background: var(--gradient-secondary);
     transform: translateY(-2px);
     transition: transform 0.2s ease;
 }
@@ -687,7 +882,7 @@ header {
     padding: 10px 0;
     max-width: 20rem;
     border-radius: 8px;
-    background-color: #f4f4f427;
+    background: var(--card-bg);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
@@ -698,11 +893,10 @@ header {
 }
 
 .comment-item a {
-    text-decoration: none;
-    color: #fff;
-    background-color: #333;
-    border: 1px solid #f5f4f4;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    text-decoration: none;;
+    background: linear-gradient(45deg, var(--accent-primary), var(--accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;;
     max-width: min-content;
     margin: 0 auto;
     padding: 0 2rem;
@@ -714,12 +908,15 @@ header {
 }
 
 .comment-item a:hover {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     transform: translateY(-2px);
     transition: transform 0.2s ease;
 }
 
 .comment-item small {
-    color: #888;
+    color: var(--text-secondary);
     font-size: 0.9em;
     padding: 10px;
     margin: 20px;
@@ -747,21 +944,20 @@ header {
 
 .CRUD-comment {
     padding: 5px 10px;
-    background-color: #333;
-    color: white;
+    background: var(--gradient-primary);
+    color: var(--text-primary);
     border: none;
     border-radius: 4px;
     cursor: pointer;
 }
 
 .CRUD-comment:hover {
-    background-color: #555;
+    background: var(--gradient-secondary);
     transform: translateY(-2px);
     transition: transform 0.2s ease;
 }
 
 footer {
-    background-color: #333;
     color: white;
     text-align: center;
     padding: 20px;
@@ -803,7 +999,6 @@ footer p {
     }
 
     .stock-card {
-        width: 100%;
         margin: 10px 0;
     }
 
@@ -828,6 +1023,4 @@ footer p {
         max-width: 300px;
         padding: 0px;
     }
-
-
 }

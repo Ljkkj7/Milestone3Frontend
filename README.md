@@ -171,6 +171,14 @@ Test for bugs, scalability, and balance. After the testing phase, release the ga
 
 ---
 
+## Entity Relationship Diagram
+
+---
+
+## 
+
+---
+
 ## Browser Testing
 
 ---
