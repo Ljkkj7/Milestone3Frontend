@@ -312,7 +312,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('profileUsername').textContent = userData.username;
     document.getElementById('profileLevel').textContent = userData.level;
     document.getElementById('profileExperience').textContent = userData.experience;
-    document.getElementById('profileBalance').textContent = `£${parseFloat(userData.balance).toFixed(2)}`;
+    document.getElementById('profileBalance').textContent = `£${(parseFloat(userData.balance) + parseFloat(portfolioData.total_value)).toFixed(2)}`;
     setProfileStocks();
 });
 
