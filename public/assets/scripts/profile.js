@@ -85,6 +85,55 @@ function appendComment(comment) {
     container.append(div); // Add new comments at the top - comments API feeds objects in from most recent ID first
 }
 
+// Handle delete and edit actions
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('CRUD-comment')) {
+        const dataId = e.target.getAttribute('data-comment-id');
+        
+        if (dataId.startsWith('del')) {
+            const commentId = dataId.replace('del', '');
+            handleDeleteComment(commentId);
+        } else if (dataId.startsWith('edit')) {
+            const commentId = dataId.replace('edit', '');
+            handleEditComment(commentId);
+        }
+    }
+});
+
+// Function to handle editing a comment
+async function handleEditComment(commentId) {
+    const newContent = prompt("Edit your comment:");
+    if (!newContent) return;
+
+    try {
+        const data = await callCommentsAPI('EDIT_COMMENT', { commentId, content: newContent });
+        if (data) {
+            const commentElement = document.querySelector(`.comment-item button[data-comment-id="edit${commentId}"]`).closest('.comment');
+            commentElement.querySelector('.comment-body').textContent = sanitize(newContent);
+        } else {
+            alert('Failed to edit comment. Please try again.');
+        }
+    } catch (error) {
+        console.error('Error editing comment:', error);
+    }
+}
+
+// Function to handle deleting a comment
+async function handleDeleteComment(commentId) {
+    const confirmation = confirm("Are you sure you want to delete this comment?");
+    if (!confirmation) return;
+    try {
+        const data = await callCommentsAPI('DELETE_COMMENT', { commentId });
+        if (data) {
+            document.querySelector(`.comment-item button[data-comment-id="del${commentId}"]`).closest('.comment').remove();
+        } else {
+            alert('Failed to delete comment. Please try again.');
+        }
+    } catch (error) {
+        console.error('Error deleting comment:', error);
+    }
+}
+
 async function loadComments() {
     const data = await callCommentsAPI('LOAD_COMMENTS');
     const container = document.getElementById('commentPosts');
@@ -261,7 +310,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const { portfolioData, userData } = await loadProfileData();
     document.getElementById('profileUserStocks').textContent = userData.username;
     document.getElementById('profileUsername').textContent = userData.username;
-    document.getElementById('profileBalance').textContent = `£${numeral(parseFloat(userData.balance).toFixed(2)).format('0.0a')}`;
+    document.getElementById('profileBalance').textContent = `£${parseFloat(userData.balance).toFixed(2)}`;
     setProfileStocks();
 });
 
