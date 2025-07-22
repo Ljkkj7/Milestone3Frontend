@@ -133,6 +133,35 @@ async function callCommentsAPI(type, payload = {}) {
             return await res.json();
         }
 
+        if (type === 'DELETE_COMMENT') {
+            const commentId = payload.commentId;
+            const res = await fetch(`${baseUrl}${commentId}/`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!res.ok) throw new Error(`DELETE failed: ${res.status}`);
+            return await res.json();
+        }
+
+        if (type === 'EDIT_COMMENT') {
+            const commentId = payload.commentId;
+            const res = await fetch(`${baseUrl}${commentId}/`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!res.ok) throw new Error(`EDIT failed: ${res.status}`);
+            return await res.json();
+        }
+
     } catch (error) {
         console.error('API error:', error);
     }
@@ -141,10 +170,13 @@ async function callCommentsAPI(type, payload = {}) {
 
 // Simple sanitization to prevent XSS
 function sanitize(str) {
+
     // Create a temporary element to escape HTML
     const temp = document.createElement('div');
+
     // Set the text content to the string, which will escape HTML
     temp.textContent = str;
+
     // Return the inner HTML, which is now safe
     return temp.innerHTML;
 }
@@ -162,9 +194,6 @@ async function loadProfileData() {
     }
     const portfolioData = await callAPIs('PORTFOLIO_DATA');
 
-    console.log('User data:', userData);
-    console.log('Portfolio data:', portfolioData);
-    console.log({ userData, portfolioData });
     return { portfolioData, userData };
 }
 
