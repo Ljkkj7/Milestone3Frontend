@@ -721,9 +721,10 @@ header {
     width: 25%;
     padding: 20px;
     box-sizing: border-box;
-    background-color: #f4f4f427;
+    background: var(--card-bg);
     border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    box-shadow: var(--shadow-primary);
     transition: box-shadow 0.3s ease, transform 0.3s ease;
     margin: 10px;
 }
