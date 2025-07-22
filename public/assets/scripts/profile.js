@@ -10,6 +10,7 @@ import {
     createStockChart,
     updateStockChart
 } from './stockChart.js';
+import { parse } from 'dotenv';
 
 const postButton = document.getElementById('postCommentButton');
 const renderedStocks = new Set(); // To track rendered stocks
@@ -312,6 +313,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('profileUsername').textContent = userData.username;
     document.getElementById('profileLevel').textContent = userData.level;
     document.getElementById('profileExperience').textContent = userData.experience;
+    console.log(parseFloat(userData.balance), parseFloat(portfolioData.total_value));
     document.getElementById('profileBalance').textContent = `£${(parseFloat(userData.balance) + parseFloat(portfolioData.total_value)).toFixed(2)}`;
     setProfileStocks();
 });
