@@ -11,6 +11,8 @@ import {
     updateStockChart
 } from './stockChart.js';
 
+const numeral = require('numeral');
+
 const postButton = document.getElementById('postCommentButton');
 const renderedStocks = new Set(); // To track rendered stocks
 const socket = io.connect();
@@ -178,13 +180,12 @@ async function setProfileStocks() {
         return;
     }
 
-    // if (userId !== Number(targetUserId)) {
-        // portfolioData = await loadDashboardData('TARGET_USER_PORTFOLIO_DATA');
-    // } else {
-        // portfolioData = await loadDashboardData('PORTFOLIO_DATA');
-    // }
+    if (userId !== Number(targetUserId)) {
+        portfolioData = await callAPIs('TARGET_USER_PORTFOLIO_DATA');
+    } else {
+        portfolioData = await callAPIs('PORTFOLIO_DATA');
+    }
     
-    portfolioData = await callAPIs('PORTFOLIO_DATA');
     const container = document.getElementById('stockCards');
 
     container.innerHTML = ''; // Clear existing stocks
@@ -233,7 +234,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const { portfolioData, userData } = await loadProfileData();
     document.getElementById('profileUserStocks').textContent = userData.username;
     document.getElementById('profileUsername').textContent = userData.username;
-    document.getElementById('profileBalance').textContent = `£${parseFloat(userData.balance).toFixed(2)}`;
+    document.getElementById('profileBalance').textContent = `£${numeral(parseFloat(userData.balance).toFixed(2)).format('0.0a')}`;
     setProfileStocks();
 });
 
