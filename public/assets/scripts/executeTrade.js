@@ -1,6 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Get symbol from URL
-
     const DJANGO_BUY_STOCK = 'https://marketio-3cedad1469b3.herokuapp.com/stocks/buy/';
     const DJANGO_SELL_STOCK = 'https://marketio-3cedad1469b3.herokuapp.com/stocks/sell/';
 
@@ -79,6 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             const sellData = await res.json()
+            console.log(sellData)
             if (res.ok) {
                 alert("Stock sold!")
             }
