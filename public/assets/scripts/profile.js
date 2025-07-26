@@ -108,7 +108,7 @@ async function handleEditComment(commentId) {
     try {
         const data = await callCommentsAPI('EDIT_COMMENT', { commentId, content: newContent });
         if (data) {
-            const commentElement = document.querySelector(`.comment-item button[data-comment-id="edit${commentId}"]`).closest('.comment');
+            const commentElement = document.querySelector(`.CRUD-comment[data-comment-id="edit${commentId}"]`);
             commentElement.querySelector('.comment-body').textContent = sanitize(newContent);
         } else {
             alert('Failed to edit comment. Please try again.');
