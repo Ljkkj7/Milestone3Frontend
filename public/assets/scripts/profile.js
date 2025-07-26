@@ -135,7 +135,7 @@ async function handleDeleteComment(commentId) {
     try {
         const data = await callCommentsAPI('DELETE_COMMENT', { commentId });
         if (data) {
-            document.querySelector(`.comment-item button[data-comment-id="del${commentId}"]`).closest('.comment').remove();
+            document.querySelector(`.comment-body[data-comment-id="${commentId}"]`).closest('.comment').remove();
         } else {
             alert('Failed to delete comment. Please try again.');
         }
