@@ -345,7 +345,7 @@ async function loadTopThreeTrades() {
 
 async function setTopThreeTrades() {
     const trades = await loadTopThreeTrades();
-    const container = document.getElementById('topThreeTrades');
+    const container = document.getElementById('topTradesList');
     container.innerHTML = ''; // Clear existing trades
 
     trades.forEach(trade => {
