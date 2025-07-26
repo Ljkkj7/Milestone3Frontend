@@ -192,6 +192,9 @@ async function callCommentsAPI(type, payload = {}) {
                 }
             });
 
+            if (res.status === 204) {
+                return true; // Successfully deleted
+            }
             if (!res.ok) throw new Error(`DELETE failed: ${res.status}`);
             return await res.json();
         }
