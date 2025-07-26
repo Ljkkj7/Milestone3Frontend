@@ -345,21 +345,21 @@ async function loadTopThreeTrades() {
 }
 
 async function setTopThreeTrades() {
-    const trades = await loadTopThreeTrades();
+    const res = await loadTopThreeTrades();
+    const trades = res.top_stocks || [];
+
     const container = document.getElementById('topTradesList');
     container.innerHTML = ''; // Clear existing trades
 
     console.log('Top trades data:', trades);
-    if (!trades || trades.length === 0) {
+    if (trades.length === 0) {
         container.innerHTML = '<p>No trades available.</p>';
         return;
     }
 
-    let index = 0;
-    trades.forEach((trade) => {
-        index++;
-        if (index > 3) return; // Limit to top 3 trades
-        const { symbol, profit } = trade;
+    trades.forEach((trade, index) => {
+        if (index > 2) return; // Limit to top 3 trades
+        const { symbol, profit_loss: profit } = trade;
         const tradeElement = document.createElement('div');
         tradeElement.className = 'trade-card';
         tradeElement.id = `trade-${index}`;
