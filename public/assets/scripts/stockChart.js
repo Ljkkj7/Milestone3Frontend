@@ -18,27 +18,6 @@ export function createStockChart(ctx, symbol) {
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            interaction: {
-                mode: 'index',
-                intersect: false
-            },
-            elements: {
-                point: {
-                    radius: 3,                // Dot size
-                    hoverRadius: 5            // Dot size on hover
-                }
-            },
-            animation: {
-                duration: 0                // Disable animation for performance
-            },
-            layout: {
-                padding: {
-                    top: 10,
-                    bottom: 10,
-                    left: 10,
-                    right: 10
-                }
-            },
             plugins: {
                 legend: {
                     labels: {
