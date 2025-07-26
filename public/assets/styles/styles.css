@@ -1024,4 +1024,9 @@ footer p {
         max-width: 300px;
         padding: 0px;
     }
+
+    .stock-card canvas {
+        max-width: 15rem;
+        max-height: 10rem;
+    }
 }

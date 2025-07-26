@@ -17,7 +17,6 @@ export function createStockChart(ctx, symbol) {
         },
         options: {
             responsive: true,
-            maintainAspectRatio: false,
             plugins: {
                 legend: {
                     labels: {
