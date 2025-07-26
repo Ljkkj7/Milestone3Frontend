@@ -319,6 +319,49 @@ async function setProfileStocks() {
     });
 }
 
+async function loadTopThreeTrades() {
+    const token = localStorage.getItem('access_token');
+    if (!token) return;
+
+    try {
+        const response = await fetch('https://marketio-3cedad1469b3.herokuapp.com/dashboard/top-trades/', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('Top three trades:', data);
+    } catch (error) {
+        console.error('Error loading top three trades:', error);
+    }
+}
+
+async function setTopThreeTrades() {
+    const trades = await loadTopThreeTrades();
+    const container = document.getElementById('topThreeTrades');
+    container.innerHTML = ''; // Clear existing trades
+
+    trades.forEach(trade => {
+        const { symbol, profit } = trade;
+        const tradeElement = document.createElement('div');
+        tradeElement.className = 'trade-card';
+        tradeElement.innerHTML = `
+            <div class="trade-title">${symbol}</div>
+            <div class="trade-details">
+                <span class="trade-profit">Profit: £${profit.toFixed(2)}</span>
+            </div>
+        `;
+        container.appendChild(tradeElement);
+    });
+}
+
 // Load comments when the page is ready
 document.addEventListener('DOMContentLoaded', async () => {
     loadComments();
@@ -327,13 +370,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('profileUsername').textContent = userData.username;
     document.getElementById('profileLevel').textContent = userData.level;
     document.getElementById('profileExperience').textContent = userData.experience;
-    console.log(parseFloat(userData.balance), parseFloat(portfolioData.total_portfolio_value));
     document.getElementById('profileBalance').textContent = `£${(parseFloat(userData.balance) + parseFloat(portfolioData.total_portfolio_value)).toFixed(2)}`;
     setProfileStocks();
+    setTopThreeTrades();
 });
 
 socket.on('stocks_data', (stocks) => {
-    
     stocks.forEach(stock => {
         const {symbol, price} = stock;
         const numPrice = parseFloat(price)
