@@ -971,6 +971,21 @@ header {
     transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
+.top-trade {
+    border: 1px solid gold;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.second-trade {
+    border: 1px solid silver;
+    box-shadow: 0 0 10px rgba(192, 192, 192, 0.5);
+}
+
+.third-trade {
+    border: 1px solid #cd7f32; /* Bronze */
+    box-shadow: 0 0 10px rgba(205, 127, 50, 0.5);
+}
+
 footer {
     color: white;
     text-align: center;

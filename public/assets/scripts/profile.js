@@ -371,6 +371,19 @@ async function setTopThreeTrades() {
         `;
         container.appendChild(tradeElement);
     });
+
+    const tradeCards = document.querySelectorAll('.trade-card');
+    tradeCards.forEach(card => {
+        if (card.id === 'trade-0') {
+            card.classList.add('top-trade');
+        }
+        if (card.id === 'trade-1') {
+            card.classList.add('second-trade');
+        }
+        if (card.id === 'trade-2') {
+            card.classList.add('third-trade');
+        }
+    });
 }
 
 // Load comments when the page is ready
