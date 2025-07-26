@@ -1,3 +1,5 @@
+const { startTokenRefresh } = require("./utils");
+
 document.getElementById('registerForm').onsubmit = async (e) => {
     e.preventDefault();
 
@@ -43,6 +45,7 @@ document.getElementById('loginForm').onsubmit = async (e) => {
         if (res.ok) {
             localStorage.setItem('access_token', data.access);
             localStorage.setItem('refresh_token', data.refresh);
+            startTokenRefresh();
             alert("Login successful");
             window.location.href = 'market.html';
         } else {
