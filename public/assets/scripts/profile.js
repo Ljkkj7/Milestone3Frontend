@@ -324,7 +324,7 @@ async function loadTopThreeTrades() {
     if (!token) return;
 
     try {
-        const response = await fetch('https://marketio-3cedad1469b3.herokuapp.com/dashboard/top-trades/', {
+        const response = await fetch('https://marketio-3cedad1469b3.herokuapp.com/dashboard/top-stocks/', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
