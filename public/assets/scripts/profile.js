@@ -15,6 +15,7 @@ const postButton = document.getElementById('postCommentButton');
 const renderedStocks = new Set(); // To track rendered stocks
 const socket = io.connect();
 const stockCharts = {};
+const token = localStorage.getItem('access_token');
 const jwtUserId = parseJwt(token)?.user_id;
 let priceHistory = JSON.parse(localStorage.getItem('priceHistory')) || {};
 let labelHistory = JSON.parse(localStorage.getItem('labelHistory')) || {};
