@@ -236,15 +236,17 @@ function sanitize(str) {
 async function loadProfileData() {
     const token = localStorage.getItem('access_token');
     let userData = {};
+    let portfolioData = {};
     const jwtUserId = parseJwt(token)?.user_id;
     if (!token) return;
 
     if (jwtUserId === getUserIdFromUrl()) {
         userData = await callAPIs('USER_DATA');
+        portfolioData = await callAPIs('TARGET_PORTFOLIO_DATA');
     } else {
         userData = await callAPIs('TARGET_USER_DATA');
+        portfolioData = await callAPIs('TARGET_PORTFOLIO_DATA');
     }
-    const portfolioData = await callAPIs('PORTFOLIO_DATA');
 
     return { portfolioData, userData };
 }
