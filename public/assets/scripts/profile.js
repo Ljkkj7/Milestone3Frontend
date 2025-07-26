@@ -109,7 +109,17 @@ async function handleEditComment(commentId) {
         const data = await callCommentsAPI('EDIT_COMMENT', { commentId, content: newContent });
         if (data) {
             const commentElement = document.querySelector(`.comment-body[data-comment-id="${commentId}"]`);
+            const commentDateElement = commentElement.nextElementSibling;
+            const commentDate = new Date(data.updated_at).toLocaleString({
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: 'none',
+            });
             commentElement.textContent = sanitize(newContent);
+            commentDateElement.textContent = commentDate;
         } else {
             alert('Failed to edit comment. Please try again.');
         }
