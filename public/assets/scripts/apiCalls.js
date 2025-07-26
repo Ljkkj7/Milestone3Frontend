@@ -19,6 +19,9 @@ export async function callAPIs(type) {
         case `TARGET_PORTFOLIO_DATA`:
             url = `${API_URLS.portfolio}?target_user=${getUserIdFromUrl()}`;
             break;
+        case 'TARGET_USER_TOP_STOCKS_DATA':
+            url = `${API_URLS.topStocks}?target_user=${getUserIdFromUrl()}`;
+            break;
         case 'BALANCE_DATA':
             url = API_URLS.balance;
             break;
@@ -27,6 +30,9 @@ export async function callAPIs(type) {
             break;
         case 'PAL_DATA':
             url = API_URLS.pal;
+            break;
+        case 'USER_TOP_STOCKS_DATA':
+            url = `${API_URLS.topStocks}`;
             break;
         default:
             throw new Error("Invalid data type");
@@ -47,5 +53,6 @@ export function getApiUrls() {
         portfolio: `${window.env.API_BASE_URL}${window.env.API_PORTFOLIO_PATH}`,
         balance: `${window.env.API_BASE_URL}${window.env.API_BALANCE_PATH}`,
         pal: `${window.env.API_BASE_URL}${window.env.API_PAL_PATH}`,
+        topStocks: `${window.env.API_BASE_URL}/dashboard/top-stocks/`,
     };
 }

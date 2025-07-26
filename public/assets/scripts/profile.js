@@ -15,6 +15,7 @@ const postButton = document.getElementById('postCommentButton');
 const renderedStocks = new Set(); // To track rendered stocks
 const socket = io.connect();
 const stockCharts = {};
+const jwtUserId = parseJwt(token)?.user_id;
 let priceHistory = JSON.parse(localStorage.getItem('priceHistory')) || {};
 let labelHistory = JSON.parse(localStorage.getItem('labelHistory')) || {};
 
@@ -247,12 +248,11 @@ async function loadProfileData() {
     const token = localStorage.getItem('access_token');
     let userData = {};
     let portfolioData = {};
-    const jwtUserId = parseJwt(token)?.user_id;
     if (!token) return;
 
     if (jwtUserId === getUserIdFromUrl()) {
         userData = await callAPIs('USER_DATA');
-        portfolioData = await callAPIs('TARGET_PORTFOLIO_DATA');
+        portfolioData = await callAPIs('PORTFOLIO_DATA');
     } else {
         userData = await callAPIs('TARGET_USER_DATA');
         portfolioData = await callAPIs('TARGET_PORTFOLIO_DATA');
@@ -323,25 +323,10 @@ async function loadTopThreeTrades() {
     const token = localStorage.getItem('access_token');
     if (!token) return;
 
-    try {
-        const response = await fetch('https://marketio-3cedad1469b3.herokuapp.com/dashboard/top-stocks/', {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        console.log('Top three trades:', data);
-        return data;
-    } catch (error) {
-        console.error('Error loading top three trades:', error);
+    if (jwtUserId !== getUserIdFromUrl()) {
+        return await callAPIs('TARGET_USER_TOP_STOCKS_DATA');
     }
+    return await callAPIs('USER_TOP_STOCKS_DATA');
 }
 
 async function setTopThreeTrades() {
