@@ -338,6 +338,7 @@ async function loadTopThreeTrades() {
 
         const data = await response.json();
         console.log('Top three trades:', data);
+        return data;
     } catch (error) {
         console.error('Error loading top three trades:', error);
     }
@@ -349,10 +350,19 @@ async function setTopThreeTrades() {
     container.innerHTML = ''; // Clear existing trades
 
     console.log('Top trades data:', trades);
-    trades.forEach(trade => {
+    if (!trades || trades.length === 0) {
+        container.innerHTML = '<p>No trades available.</p>';
+        return;
+    }
+
+    let index = 0;
+    trades.forEach((trade) => {
+        index++;
+        if (index > 3) return; // Limit to top 3 trades
         const { symbol, profit } = trade;
         const tradeElement = document.createElement('div');
         tradeElement.className = 'trade-card';
+        tradeElement.id = `trade-${index}`;
         tradeElement.innerHTML = `
             <div class="trade-title">${symbol}</div>
             <div class="trade-details">
