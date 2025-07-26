@@ -61,7 +61,7 @@ function appendComment(comment) {
                 <img src="${comment.author_avatar || 'assets/images/profile.png'}" alt="${sanitize(comment.author_username)}'s avatar" class="comment-avatar">
                 <p><strong>${sanitize(comment.author_username)}</strong></p>
             </a>
-            <p class="comment-body">${sanitize(comment.content)}</p>
+            <p class="comment-body" data-comment-id="${comment.id}">${sanitize(comment.content)}</p>
             <small>${new Date(comment.created_at).toLocaleString({
                 year: 'numeric',
                 month: '2-digit',
@@ -108,8 +108,18 @@ async function handleEditComment(commentId) {
     try {
         const data = await callCommentsAPI('EDIT_COMMENT', { commentId, content: newContent });
         if (data) {
-            const commentElement = document.querySelector(`.comment-item button[data-comment-id="edit${commentId}"]`).closest('.comment');
-            commentElement.querySelector('.comment-body').textContent = sanitize(newContent);
+            const commentElement = document.querySelector(`.comment-body[data-comment-id="${commentId}"]`);
+            const commentDateElement = commentElement.nextElementSibling;
+            const commentDate = new Date(data.updated_at).toLocaleString({
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: 'none',
+            });
+            commentElement.textContent = sanitize(newContent);
+            commentDateElement.textContent = commentDate;
         } else {
             alert('Failed to edit comment. Please try again.');
         }
@@ -125,7 +135,7 @@ async function handleDeleteComment(commentId) {
     try {
         const data = await callCommentsAPI('DELETE_COMMENT', { commentId });
         if (data) {
-            document.querySelector(`.comment-item button[data-comment-id="del${commentId}"]`).closest('.comment').remove();
+            document.querySelector(`.comment-body[data-comment-id="${commentId}"]`).closest('.comment').remove();
         } else {
             alert('Failed to delete comment. Please try again.');
         }
@@ -192,6 +202,9 @@ async function callCommentsAPI(type, payload = {}) {
                 }
             });
 
+            if (res.status === 204) {
+                return true; // Successfully deleted
+            }
             if (!res.ok) throw new Error(`DELETE failed: ${res.status}`);
             return await res.json();
         }
@@ -233,15 +246,17 @@ function sanitize(str) {
 async function loadProfileData() {
     const token = localStorage.getItem('access_token');
     let userData = {};
+    let portfolioData = {};
     const jwtUserId = parseJwt(token)?.user_id;
     if (!token) return;
 
     if (jwtUserId === getUserIdFromUrl()) {
         userData = await callAPIs('USER_DATA');
+        portfolioData = await callAPIs('TARGET_PORTFOLIO_DATA');
     } else {
         userData = await callAPIs('TARGET_USER_DATA');
+        portfolioData = await callAPIs('TARGET_PORTFOLIO_DATA');
     }
-    const portfolioData = await callAPIs('PORTFOLIO_DATA');
 
     return { portfolioData, userData };
 }
