@@ -348,6 +348,7 @@ async function setTopThreeTrades() {
     const container = document.getElementById('topTradesList');
     container.innerHTML = ''; // Clear existing trades
 
+    console.log('Top trades data:', trades);
     trades.forEach(trade => {
         const { symbol, profit } = trade;
         const tradeElement = document.createElement('div');
