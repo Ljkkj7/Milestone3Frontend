@@ -986,6 +986,18 @@ header {
     box-shadow: 0 0 10px rgba(205, 127, 50, 0.5);
 }
 
+.leaderboard-container {
+    background: var(--secondary-bg);
+    border-radius: 8px;
+    min-width: 30rem;
+    max-width: 40rem;
+    margin: 0 auto;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    box-shadow: var(--shadow-primary);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+
 .leaderboard-container h2 {
     text-align: center;
     margin: 20px 0;
@@ -1013,8 +1025,13 @@ header {
     background: var(--card-bg);
 }
 
-.leaderboard-position {
-    float: left;
+.leaderboard-entry .leaderboard-username {
+    color: white;
+}
+
+.leaderboard-entry:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
 }
 
 @keyframes gradientShimmer {
@@ -1038,12 +1055,13 @@ header {
                 #ff8c42 100%
             );
     background-size: 200% 200%;
-    color: #fff;
     animation: gradientShimmer 2s ease-in-out infinite;
 }
 
 .rank1:hover, .rank2:hover, .rank3:hover {
-    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+    transition: transform 0.2s ease;
 }
 
 .rank2 {
@@ -1055,7 +1073,6 @@ header {
                 #f5f7fa 100%
         );
     background-size: 200% 200%;
-    color: #fff;
     animation: gradientShimmer 2s ease-in-out infinite;
 }
 
@@ -1068,11 +1085,27 @@ header {
                 #daa520 100%
     );
     background-size: 200% 200%;
-    color: #fff;
     animation: gradientShimmer 2s ease-in-out infinite;
 }
 
+.leaderboard-username {
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+}
 
+.rank1 .leaderboard-username, .rank2 .leaderboard-username, .rank3 .leaderboard-username {
+    color: black;
+}
+
+.leaderboard-position {
+    margin-top: 0.8rem;
+    float: left;
+}
+
+.leaderboard-balance {
+    font-weight: bold;
+}
 
 footer {
     color: white;
