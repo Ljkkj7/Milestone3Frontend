@@ -986,6 +986,94 @@ header {
     box-shadow: 0 0 10px rgba(205, 127, 50, 0.5);
 }
 
+.leaderboard-container h2 {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 24px;
+    font-weight: bold;
+    background: linear-gradient(45deg, var(--accent-primary), var(--accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: var(--text-primary);
+    text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+}
+
+.leaderboard-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.leaderboard-entry {
+    margin: 0.5rem auto;
+    border-radius: 8px;
+    padding: 1rem;
+    width: 50%;
+    max-width: 100%;
+    text-align: center;
+    background: var(--card-bg);
+}
+
+.leaderboard-position {
+    float: left;
+}
+
+@keyframes gradientShimmer {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+.rank1 {
+    background: linear-gradient(90deg,
+                #ff6b35 0%,
+                #f7931e 25%,
+                #ffd700 50%,
+                #ffb347 75%,
+                #ff8c42 100%
+            );
+    background-size: 200% 200%;
+    color: #fff;
+    animation: gradientShimmer 2s ease-in-out infinite;
+}
+
+.rank1:hover, .rank2:hover, .rank3:hover {
+    transform: scale(1.05);
+}
+
+.rank2 {
+    background: linear-gradient(90deg,
+                #8e9aaf 0%,
+                #cbc0d3 25%,
+                #9bb5ff 50%,
+                #b8c6db 75%,
+                #f5f7fa 100%
+        );
+    background-size: 200% 200%;
+    color: #fff;
+    animation: gradientShimmer 2s ease-in-out infinite;
+}
+
+.rank3 {
+    background: linear-gradient(90deg,
+                #cd7f32 0%,
+                #b87333 25%,
+                #d4af37 50%,
+                #a0522d 75%,
+                #daa520 100%
+    );
+    background-size: 200% 200%;
+    color: #fff;
+    animation: gradientShimmer 2s ease-in-out infinite;
+}
+
+
+
 footer {
     color: white;
     text-align: center;
