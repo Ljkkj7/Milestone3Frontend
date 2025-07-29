@@ -23,10 +23,11 @@
             </ul>
         </div>
     </nav>
-    <script src="assets/scripts/hamburger.js">
     <script>
         lucide.createIcons();
     </script>
+    <script type="module" src="assets/scripts/profilePayLoad.js"></script>
+    <script src="assets/scripts/hamburger.js"></script>
     <header>
       <div class="header-card">
             <h1>Leaderboard</h1>
@@ -34,6 +35,13 @@
         </div>
     </header>
     <main>
+        <section class="leaderboard-container">
+            <h2>Top Traders</h2>
+            <div class="leaderboard-list" id="leaderboardList">
+                <!-- Leaderboard entries will be dynamically inserted here -->
+            </div>
+        </section>
+        <script type="module" src="assets/scripts/leaderboard.js"></script>
     </main>
   </body>
 </html>
