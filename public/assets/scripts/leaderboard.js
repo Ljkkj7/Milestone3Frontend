@@ -21,7 +21,7 @@ window.addEventListener('DOMContentLoaded', async () => {
                 listItem.classList.add(`rank${index + 1}`);
             }
             listItem.innerHTML = `
-                <span class="leaderboard-position">${entry.position}</span>
+                <span class="leaderboard-position">${index + 1}</span>
                 <span class="leaderboard-username">${entry.username}</span>
                 <span class="leaderboard-balance">£${parseFloat(entry.balance).toFixed(2)}</span>
             `;
