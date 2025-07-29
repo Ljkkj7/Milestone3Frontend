@@ -15,6 +15,8 @@ const postButton = document.getElementById('postCommentButton');
 const renderedStocks = new Set(); // To track rendered stocks
 const socket = io.connect();
 const stockCharts = {};
+const token = localStorage.getItem('access_token');
+const jwtUserId = parseJwt(token)?.user_id;
 let priceHistory = JSON.parse(localStorage.getItem('priceHistory')) || {};
 let labelHistory = JSON.parse(localStorage.getItem('labelHistory')) || {};
 
@@ -247,12 +249,11 @@ async function loadProfileData() {
     const token = localStorage.getItem('access_token');
     let userData = {};
     let portfolioData = {};
-    const jwtUserId = parseJwt(token)?.user_id;
     if (!token) return;
 
     if (jwtUserId === getUserIdFromUrl()) {
         userData = await callAPIs('USER_DATA');
-        portfolioData = await callAPIs('TARGET_PORTFOLIO_DATA');
+        portfolioData = await callAPIs('PORTFOLIO_DATA');
     } else {
         userData = await callAPIs('TARGET_USER_DATA');
         portfolioData = await callAPIs('TARGET_PORTFOLIO_DATA');
@@ -319,6 +320,58 @@ async function setProfileStocks() {
     });
 }
 
+async function loadTopThreeTrades() {
+    const token = localStorage.getItem('access_token');
+    if (!token) return;
+
+    if (jwtUserId !== getUserIdFromUrl()) {
+        return await callAPIs('TARGET_USER_TOP_STOCKS_DATA');
+    }
+    return await callAPIs('USER_TOP_STOCKS_DATA');
+}
+
+async function setTopThreeTrades() {
+    const res = await loadTopThreeTrades();
+    const trades = res.top_stocks || [];
+
+    const container = document.getElementById('topTradesList');
+    container.innerHTML = ''; // Clear existing trades
+
+    console.log('Top trades data:', trades);
+    if (trades.length === 0) {
+        container.innerHTML = '<p>No trades available.</p>';
+        return;
+    }
+
+    trades.forEach((trade, index) => {
+        if (index > 2) return; // Limit to top 3 trades
+        const { symbol, profit_loss: profit } = trade;
+        const tradeElement = document.createElement('div');
+        tradeElement.className = 'trade-card';
+        tradeElement.id = `trade-${index}`;
+        tradeElement.innerHTML = `
+            <div class="trade-title">${symbol}</div>
+            <div class="trade-details">
+                <span class="trade-profit">Profit: £${profit.toFixed(2)}</span>
+            </div>
+        `;
+        container.appendChild(tradeElement);
+    });
+
+    const tradeCards = document.querySelectorAll('.trade-card');
+    tradeCards.forEach(card => {
+        if (card.id === 'trade-0') {
+            card.classList.add('top-trade');
+        }
+        if (card.id === 'trade-1') {
+            card.classList.add('second-trade');
+        }
+        if (card.id === 'trade-2') {
+            card.classList.add('third-trade');
+        }
+    });
+}
+
 // Load comments when the page is ready
 document.addEventListener('DOMContentLoaded', async () => {
     loadComments();
@@ -327,13 +380,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('profileUsername').textContent = userData.username;
     document.getElementById('profileLevel').textContent = userData.level;
     document.getElementById('profileExperience').textContent = userData.experience;
-    console.log(parseFloat(userData.balance), parseFloat(portfolioData.total_portfolio_value));
     document.getElementById('profileBalance').textContent = `£${(parseFloat(userData.balance) + parseFloat(portfolioData.total_portfolio_value)).toFixed(2)}`;
     setProfileStocks();
+    setTopThreeTrades();
 });
 
 socket.on('stocks_data', (stocks) => {
-    
     stocks.forEach(stock => {
         const {symbol, price} = stock;
         const numPrice = parseFloat(price)

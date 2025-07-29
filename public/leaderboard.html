@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/styles/styles.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://marketio-frontend-139f7c2c9279.herokuapp.com/socket.io/socket.io.js"></script>
+    <title>Market.io - Leaderboard</title>
+  </head>
+  <body>
+    <nav class="navbar">
+        <div class ="nav-title"><a href="market.html">Market.io</a></div>
+        <div class="hamburger-menu" id="hamburger">☰</div>
+        <!-- Hidden Side Menu -->
+        <div class ="side-menu-container" id="sideMenu">
+            <ul class="nav-links">
+                <li><a href="market.html" class="active"><i data-lucide="align-horizontal-distribute-center" class="icons"></i> Market</a></li>
+                <li><a href="dashboard.html"><i data-lucide="pin" class="icons"></i> Dashboard</a></li>
+                <li><a href="profile.html"><i data-lucide="user" class="icons"></i> Profile</a></li>
+                <li><a href="leaderboard.html"><i data-lucide="trophy" class="icons"></i> Leaderboard</a></li>
+                <li><a href="#logout"><i data-lucide="log-out" class="icons"></i> Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+    <script>
+        lucide.createIcons();
+    </script>
+    <script type="module" src="assets/scripts/profilePayLoad.js"></script>
+    <script src="assets/scripts/hamburger.js"></script>
+    <header>
+      <div class="header-card">
+            <h1>Leaderboard</h1>
+            <p>See the top 10 traders on market.io in the world!</p>
+        </div>
+    </header>
+    <main>
+        <section class="leaderboard-container">
+            <h2>Top Traders</h2>
+            <div class="leaderboard-list" id="leaderboardList">
+                <!-- Leaderboard entries will be dynamically inserted here -->
+            </div>
+        </section>
+        <script src="assets/scripts/leaderboard.js"></script>
+    </main>
+  </body>
+</html>
