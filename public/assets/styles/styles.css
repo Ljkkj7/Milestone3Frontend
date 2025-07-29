@@ -1188,6 +1188,10 @@ footer p {
         float: none;
         width: fit-content;
     }
+
+    .leaderboard-container {
+        min-width: 1rem;
+    }
 }
 
 @media screen and (max-width: 768px) {
