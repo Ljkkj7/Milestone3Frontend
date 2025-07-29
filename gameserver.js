@@ -48,6 +48,10 @@ io.on('connection', (socket) => {
     });
 });
 
+async function triggerMarketEvent(socket, seed) {
+    
+}
+
 // Function to fetch stocks from Django API and send to client
 async function fetchAndSendStocks(socket) {
     try {
