@@ -36,7 +36,7 @@ io.on('connection', (socket) => {
     console.log('A user connected:', socket.id);
 
     // Handle stock requests
-    fetchAndSendStocks();
+    fetchAndSendStocks(socket);
 
     // Handle disconnection
     socket.on('disconnect', () => {
@@ -48,7 +48,6 @@ io.on('connection', (socket) => {
 setInterval(async () => {
     console.log('Updating stock prices...');
     await updateStockPrices();
-    await fetchAndSendStocks();
 
     const shouldTriggerEvent = Math.random() <= 0.1;
     if (shouldTriggerEvent && !eventTrigger) {
@@ -135,7 +134,7 @@ async function triggerMarketEvent() {
 }
 
 // Function to fetch stocks from Django API and send to clients
-async function fetchAndSendStocks() {
+async function fetchAndSendStocks(socket) {
     try {
 
         // Fetch stock data from the Django API
@@ -148,7 +147,7 @@ async function fetchAndSendStocks() {
 
 
         // Emit the stocks data to all connected clients
-        io.emit('stocks_data', stocks);
+        socket.emit('stocks_data', stocks);
 
     } catch (error) {
         console.error('Error fetching stocks:', error);
