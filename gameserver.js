@@ -8,8 +8,8 @@ const io = socketIO(server);
 
 const DJANGO_STOCK_GET_LIST = 'https://marketio-3cedad1469b3.herokuapp.com/stocks/';
 const DJANGO_STOCK_UPDATE = 'https://marketio-3cedad1469b3.herokuapp.com/stocks/update/';
-const DJANGO_STOCK_UPDATE_NEGATIVE = 'https://marketio-3cedad1469b3.herokuapp.com/stocks/update/positive/';
-const DJANGO_STOCK_UPDATE_POSITIVE = 'https://marketio-3cedad1469b3.herokuapp.com/stocks/update/negative/';
+const DJANGO_STOCK_UPDATE_NEGATIVE = 'https://marketio-3cedad1469b3.herokuapp.com/stocks/update/negative/';
+const DJANGO_STOCK_UPDATE_POSITIVE = 'https://marketio-3cedad1469b3.herokuapp.com/stocks/update/positive/';
 const DJANGO_RESET_STATUS = 'https://marketio-3cedad1469b3.herokuapp.com/stocks/update/eventend/';
 
 
