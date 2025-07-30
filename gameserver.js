@@ -48,18 +48,16 @@ io.on('connection', (socket) => {
         console.log('Fetching stocks...');
         fetchAndSendStocks(socket);
 
-        const shouldTriggerEvent = Math.random() <= 1;
+        const shouldTriggerEvent = Math.random() <= 0.1;
         console.log(shouldTriggerEvent)
         console.log(eventTrigger)
         if(shouldTriggerEvent && !eventTrigger) {
-            setInterval(async () => {
-                try {
-                    await triggerMarketEvent();
-                    eventTrigger = true;
-                } catch (err) {
-                    console.error('Failed to trigger market event:', err);
-                }
-            }, 600000) // Event trigger every 10 minutes
+            try {
+                await triggerMarketEvent();
+                eventTrigger = true;
+            } catch (err) {
+                console.error('Failed to trigger market event:', err);
+            }
         }
     }, 5000); // 5 seconds
 
@@ -123,7 +121,7 @@ async function triggerMarketEvent() {
             })
         }
 
-        const delay = Math.floor(Math.random() * 600001);
+        const delay = Math.floor(Math.random() * 60001);
         setTimeout(async () => {
             try {
                 await fetch(DJANGO_RESET_STATUS, {
