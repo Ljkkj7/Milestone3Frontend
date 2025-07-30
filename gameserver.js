@@ -49,6 +49,8 @@ io.on('connection', (socket) => {
         fetchAndSendStocks(socket);
 
         const shouldTriggerEvent = Math.random() <= 1;
+        console.log(shouldTriggerEvent)
+        console.log(eventTrigger)
         if(shouldTriggerEvent && !eventTrigger) {
             try {
                 await triggerMarketEvent();
