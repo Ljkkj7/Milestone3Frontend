@@ -1,4 +1,6 @@
 export function createStockChart(ctx, symbol) {
+    const maxPoints = window.innerWidth < 768 ? 5 : 20; // Resize for mobile
+
     const chart = new Chart(ctx, {
         type: 'line',
         data: {
@@ -57,6 +59,8 @@ export function createStockChart(ctx, symbol) {
         }
     });
 
+    chart.maxPoints = maxPoints;
+
     return chart;
 }
 
@@ -72,7 +76,8 @@ export function updateStockChart(chart, label, price) {
     }
 
     // Limit the number of data points to the last 20 for better performance
-    if (chart.data.labels.length > 20) {    
+    const max = chart.maxPoints || 20;
+    if (chart.data.labels.length > max) {    
         chart.data.labels.shift();
         chart.data.datasets[0].data.shift();
     }
