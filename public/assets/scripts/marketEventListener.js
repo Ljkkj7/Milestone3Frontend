@@ -3,6 +3,7 @@ import { getEventTemplate } from "./eventTemplates.js";
 const socket = io.connect();
 
 socket.on('market_event', (marketEvent) => {
+    console.log(marketEvent)
     showEventBanner(marketEvent.symbol, marketEvent.type);
 })
 
