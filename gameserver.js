@@ -36,37 +36,30 @@ io.on('connection', (socket) => {
     console.log('A user connected:', socket.id);
 
     // Handle stock requests
-    fetchAndSendStocks(socket);
-
-    const intervalId = setInterval(async () => {
-        console.log('Updating stock prices...');
-
-        // Update stock prices every 5 seconds
-        updateStockPrices(socket);
-
-        // Fetch and send the latest stock data
-        console.log('Fetching stocks...');
-        fetchAndSendStocks(socket);
-
-        const shouldTriggerEvent = Math.random() <= 0.1;
-        console.log(shouldTriggerEvent)
-        console.log(eventTrigger)
-        if(shouldTriggerEvent && !eventTrigger) {
-            try {
-                await triggerMarketEvent();
-                eventTrigger = true;
-            } catch (err) {
-                console.error('Failed to trigger market event:', err);
-            }
-        }
-    }, 5000); // 5 seconds
+    fetchAndSendStocks();
 
     // Handle disconnection
     socket.on('disconnect', () => {
         console.log('User disconnected:', socket.id);
-        clearInterval(intervalId);
     });
 });
+
+// Shared interval for *all* clients
+setInterval(async () => {
+    console.log('Updating stock prices...');
+    await updateStockPrices();
+    await fetchAndSendStocks();
+
+    const shouldTriggerEvent = Math.random() <= 0.1;
+    if (shouldTriggerEvent && !eventTrigger) {
+        try {
+            await triggerMarketEvent();
+            eventTrigger = true;
+        } catch (err) {
+            console.error('Failed to trigger market event:', err);
+        }
+    }
+}, 5000); // Every 5 seconds
 
 async function triggerMarketEvent() {
     const eventIndicator = Math.floor(Math.random() * 2);
@@ -141,9 +134,10 @@ async function triggerMarketEvent() {
     }
 }
 
-// Function to fetch stocks from Django API and send to client
-async function fetchAndSendStocks(socket) {
+// Function to fetch stocks from Django API and send to clients
+async function fetchAndSendStocks() {
     try {
+
         // Fetch stock data from the Django API
         console.log('Fetching stocks from Django API...');
         const response = await fetch(DJANGO_STOCK_GET_LIST);
@@ -151,24 +145,38 @@ async function fetchAndSendStocks(socket) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const stocks = await response.json();
-        // Emit the stocks data to the connected client
-        socket.emit('stocks_data', stocks);
+
+
+        // Emit the stocks data to all connected clients
+        io.emit('stocks_data', stocks);
+
     } catch (error) {
         console.error('Error fetching stocks:', error);
     }
 }
 
-async function updateStockPrices(socket) {
+// Function to update stock prices
+async function updateStockPrices() {
+
     try {
+
         // Fetch updated stock prices from the Django API
         console.log('Updating stock prices from Django API...');
-        const response = await fetch(DJANGO_STOCK_UPDATE, { method: 'POST', headers: { 'Content-Type': 'application/json' } });
+
+        const response = await fetch(DJANGO_STOCK_UPDATE, 
+            {
+                method: 'POST', 
+                headers: { 'Content-Type': 'application/json' } 
+            });
+
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
+
         const data = await response.json();
 
-        socket.emit('stocks_data', data);
+        io.emit('stocks_data', data);
+
     } catch (error) {
         console.error('Error updating stock prices:', error);
     }
