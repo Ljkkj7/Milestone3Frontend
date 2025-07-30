@@ -92,6 +92,8 @@ async function triggerMarketEvent() {
                 throw new Error(`HTTP error! status: ${responsePositive.status}`)
             }
 
+            console.log("Triggering positive stock event");
+
             io.emit('market_event', {
                 type: 'positive',
                 stock: stock.symbol
@@ -110,6 +112,8 @@ async function triggerMarketEvent() {
             if (!responseNegative.ok) {
                 throw new Error(`HTTP error! status: ${responseNegative.status}`)
             }
+
+            console.log("Triggering negative stock event");
 
             io.emit('market_event', {
                 type: 'negative',
@@ -163,7 +167,6 @@ async function updateStockPrices(socket) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        console.log('Stock prices updated:', data);
 
         socket.emit('stocks_data', data);
     } catch (error) {
