@@ -120,6 +120,54 @@ JWT's are stateless and self contained - being digitally signed with a hashing m
 
 ---
 
+## Challenges of Implementing a Real-Time Simulated Stock Market Using a Sine Wave Algorithm
+Designing a real-time stock market simulation using a sine wave algorithm to dictate price fluctuations may seem appealing due to its predictable, smooth oscillation, but it introduces several technical and gameplay-related difficulties:
+
+### 1. Predictability
+
+A sine wave follows a mathematically predictable pattern, making it possible for players to "time the market" and game the system by predicting when prices will rise or fall.
+
+Consequence: This undermines the challenge and realism of trading. It turns the game into a pattern-recognition task rather than strategic decision-making under uncertainty.
+
+### 2. Lack of Realism
+
+Real-world stock markets are influenced by complex, often random variables: news events, earnings reports, political shifts, etc. A sine wave provides perfect symmetry and rhythm, which feels artificial.
+
+Consequence: Players may find the market behavior too mechanical, hurting immersion and replayability.
+
+### 3. Synchronization Complexity
+In a multiplayer environment using WebSockets, synchronizing sine wave-driven prices across all clients requires precise time coordination. Even small desynchronizations between client clocks and server ticks can lead to price discrepancies.
+
+Consequence: Real-time trading could break if users are acting on slightly different price data, leading to fairness issues and bugs.
+
+### 4. Difficulty Simulating Volatility and News Events
+A sine wave has a constant frequency and amplitude unless artificially modified. Introducing realistic volatility spikes, crashes, or news-induced market shifts requires layering additional noise or event triggers on top of the wave.
+
+Consequence: This increases complexity and may require building a custom hybrid algorithm that blends deterministic and random behavior.
+
+### 5. Inflexibility in Scaling Complexity
+As the game gets more complex, there is a need to simulate different sectors or stocks reacting independently. A basic sine wave doesn’t account for correlation between stocks, volume pressure, or divergent market behavior.
+
+Consequence: Using sine waves can limit future development of advanced trading mechanics and nuanced market conditions.
+
+### 6. Server Performance Load
+Continuously calculating and broadcasting stock prices in real time (especially for many assets using sine functions + noise) can become CPU-intensive, particularly under high player load.
+
+Consequence: Without efficient computation and throttling strategies, it can impact backend performance and increase latency.
+
+### ✔️ Potential Solutions
+To mitigate the above issues:
+
+Combine sine waves with random noise and event-based modifiers to introduce unpredictability.
+
+Use server-side timestamping to maintain synchronized price states across clients.
+
+Periodically regenerate parameters (e.g., amplitude, frequency) to make cycles less predictable.
+
+Layer in game-driven events to break regularity.
+
+---
+
 ## 📌 Development Phases
 
 ### Prototype:
@@ -170,6 +218,115 @@ Test for bugs, scalability, and balance. After the testing phase, release the ga
 
 ### Entity Relationship Diagram
 
+[Entity Relationship Diagram](public/assets/images/entityrelationshipdiagram.png)
+
+### Data Modelling
+
+#### 1. auth_user
+This table stores core authentication data for all users of the application.
+
+```
+id (int): Primary key, unique identifier for each user.
+
+password (varchar): Hashed password for secure authentication.
+
+is_superuser (boolean): Indicates if the user has all permissions.
+
+username (varchar): Unique username used for login.
+
+is_staff (boolean): Determines if the user has admin site access.
+
+is_active (boolean): Specifies whether the user account is active.
+
+date_joined (timestamptz): Timestamp of account creation.
+```
+
+#### 2. custom_auth_userprofile
+This table extends the base user model with game-specific and financial data.
+
+```
+user_id (int): Foreign key linking to auth_user.id, primary key here as well (one-to-one).
+
+balance (decimal): Current in-game currency or funds the user holds.
+
+experience (int): XP points reflecting user progress or trading activity.
+
+level (int): Gamified user level, likely derived from experience.
+```
+
+#### 3. stockhandler_stock
+This table represents individual stocks available in the simulation.
+
+```
+id (bigint): Primary key for each stock.
+
+symbol (varchar): Ticker symbol (e.g., AAPL, TSLA).
+
+name (varchar): Full name of the company/stock.
+
+price (decimal): Current live price of the stock.
+
+base_price (decimal): Initial or baseline price used in price simulation.
+
+amplitude (decimal): Represents the sine wave amplitude used in price simulation.
+
+noise (decimal): Randomized noise added to the stock price to simulate volatility.
+
+status (varchar): Indicates whether the stock is active, paused, or delisted.
+
+created_at (timestamptz): Timestamp of when the stock was added.
+```
+
+#### 4. stockhandler_transaction
+Tracks every buy or sell transaction carried out by users.
+
+```
+id (bigint): Primary key for the transaction.
+
+quantity (int): Number of shares bought or sold.
+
+price (decimal): Price per share at the time of transaction.
+
+transaction_type (varchar): Either 'buy' or 'sell'.
+
+stock (bigint): Foreign key to stockhandler_stock.id, identifying which stock is transacted.
+
+user_profile_id (int): Foreign key to custom_auth_userprofile.user_id, identifying who made the transaction.
+```
+
+#### 5. comments_comment
+Handles user comments, typically for social interaction or feedback.
+
+```
+id (bigint): Primary key of the comment.
+
+content (text): Actual text content of the comment.
+
+created_at (timestamptz): Timestamp of comment creation.
+
+updated_at (timestamptz): Timestamp of the last update to the comment.
+
+author_id (int): Foreign key to auth_user.id, indicates who wrote the comment.
+
+target_user_id (int): Foreign key to auth_user.id, the user to whom the comment is directed (e.g., profile comments).
+```
+
+---
+
+## Wireframes
+
+### Index
+
+### Market
+
+### Dashboard
+
+### Stock Detail
+
+### Leaderboard
+
+### Profile
+
 ---
 
 ## Browser Testing
@@ -204,52 +361,170 @@ Test for bugs, scalability, and balance. After the testing phase, release the ga
 
 ## User Story Testing
 
-### 🧑 New Player
-- As a new player, I want to register or join the game instantly so that I can start trading right away.
-- As a new player, I want to receive a starting balance so I can participate in the market.
+| **ID**    | **User Story**                     | **Test Description**                                     | **Expected Result**                                              | **Test Type**          | **Status** |
+| --------- | ---------------------------------- | -------------------------------------------------------- | ---------------------------------------------------------------- | ---------------------- | ---------- |
+| **UST01** | New user registers                 | Test registration form and submit with valid credentials | Account is created, JWT returned, redirected to dashboard        | Functional / Auth      | ✅ Pass     |
+| **UST02** | New user receives starting balance | After registration, check wallet balance                 | Wallet displays \$10,000 virtual funds                           | Unit / UI              | ✅ Pass     |
+| **UST03** | View stock list                    | Player lands on dashboard and sees updated stock prices  | Real-time stock table is populated and changes every few seconds | UI / WebSocket         | ✅ Pass     |
+| **UST04** | Buy stock                          | User selects a stock, enters quantity, and clicks “Buy”  | Virtual balance decreases, holdings increase, trade logged       | Functional             | ✅ Pass     |
+| **UST05** | Sell stock                         | User sells a stock from portfolio                        | Balance increases, stock quantity reduces in holdings            | Functional             | ✅ Pass     |
+| **UST06** | See portfolio                      | Navigate to “My Portfolio”                               | Holdings, balance, and trade history appear accurately           | UI                     | ✅ Pass     |
+| **UST07** | Live stock updates                 | Stock prices fluctuate automatically                     | Stock list reflects real-time simulated pricing                  | Simulation / WebSocket | ✅ Pass     |
+| **UST08** | Leaderboard view                   | Click "Leaderboard" from nav menu                        | Leaderboard appears sorted by player level                       | UI                     | ✅ Pass     |
+| **UST09** | View other profiles                | Click on another user from leaderboard                   | Public profile loads showing current holdings and top 3 trades   | Functional             | ✅ Pass     |
+| **UST10** | Comment on profile                 | Write a comment on another user's profile page           | Comment is submitted and displayed in real-time                  | Functional / WebSocket | ✅ Pass     |
+| **UST11** | Trigger market event               | Simulate event like “Crash”                              | All stock prices react according to logic, reflected live        | Simulation / Event     | ✅ Pass     |
+| **UST12** | Unauthorized access                | Try to access dashboard without JWT                      | Redirected to login or shown 401 error                           | Security / Auth        | ✅ Pass     |
+| **UST13** | Join trading competition (future)  | Click "Join Lobby" (when implemented)                    | Joins real-time lobby with other players                         | Integration (Future)   | ⬜️ Pending |
 
-### 👤 Registered Player
-- As a player, I want to view a list of available stocks and their current prices.
-- As a player, I want to buy and sell stocks so I can grow my virtual portfolio.
-- As a player, I want to see my balance and current holdings so I can make informed decisions.
-- As a player, I want stock prices to update in real time so that the game feels dynamic.
-- As a player, I want to view a leaderboard so I can compare my performance to others.
+#### Images
 
-### 🧑‍🤝‍🧑 Multiplayer
-- As a player, I want to see other players current stocks held on their profile.
-- As a player, I want to see other players top three trades of all time.
-- As a player, I want to be able to comment on other peoples profiles.
-- As a player, I want to join lobbies or private rooms for group trading competitions(future feature).
+- [Dummy Links]()
+- [Dummy Links]()
+- [Dummy Links]()
+- [Dummy Links]()
+- [Dummy Links]()
+- [Dummy Links]()
+- [Dummy Links]()
+- [Dummy Links]()
+- [Dummy Links]()
+- [Dummy Links]()
+- [Dummy Links]()
+- [Dummy Links]()
+- [Dummy Links]()
 
 ---
 
 ## Lighthouse Testing
 
+| **ID** | **Page**       | **Test Type**  | **Metric**                | **Expected Score** | **Actual Score** | **Status** |
+| ------ | -------------- | -------------- | ------------------------- | ------------------ | ---------------- | ---------- |
+| LH01   | `index`        | Performance    | Load Speed                | ≥ 90               |                | ⬜ Pending  |
+| LH02   | `index`        | Accessibility  | ARIA, Color Contrast      | ≥ 90               |                | ⬜ Pending  |
+| LH03   | `index`        | Best Practices | Code Quality              | ≥ 90               |                | ⬜ Pending  |
+| LH04   | `index`        | SEO            | Meta Tags, Link Titles    | ≥ 90               |                | ⬜ Pending  |
+| LH05   | `dashboard`    | Performance    | Time to Interactive       | ≥ 90               |               | ⬜ Pending  |
+| LH06   | `dashboard`    | Accessibility  | Keyboard Navigation       | ≥ 90               |                | ⬜ Pending  |
+| LH07   | `dashboard`    | SEO            | Structure, Heading Levels | ≥ 90               |                | ⬜ Pending  |
+| LH08   | `leaderboard`  | Performance    | Speed Index               | ≥ 90               |                | ⬜ Pending  |
+| LH09   | `leaderboard`  | Accessibility  | ARIA and Labels           | ≥ 90               |                | ⬜ Pending  |
+| LH10   | `market`       | Performance    | First Contentful Paint    | ≥ 90               |               | ⬜ Pending  |
+| LH11   | `market`       | Accessibility  | Chart Navigation          | ≥ 90               |               | ⬜ Pending  |
+| LH12   | `market`       | Best Practices | Secure Connections        | 100                |               | ⬜ Pending  |
+| LH13   | `profile`      | Accessibility  | Form Labels, Comments     | ≥ 90               |                | ⬜ Pending  |
+| LH14   | `profile`      | SEO            | Mobile Optimization       | ≥ 90               |                | ⬜ Pending  |
+| LH15   | `stock-detail` | Performance    | JS Execution Time         | ≥ 90               |                | ⬜ Pending  |
+| LH16   | `stock-detail` | SEO            | Page Title, Meta Tags     | ≥ 90               |                | ⬜ Pending  |
+
+#### Images
+
+- [Dummy Links]()
+- [Dummy Links]()
+- [Dummy Links]()
+- [Dummy Links]()
+- [Dummy Links]()
+- [Dummy Links]()
+- [Dummy Links]()
+- [Dummy Links]()
+- [Dummy Links]()
+- [Dummy Links]()
+- [Dummy Links]()
+- [Dummy Links]()
+- [Dummy Links]()
+- [Dummy Links]()
+- [Dummy Links]()
+- [Dummy Links]()
+
 ---
 
 ## HTML/CSS/JS/Python Validators
 
+| **ID** | **File Type** | **File(s)**                       | **Validation Tool** | **Test Description**                                 | **Expected Result**                 | **Status** |
+| ------ | ------------- | --------------------------------- | ------------------- | ---------------------------------------------------- | ----------------------------------- | ---------- |
+| V01    | HTML          | All `.html` files                 | W3C HTML Validator  | Check for HTML5 syntax and structure issues          | No critical validation errors       | ⬜ Pending  |
+| V02    | CSS           | All `.css` files                  | W3C CSS Validator   | Validate CSS syntax and property usage               | No errors, valid CSS styles         | ⬜ Pending  |
+| V03    | JavaScript    | All `.js` frontend files          | ESLint              | Check for JS syntax errors and best practices        | No major linting or logic issues    | ⬜ Pending  |
+| V04    | JavaScript    | WebSocket interaction scripts     | ESLint              | Ensure WebSocket logic follows conventions           | Clean linting report                | ⬜ Pending  |
+| V05    | Python        | All Django backend files          | Flake8              | Check for Python PEP8 compliance                     | Score ≥ 8.0 or minimal style issues | ⬜ Pending  |
+| V06    | Python        | Django REST API views/serializers | Flake8              | Validate correct usage of serializers and views      | No critical warnings                | ⬜ Pending  |
+| V07    | Python        | Authentication (JWT-related) code | Flake8              | Ensure secure and proper JWT implementation          | No security issues or bad practices | ⬜ Pending  |
+| V08    | HTML + JS     | Chart rendering and DOM scripts   | W3C + ESLint        | Validate chart rendering functions and accessibility | Well-structured, accessible code    | ⬜ Pending  |
+
+### Images
+
+- [Dummy Links]()
+- [Dummy Links]()
+- [Dummy Links]()
+- [Dummy Links]()
+- [Dummy Links]()
+- [Dummy Links]()
+- [Dummy Links]()
+- [Dummy Links]()
+- [Dummy Links]()
+
 ---
 
-## Dependencies
+### Postman API Tests
 
-### Node.js Packages
+---
+
+## Technologies Used
+
+### Languages
+
+- Python
+- CSS3
+- HTML5
+- JavaScript
+
+### Runtime environment
+
+- Node.js
+
+### Databases
+
+- PostgreSQL
+- DB.SQLITE3
+
+### Dependencies
+
+#### Packages & Libraries
 
 - Express
 - Socket.io
-
-### Python Libraries
-
+- Chart.js
 - Django
 - Django Restframework
 - Django Restframework SimpleJWT
 - Django CORS Headers
 - Psycopg2
 - DJ Database
+- gunicorn
+- pip
+
+### Programmes & Applications
+
+- DrawSQL
+- Git
+- GitHub
+- GitHub Projects
+- Chrome DevTools
+- Postman
+
+### Hosting
+
+- Heroku 
 
 ---
 
 ## 🚀 Getting Started
+
+You can try the app instantly on the live deployment:
+
+🔗 **[Launch Market.io on Heroku](https://marketio-frontend-139f7c2c9279.herokuapp.com)**
+
+Or follow the steps below to run it locally.
+
 
 ```bash
 # 1. Clone the frontend repository
@@ -280,3 +555,8 @@ node server.js
 
 # 8. Visit http://localhost:3000 in your browser
 ```
+
+## Credits
+
+- Stack Overflow
+- W3 Schools
