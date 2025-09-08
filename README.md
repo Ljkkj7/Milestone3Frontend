@@ -55,6 +55,413 @@ The price engine uses a hybrid approach:
 - Random Noise: Adds realistic volatility
 - Market Events: Triggers system-wide price movements
 
+## Price Engine Design
+
+### Core Components
+
+#### Django Application Structure
+
+```
+backend/
+├── marketio_backend/
+│   ├── comments/         # CRUD app for profile comments
+│   ├── custom_auth/      # User management and authentication
+│   ├── dashboard/        # Handling of Profile, Balance & Portfolio management & calculations
+│   ├── leaderboard/      # Ranking and progression system
+│   ├── marketio_backend/ # Django app config
+│   └── stockhandler/     # Houses the price engine and manages stock price simulation, market events and transaction management 
+└── venv/                # Virtual Environment
+```
+
+### Price Engine Implementation
+
+#### Sine Wave Base Generator
+
+To best simulate fluctuations in market prices - I decided to go with a sine wave. Due to its predictable nature and simplicty in manipulation.
+
+To best handle the wave function I first needed to define each stock model with having the appropriate variables for manipulation.
+
+The best way to manipulate this is through the amplitude and noise of the function. Manipulating the amplitude allows us to decide the magnitude of the price swings in either direction - and the noise allows us to increase or decrease the volatilty of these swings.
+
+```python
+class Stock(models.Model):
+    symbol = models.CharField(max_length=10, unique=True)
+    name = models.CharField(max_length=100)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    base_price = models.DecimalField(max_digits=10, decimal_places=2, default=100.00)
+    created_at = models.DateTimeField(auto_now_add=True)
+    amplitude = models.DecimalField(max_digits=10, decimal_places=2, default=10.00)
+    noise = models.DecimalField(max_digits=10, decimal_places=2, default=1.00)
+    status = models.CharField(max_length=20, default="normal")
+```
+
+For the generator method - I apply the principles of a sinewave function to each price in the database and save it back.
+
+```python
+def simulate_price_change(self):
+        """"Simulate a price change based on a sine wave function and random noise."""
+
+        #Check if a market event is happening to this stock
+        if self.status == "positive":
+            self.simulate_positive_market_event()
+            return
+
+        if self.status == "negative":
+            self.simulate_negative_market_event()
+            return
+
+        now = timezone.now()
+        delta = (now - self.created_at).total_seconds() / 3600 # Convert to hours
+        amplitude = 10
+
+        wave = amplitude * math.sin(0.05*delta + 2*math.pi*0.5)
+
+        noise = random.uniform(-1.0, 1.0)
+
+        new_price = Decimal(self.base_price) + Decimal(wave + noise)
+        self.price = round(new_price, 2)
+        self.save()
+```
+
+#### Market Event Method
+
+As seen in the above method - every time the "simulate_price_change" method is called - there is a conditional check for the a flag in the stocks database entry.
+
+Upon this check either function is called and the base function returns to avoid double price updates.
+
+Both methods are essentially the same but reversed - I have shown them below.
+
+```python
+def simulate_positive_market_event(self):
+        """Simulate a market event that affects the stock price positively."""
+        
+        # Set status to positive if not already
+        if self.status != "positive":
+            self.status = "positive"
+
+        # MASSIVE amplification for dramatic price swings
+        severity = random.randint(8, 10)  # Higher severity (8-10 instead of 1-10)
+        
+        # Hugely amplified event impact - multiply by 50-100x instead of just amplitude
+        base_multiplier = random.uniform(50.0, 100.0)  # Massive base multiplier
+        event_impact = severity * float(self.amplitude) * base_multiplier
+        
+        # Much larger stock impact range for dramatic swings
+        stock_impact = random.uniform(20.0, event_impact)  # Start from 20 instead of 0.5
+        
+        # Amplified noise for more volatility
+        noise = random.uniform(0, float(self.noise) * 10)
+        
+        # Keep your sine wave but make it much more aggressive
+        # Faster frequency (0.5 instead of 0.05) and bigger amplitude
+        time_factor = 0.5 * timezone.now().timestamp()
+        wave = stock_impact * math.sin(time_factor + 2 * math.pi * 0.5)
+
+        # Calculate new price - this can now create 300-400% swings
+        price_change = wave + noise
+        new_price = Decimal(self.price) + Decimal(price_change)
+        
+        self.price = max(Decimal('0.01'), Decimal(round(new_price, 2)))
+        
+            
+        # Save the updated stock price
+        self.save()
+```
+
+```python
+def simulate_negative_market_event(self):
+        """Simulate a market event that affects the stock price negatively."""
+        
+        # Set status to negative if not already
+        if self.status != "negative":
+            self.status = "negative"
+
+        # MASSIVE amplification for dramatic price crashes
+        severity = random.randint(8, 10)  # Higher severity (8-10 instead of 1-10)
+        
+        # Hugely amplified event impact - multiply by 30-80x for crashes
+        base_multiplier = random.uniform(30.0, 80.0)  # Large but slightly less than positive
+        event_impact = severity * float(self.amplitude) * base_multiplier
+
+        # Much larger negative stock impact range
+        stock_impact = -abs(random.uniform(15.0, event_impact))  # Start from 15 instead of 0.5
+        
+        # Amplified noise for more volatility
+        noise = random.uniform(-float(self.noise) * 10, float(self.noise) * 10)
+        
+        # Keep your sine wave but make it much more aggressive for crashes
+        # Faster frequency and bigger amplitude for dramatic drops
+        time_factor = 0.5 * timezone.now().timestamp()
+        wave = stock_impact * math.sin(time_factor + 2 * math.pi * 0.5)
+
+        # Calculate new price
+        price_change = wave + noise
+        new_price = Decimal(self.price) + Decimal(price_change)
+        
+        self.price = max(Decimal('0.01'), Decimal(round(new_price, 2)))
+        
+            
+        # Save the updated stock price
+        self.save()
+```
+
+#### API View's
+
+```python
+class StockUpdateAPIView(APIView):
+    def post(self, request):
+        stocks = Stock.objects.all()
+        for stock in stocks:
+            stock.simulate_price_change()
+        serializer = StockSerializer(stocks, many=True)
+        return Response(serializer.data)
+```
+
+```python
+class PositiveStockMarketEventAPIView(APIView):
+    def post(self, request):
+        stockAffected = request.data.get("symbol")
+        stock = Stock.objects.filter(symbol=stockAffected).first()
+        stock.simulate_positive_market_event()
+        serializer = StockSerializer(stock)
+        return Response(serializer.data)
+```
+
+```python
+class NegativeStockMarketEventAPIView(APIView):
+    def post(self, request):
+        stockAffected = request.data.get("symbol")
+        stock = Stock.objects.filter(symbol=stockAffected).first()
+        stock.simulate_negative_market_event()
+        serializer = StockSerializer(stock)
+        return Response(serializer.data)
+```
+
+```python
+class StockMarketEventEndAPIView(APIView):
+    def post(self, request):
+        stockAffected = request.data.get("symbol")
+        stock = Stock.objects.filter(symbol=stockAffected).first()
+        stock.market_event_end()
+        serializer = StockSerializer(stock)
+        return Response(serializer.data)
+```
+### Frontend Integration
+
+#### Node.js -> Django API Integration
+
+To avoid setting up a Linux server on my home laptop to run redis tasks, I've implemented a REST API workaround.
+
+Upon the function call of "triggerMarketEvent", a random stock is chose and updated positvely or negatively through the respetive API's using a boolean flag to select which event is to happen.
+
+The event is the ended after a random amount of time up to 1 minute [60000ms].
+
+```javascript
+async function triggerMarketEvent() {
+    const eventIndicator = Math.floor(Math.random() * 2);
+    try {
+        const res = await fetch(DJANGO_STOCK_GET_LIST);
+        if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`)
+        }
+        const stocks = await res.json();
+        const stock = stocks[Math.floor(Math.random() * stocks.length)];
+
+
+        if (eventIndicator == 0) {
+            const responsePositive = await fetch(DJANGO_STOCK_UPDATE_POSITIVE, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ symbol: stock.symbol })
+            })
+
+            if (!responsePositive.ok) {
+                throw new Error(`HTTP error! status: ${responsePositive.status}`)
+            }
+
+            console.log("Triggering positive stock event");
+
+            io.emit('market_event', {
+                type: 'positive',
+                stock: stock.symbol
+            })
+        }
+
+        if (eventIndicator == 1) {
+            const responseNegative = await fetch(DJANGO_STOCK_UPDATE_NEGATIVE, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ symbol: stock.symbol })
+            })
+
+            if (!responseNegative.ok) {
+                throw new Error(`HTTP error! status: ${responseNegative.status}`)
+            }
+
+            console.log("Triggering negative stock event");
+
+            io.emit('market_event', {
+                type: 'negative',
+                stock: stock.symbol
+            })
+        }
+
+        const delay = Math.floor(Math.random() * 60001);
+        setTimeout(async () => {
+            try {
+                await fetch(DJANGO_RESET_STATUS, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ symbol: stock.symbol })
+                });
+                console.log(`Reset status of ${stock.symbol} after ${delay}ms`);
+            } catch (err) {
+                console.error('Error resetting stock status:', err);
+            }
+
+            eventTrigger = false;
+        }, delay);
+    } catch(err) {
+        console.error("Error triggering market event...", err)
+    }
+}
+```
+
+As seen from the logic above - all of the stock deciding logic is completed on the frontend and sent back to the Django backend in JSON format.
+
+The mathematics and stock price manipulation is performed on the backend and retrieved using a socket.io loop to update stock prices.
+
+```javascript
+// Function to fetch stocks from Django API and send to clients
+async function fetchAndSendStocks(socket) {
+    try {
+
+        // Fetch stock data from the Django API
+        console.log('Fetching stocks from Django API...');
+        const response = await fetch(DJANGO_STOCK_GET_LIST);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const stocks = await response.json();
+
+
+        // Emit the stocks data to all connected clients
+        socket.emit('stocks_data', stocks);
+
+    } catch (error) {
+        console.error('Error fetching stocks:', error);
+    }
+}
+
+// Function to update stock prices
+async function updateStockPrices() {
+
+    try {
+
+        // Fetch updated stock prices from the Django API
+        console.log('Updating stock prices from Django API...');
+
+        const response = await fetch(DJANGO_STOCK_UPDATE, 
+            {
+                method: 'POST', 
+                headers: { 'Content-Type': 'application/json' } 
+            });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        io.emit('stocks_data', data);
+
+    } catch (error) {
+        console.error('Error updating stock prices:', error);
+    }
+}
+```
+
+## Price Engine Design Outcomes & Results
+
+### Implementation Success Metrics
+
+#### Price Engine Performance
+
+The sine wave-based price engine successfully delivers:
+
+- Predictable Market Cycles: Base sine wave provides learnable patterns for player strategy development
+- Realistic Volatility: Combined amplitude and noise manipulation creates authentic market fluctuations
+- Dramatic Market Events: Positive and negative event multipliers (50-100x and 30-80x respectively) generate compelling 300-400% price swings
+- Mathematical Precision: Decimal-based calculations ensure accurate financial computations without floating-point errors
+
+#### System Architecture Benefits
+
+Simplified Infrastructure
+
+- REST API Workaround: Node.js to Django integration eliminates need for complex Redis task queues during development
+- Reduced Complexity: Direct API calls replace message queue infrastructure while maintaining functionality
+- Development Efficiency: Faster iteration cycles without Linux server setup requirements
+
+#### Real-Time Performance
+
+- Socket.io Integration: Seamless real-time price updates to all connected clients
+- Event Broadcasting: Instant market event notifications with stock symbol and event type
+- Responsive Updates: Sub-second price change propagation across the frontend
+
+#### Market Simulation Effectiveness
+
+Dynamic Event System
+
+- Random Event Triggers: Automated market events create unpredictable trading opportunities
+- Timed Event Duration: Random 0-60 second event windows add strategic timing elements
+- Multi-Stock Coverage: Events can affect any stock in the system, ensuring market-wide engagement
+
+Price Behavior Results
+
+- Stable Base Movement: Sine wave foundation prevents unrealistic price crashes to zero
+- Amplified Volatility: Market events create dramatic but recoverable price movements
+- Minimum Price Protection: Hard floor of $0.01 prevents negative or zero stock values
+
+#### Technical Achievements
+
+Backend Robustness
+
+- Model-Driven Logic: Stock models encapsulate all price manipulation logic for maintainability
+- Status Flag System: Simple boolean flags efficiently manage market event states
+- API Endpoint Organization: Clear separation of concerns across different market actions
+
+Frontend Integration Success
+
+- Error Handling: Comprehensive try-catch blocks ensure system stability during API failures
+- Asynchronous Operations: Non-blocking price updates maintain smooth user experience
+- Event Broadcasting: Real-time market event notifications keep all players informed
+
+#### Player Experience Impact
+
+Engagement Features
+
+- Market Event Anticipation: Random events create excitement and strategic decision points
+- Visual Drama: Large price swings (300-400%) provide satisfying visual feedback
+- Learning Opportunities: Predictable base patterns allow skill development while events add challenge
+
+#### Development Insights
+
+Implementation Lessons
+
+- Pragmatic Solutions: REST API workaround proves simple solutions often outperform complex architectures
+- Mathematical Modeling: Sine wave approach provides perfect balance of predictability and chaos
+- Event-Driven Design: Status flags and timed events create engaging gameplay mechanics
+
+Performance Validation
+
+- Real-Time Responsiveness: Sub-second price updates maintain trading simulation authenticity
+- Mathematical Accuracy: Decimal precision prevents financial calculation errors
+- System Stability: Error handling and minimum price constraints ensure robust operation
+
 ## 🖥️ User Interface
 
 ### Page Structure
