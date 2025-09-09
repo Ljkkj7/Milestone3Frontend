@@ -800,6 +800,106 @@ target_user_id (int): Foreign key to auth_user.id, the user to whom the comment 
 
 ---
 
+## CRUD Functionality
+
+The comments system enables users to leave public comments on each other's profiles, creating a social interaction layer within the trading game. 
+The system implements full CRUD (Create, Read, Update, Delete) operations with proper authentication and permission controls.
+
+### Model Structure
+
+The Comment model establishes relationships between users through profile interactions:
+
+```python
+class Comment(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='written_comments')
+    target_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='profile_comments')
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+```
+### Key Relationships:
+
+```
+author: The user who wrote the comment (one-to-many relationship)
+target_user: The user whose profile receives the comment (one-to-many relationship)
+Automatic timestamp tracking for creation and modification dates
+```
+
+### CRUD Operations
+
+Create & Read (CommentListCreateView)
+
+- Create: Authenticated users can post comments on any user's profile
+- Read: Retrieves all comments for a specific target user, ordered by most recent
+- Query Parameter: target_user ID to filter comments for specific profiles
+- Auto-Assignment: Comment author automatically set to the authenticated user
+
+Update & Delete (CommentRetrieveUpdateDestroyView)
+
+- Retrieve: Fetch individual comments by ID
+- Update: Comment authors can edit their own comments
+- Delete: Both comment authors and profile owners can delete comments
+
+### Permission System
+
+Authentication Requirements
+
+- All operations require user authentication (IsAuthenticated permission)
+- Anonymous users cannot interact with the comments system
+
+### Authorization Logic
+
+- Comment Creation: Any authenticated user can comment on any profile
+- Comment Editing: Only the original author can modify their comments
+- Comment Deletion: Either the comment author OR the profile owner can delete comments
+- Comment Viewing: Restricted to comments for the specified target user
+
+### Permission Validation
+
+```python
+def get_object(self):
+    obj = super().get_object()
+    if obj.author != self.request.user and obj.target_user != self.request.user:
+        raise PermissionDenied("You do not have permission to edit this comment.")
+    return obj
+```
+
+### API Endpoints
+
+#### List/Create Comments
+```
+GET /api/comments/?target_user={user_id} - Retrieve comments for a user's profile
+POST /api/comments/ - Create a new comment (requires target_user in request body)
+```
+#### Individual Comment Operations
+```
+GET /api/comments/{comment_id}/ - Retrieve specific comment
+PUT/PATCH /api/comments/{comment_id}/ - Update comment (author only)
+DELETE /api/comments/{comment_id}/ - Delete comment (author or profile owner)
+```
+
+### Security Features
+
+#### Data Integrity
+
+- Foreign key constraints ensure referential integrity
+- Cascade deletion removes comments when users are deleted
+- Automatic timestamp updates track modification history
+
+#### Access Control
+
+- Permission checks prevent unauthorized comment modifications
+- Profile owners can moderate comments on their profiles
+- Clear error messages for permission violations
+
+#### Input Validation
+
+- TextField validation ensures content requirements are met
+- User existence validation before comment creation
+- Proper exception handling for invalid operations
+
+---
+
 ## Browser Testing
 
 Browser Compatibility
@@ -912,30 +1012,17 @@ Tested across major browsers:
 
 | **ID** | **File Type** | **File(s)**                       | **Validation Tool** | **Test Description**                                 | **Expected Result**                 | **Status** |
 | ------ | ------------- | --------------------------------- | ------------------- | ---------------------------------------------------- | ----------------------------------- | ---------- |
-| V01    | HTML          | All `.html` files                 | W3C HTML Validator  | Check for HTML5 syntax and structure issues          | No critical validation errors       | ⬜ Pending  |
-| V02    | CSS           | All `.css` files                  | W3C CSS Validator   | Validate CSS syntax and property usage               | No errors, valid CSS styles         | ⬜ Pending  |
-| V03    | JavaScript    | All `.js` frontend files          | ESLint              | Check for JS syntax errors and best practices        | No major linting or logic issues    | ⬜ Pending  |
-| V04    | JavaScript    | WebSocket interaction scripts     | ESLint              | Ensure WebSocket logic follows conventions           | Clean linting report                | ⬜ Pending  |
-| V05    | Python        | All Django backend files          | Flake8              | Check for Python PEP8 compliance                     | Score ≥ 8.0 or minimal style issues | ⬜ Pending  |
-| V06    | Python        | Django REST API views/serializers | Flake8              | Validate correct usage of serializers and views      | No critical warnings                | ⬜ Pending  |
-| V07    | Python        | Authentication (JWT-related) code | Flake8              | Ensure secure and proper JWT implementation          | No security issues or bad practices | ⬜ Pending  |
-| V08    | HTML + JS     | Chart rendering and DOM scripts   | W3C + ESLint        | Validate chart rendering functions and accessibility | Well-structured, accessible code    | ⬜ Pending  |
+| V01    | HTML          | All `.html` files                 | W3C HTML Validator  | Check for HTML5 syntax and structure issues          | No critical validation errors       | ✅ Pass  |
+| V02    | CSS           | All `.css` files                  | W3C CSS Validator   | Validate CSS syntax and property usage               | No errors, valid CSS styles         | ✅ Pass |
+| V03    | JavaScript    | All `.js` frontend files          | JSHint             | Check for JS syntax errors and best practices        | No major linting or logic issues    | ✅ Pass |
+| V04    | JavaScript    | WebSocket interaction scripts     | JSHint              | Ensure WebSocket logic follows conventions           | Clean linting report                | ✅ Pass |
+| V05    | Python        | All Django backend files          | Flake8 [VSCode Plugin]              | Check for Python PEP8 compliance                     | Score ≥ 8.0 or minimal style issues | ✅ Pass  |
+| V06    | Python        | Django REST API views/serializers | Flake8 [VSCode Plugin]          | Validate correct usage of serializers and views      | No critical warnings                | ✅ Pass  |
 
 ### Images
 
-- [Dummy Links]()
-- [Dummy Links]()
-- [Dummy Links]()
-- [Dummy Links]()
-- [Dummy Links]()
-- [Dummy Links]()
-- [Dummy Links]()
-- [Dummy Links]()
-- [Dummy Links]()
-
----
-
-### Postman API Tests
+- [JSLint & HTML/CSS Validators](./public/assets/images/jslinters/)
+- [Python Linter](./public/assets/images/pythonlinter/pythonlinter.mkv)
 
 ---
 
@@ -984,7 +1071,6 @@ Tested across major browsers:
 - GitHub
 - GitHub Projects
 - Chrome DevTools
-- Postman
 
 ### Hosting
 
