@@ -23,7 +23,7 @@ window.addEventListener('DOMContentLoaded', async () => {
             listItem.innerHTML = `
                 <span class="leaderboard-position">${index + 1}</span>
                 <span class="leaderboard-username">${entry.username}</span>
-                <span class="leaderboard-balance">${entry.experience} XP</span>
+                <span class="leaderboard-balance">${entry.level} XP</span>
             `;
             leaderboardList.appendChild(listItem);
         });

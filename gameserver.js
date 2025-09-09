@@ -8,6 +8,12 @@ const io = socketIO(server);
 
 const DJANGO_STOCK_GET_LIST = 'https://marketio-3cedad1469b3.herokuapp.com/stocks/';
 const DJANGO_STOCK_UPDATE = 'https://marketio-3cedad1469b3.herokuapp.com/stocks/update/';
+const DJANGO_STOCK_UPDATE_NEGATIVE = 'https://marketio-3cedad1469b3.herokuapp.com/stocks/update/negative/';
+const DJANGO_STOCK_UPDATE_POSITIVE = 'https://marketio-3cedad1469b3.herokuapp.com/stocks/update/positive/';
+const DJANGO_RESET_STATUS = 'https://marketio-3cedad1469b3.herokuapp.com/stocks/update/eventend/';
+
+
+let eventTrigger = false;
 
 // Serve environment variables to the client
 app.get('/env.js', (req, res) => {
@@ -32,29 +38,105 @@ io.on('connection', (socket) => {
     // Handle stock requests
     fetchAndSendStocks(socket);
 
-    const intervalId = setInterval(() => {
-        console.log('Updating stock prices...');
-        // Update stock prices every 5 seconds
-        updateStockPrices();
-        // Fetch and send the latest stock data
-        console.log('Fetching stocks...');
-        fetchAndSendStocks(socket);
-    }, 5000); // 5 seconds
-
     // Handle disconnection
     socket.on('disconnect', () => {
         console.log('User disconnected:', socket.id);
-        clearInterval(intervalId);
     });
 });
 
-async function triggerMarketEvent(socket, seed) {
-    
+// Shared interval for *all* clients
+setInterval(async () => {
+    console.log('Updating stock prices...');
+    await updateStockPrices();
+
+    const shouldTriggerEvent = Math.random() <= 0.1;
+    if (shouldTriggerEvent && !eventTrigger) {
+        try {
+            await triggerMarketEvent();
+            eventTrigger = true;
+        } catch (err) {
+            console.error('Failed to trigger market event:', err);
+        }
+    }
+}, 5000); // Every 5 seconds
+
+async function triggerMarketEvent() {
+    const eventIndicator = Math.floor(Math.random() * 2);
+    try {
+        const res = await fetch(DJANGO_STOCK_GET_LIST);
+        if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`)
+        }
+        const stocks = await res.json();
+        const stock = stocks[Math.floor(Math.random() * stocks.length)];
+
+
+        if (eventIndicator == 0) {
+            const responsePositive = await fetch(DJANGO_STOCK_UPDATE_POSITIVE, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ symbol: stock.symbol })
+            })
+
+            if (!responsePositive.ok) {
+                throw new Error(`HTTP error! status: ${responsePositive.status}`)
+            }
+
+            console.log("Triggering positive stock event");
+
+            io.emit('market_event', {
+                type: 'positive',
+                stock: stock.symbol
+            })
+        }
+
+        if (eventIndicator == 1) {
+            const responseNegative = await fetch(DJANGO_STOCK_UPDATE_NEGATIVE, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ symbol: stock.symbol })
+            })
+
+            if (!responseNegative.ok) {
+                throw new Error(`HTTP error! status: ${responseNegative.status}`)
+            }
+
+            console.log("Triggering negative stock event");
+
+            io.emit('market_event', {
+                type: 'negative',
+                stock: stock.symbol
+            })
+        }
+
+        const delay = Math.floor(Math.random() * 60001);
+        setTimeout(async () => {
+            try {
+                await fetch(DJANGO_RESET_STATUS, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ symbol: stock.symbol })
+                });
+                console.log(`Reset status of ${stock.symbol} after ${delay}ms`);
+            } catch (err) {
+                console.error('Error resetting stock status:', err);
+            }
+
+            eventTrigger = false;
+        }, delay);
+    } catch(err) {
+        console.error("Error triggering market event...", err)
+    }
 }
 
-// Function to fetch stocks from Django API and send to client
+// Function to fetch stocks from Django API and send to clients
 async function fetchAndSendStocks(socket) {
     try {
+
         // Fetch stock data from the Django API
         console.log('Fetching stocks from Django API...');
         const response = await fetch(DJANGO_STOCK_GET_LIST);
@@ -62,25 +144,38 @@ async function fetchAndSendStocks(socket) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const stocks = await response.json();
-        // Emit the stocks data to the connected client
+
+
+        // Emit the stocks data to all connected clients
         socket.emit('stocks_data', stocks);
+
     } catch (error) {
         console.error('Error fetching stocks:', error);
     }
 }
 
-async function updateStockPrices(socket) {
+// Function to update stock prices
+async function updateStockPrices() {
+
     try {
+
         // Fetch updated stock prices from the Django API
         console.log('Updating stock prices from Django API...');
-        const response = await fetch(DJANGO_STOCK_UPDATE, { method: 'POST', headers: { 'Content-Type': 'application/json' } });
+
+        const response = await fetch(DJANGO_STOCK_UPDATE, 
+            {
+                method: 'POST', 
+                headers: { 'Content-Type': 'application/json' } 
+            });
+
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        const data = await response.json();
-        console.log('Stock prices updated:', data);
 
-        socket.emit('stocks_data', data);
+        const data = await response.json();
+
+        io.emit('stocks_data', data);
+
     } catch (error) {
         console.error('Error updating stock prices:', error);
     }
