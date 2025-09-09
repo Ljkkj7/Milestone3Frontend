@@ -1028,6 +1028,12 @@ Tested across major browsers:
 
 ### Bugs & Errors
 
+#### Known Bugs
+
+- Price resets to inital price before event after event ends.
+- Price updates can be called twice causing two points to update on charts instead of one.
+- Token refresh not refreshing causing automatic logouts after 15 minutes.
+
 ---
 
 ## Technologies Used
