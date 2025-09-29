@@ -788,15 +788,33 @@ target_user_id (int): Foreign key to auth_user.id, the user to whom the comment 
 
 ### Index
 
+![Index Wireframe - Desktop](./public/assets/images/indexdesktopwireframe.png)
+![Index Wireframe - Mobile](./public/assets/images/indexmobilewireframes.png)
+
 ### Market
+
+![Market Wireframe - Desktop](./public/assets/images/dashboarddesktopwireframe.png)
+![Market Wireframe - Mobile](./public/assets/images/dashboardmobilewireframes.png)
 
 ### Dashboard
 
+![Dashboard Wireframe - Desktop](./public/assets/images/portfoliodesktopwireframe.png)
+![Dashboard Wireframe - Mobile](./public/assets/images/portfoliomobilewireframes.png)
+
 ### Stock Detail
+
+![Stock Detail Wireframe - Desktop](./public/assets/images/stockdetaildesktopwireframe.png)
+![Stock Detail Wireframe - Mobile](./public/assets/images/stockdetailmobilewireframes.png)
 
 ### Leaderboard
 
+![Leaderboard Wireframe - Desktop](./public/assets/images/leaderboardesktopwireframe.png)
+![Leaderboard Wireframe - Mobile](./public/assets/images/leaderboardmobilewireframes.png)
+
 ### Profile
+
+![Profile Wireframe - Desktop](./public/assets/images/profiledesktopwireframe.png)
+![Profile Wireframe - Mobile](./public/assets/images/profilemobilewireframes.png)
 
 ---
 
