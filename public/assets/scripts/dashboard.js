@@ -7,6 +7,8 @@ import {
     callAPIs
 } from './apiCalls.js';
 
+import { logout } from './auth.js';
+
 const socket = io.connect();
 const renderedHoldings = new Set();
 const holdings = {};

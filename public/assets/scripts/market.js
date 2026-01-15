@@ -2,6 +2,7 @@ import {
     createStockChart,
     updateStockChart
 } from './stockChart.js';
+import { logout } from './auth.js';
 
 const renderedStocks = new Set(); // To track rendered stocks]
 const renderedHoldings = new Set();
@@ -133,18 +134,20 @@ async function loadUserFigures() {
     try {
         const response = await fetch(DJANGO_GET_USER_BALANCE_FIGURES, {
             method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
+            headers:
+                {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
         });
 
         const res = await fetch(DJANGO_GET_USER_PORTFOLIO_FIGURES, {
            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            } 
+            headers:
+                {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                } 
         });
 
         if (!response.ok) {

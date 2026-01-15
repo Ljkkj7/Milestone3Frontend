@@ -54,3 +54,25 @@ document.getElementById('loginForm').onsubmit = async (e) => {
         alert("Request failed: " + err.message);
     }
 }
+
+// Logout Flow
+export function logout() {
+    // Remove tokens and any sensitive data
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    // Optionally clear other user data
+    // localStorage.clear(); // Uncomment if you want to clear all localStorage
+    alert('You have been logged out.');
+    window.location.href = 'index.html';
+}
+
+// Attach logout to navbar logout link (works for all pages that import this script)
+document.addEventListener('DOMContentLoaded', () => {
+    const logoutLinks = document.querySelectorAll('a[href="#logout"]');
+    logoutLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            logout();
+        });
+    });
+});

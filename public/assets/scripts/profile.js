@@ -11,6 +11,8 @@ import {
     updateStockChart
 } from './stockChart.js';
 
+import { logout } from './auth.js';
+
 const postButton = document.getElementById('postCommentButton');
 const renderedStocks = new Set(); // To track rendered stocks
 const socket = io.connect();

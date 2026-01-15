@@ -1,3 +1,5 @@
+import { logout } from './auth.js';
+
 const socket = io.connect();
 
 window.addEventListener('DOMContentLoaded', async () => {
