@@ -34,6 +34,10 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             const buyData = await res.json()
+            if (buyData.error) {
+                alert(buyData.error);
+                return;
+            }
             if (res.ok) {
                 alert("Stock bought!")
             }
@@ -78,6 +82,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const sellData = await res.json()
             console.log(sellData)
+            
+            if (sellData.error) {
+                alert(sellData.error)
+                return;
+            }
             if (res.ok) {
                 alert("Stock sold!")
             }
