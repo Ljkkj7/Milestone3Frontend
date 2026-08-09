@@ -44,7 +44,6 @@ export async function callAPIs(type) {
         return await res.json();
     } catch (err) {
         console.error("Dashboard data fetch failed:", err);
-        alert("Failed to load dashboard data: " + err.message);
     }
 }
 
