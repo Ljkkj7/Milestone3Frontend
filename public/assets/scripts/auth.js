@@ -1,5 +1,5 @@
 
-const regsiterForm = document.getElementById('registerForm')
+const registerForm = document.getElementById('registerForm')
 if (registerForm){
     registerForm.onsubmit = async (e) => {
         e.preventDefault();
