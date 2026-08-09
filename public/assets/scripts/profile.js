@@ -334,7 +334,7 @@ async function loadTopThreeTrades() {
 
 async function setTopThreeTrades() {
     const res = await loadTopThreeTrades();
-    const trades = res.top_stocks || [];
+    const trades = res?.top_stocks || [];
 
     const container = document.getElementById('topTradesList');
     container.innerHTML = ''; // Clear existing trades
